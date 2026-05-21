@@ -7,17 +7,17 @@ description: Generate concise Chinese commit messages that follow Conventional C
 
 ## Overview
 
-生成简洁、中文、便于浏览的 Git commit 信息。默认只输出建议的 commit message；只有用户明确要求提交时，才执行 `git add` / `git commit`。
+Generate concise, Chinese, easy-to-scan Git commit messages. By default, output only the suggested commit message. Run `git add` or `git commit` only when the user explicitly asks to commit.
 
-本 skill 同时遵守三层约定：
+This skill follows three layers of conventions:
 
-- Conventional Commits v1.0.0 规范：格式、`feat`、`fix`、`BREAKING CHANGE` 语义。
-- `@commitlint/config-conventional`：常用 type 枚举。
-- gitmoji 官方列表：emoji shortcode 及其含义。
+- Conventional Commits v1.0.0: format, `feat`, `fix`, and `BREAKING CHANGE` semantics.
+- `@commitlint/config-conventional`: common type enum.
+- Official gitmoji list: shortcode meanings.
 
 ## Workflow
 
-1. 先检查改动：
+1. Inspect the changes first:
 
 ```bash
 git status --short
@@ -25,50 +25,50 @@ git diff --stat
 git diff
 ```
 
-2. 选择一个 type。优先使用 `@commitlint/config-conventional` 的 11 个 type：
+2. Choose a type. Prefer the 11 types from `@commitlint/config-conventional`:
 
-- `feat`: 新功能。对应 Conventional Commits 的 MINOR。
-- `fix`: bug 修复。对应 Conventional Commits 的 PATCH。
-- `build`: 构建系统或外部依赖变更，例如 make、npm、pip、docker。
-- `chore`: 不修改 src 或 test 的其它杂项。
-- `ci`: CI 配置或脚本变更。
-- `docs`: 仅文档变更。
-- `perf`: 性能优化。
-- `refactor`: 既不修 bug 也不加功能的代码重构。
-- `revert`: 回退之前的提交。
-- `style`: 不影响代码含义的格式、空白、标点、风格变更。
-- `test`: 添加缺失测试或修正已有测试。
+- `feat`: a new feature. Corresponds to MINOR in Conventional Commits.
+- `fix`: a bug fix. Corresponds to PATCH in Conventional Commits.
+- `build`: build system or external dependency changes, such as make, npm, pip, or docker.
+- `chore`: miscellaneous changes that do not modify src or test files.
+- `ci`: CI configuration or script changes.
+- `docs`: documentation-only changes.
+- `perf`: performance improvements.
+- `refactor`: code changes that neither fix a bug nor add a feature.
+- `revert`: revert a previous commit.
+- `style`: formatting, whitespace, punctuation, or style changes that do not affect code meaning.
+- `test`: add missing tests or correct existing tests.
 
-3. scope 只在确实有清晰模块时添加，例如 `DFT`、`Lammps`、`N2P2`、`plot`、`workflow`。没有清晰模块就省略。
+3. Add a scope only when there is a clear module, such as `DFT`, `Lammps`, `N2P2`, `plot`, or `workflow`. Omit the scope when there is no clear module.
 
-4. 如有破坏性变更，必须用以下任一方式标记：
+4. For breaking changes, mark them with either of these forms:
 
-- 在 type/scope 后加 `!`：`feat(api)!: :boom: 修改配置格式`
-- 在 footer 中加入：`BREAKING CHANGE: <说明>`
+- Add `!` after the type or scope: `feat(api)!: :boom: 修改配置格式`
+- Add a footer: `BREAKING CHANGE: <description>`
 
-5. 选择一个 gitmoji shortcode。优先选择能表达改动意图的 shortcode，而不是机械按 type 映射。
+5. Choose a gitmoji shortcode that expresses the intent of the change. Do not mechanically map only by type when another shortcode is more accurate.
 
 ## Output Format
 
-首行使用：
+Use this header format:
 
 ```text
-<type>(<scope>): <emoji-code> <中文标题>
+<type>(<scope>): <emoji-code> <Chinese title>
 ```
 
-没有 scope 时：
+Without a scope:
 
 ```text
-<type>: <emoji-code> <中文标题>
+<type>: <emoji-code> <Chinese title>
 ```
 
-破坏性变更：
+For breaking changes:
 
 ```text
-<type>(<scope>)!: <emoji-code> <中文标题>
+<type>(<scope>)!: <emoji-code> <Chinese title>
 ```
 
-如需要简要描述，在空一行后加 1 句中文正文，不写长段落：
+If a short body is needed, add one Chinese sentence after a blank line. Do not write long paragraphs:
 
 ```text
 feat(DFT): :sparkles: 添加收敛状态检查
@@ -78,113 +78,117 @@ feat(DFT): :sparkles: 添加收敛状态检查
 
 ## Type To Emoji Defaults
 
-这些是默认优先选择；如果具体改动更适合其它 gitmoji，以具体意图为准。
+These are the default preferred choices. If the concrete change is better represented by another gitmoji, choose by the specific intent.
 
 - `feat`: `:sparkles:`
 - `fix`: `:bug:`
-- `build`: `:package:`、`:heavy_plus_sign:`、`:heavy_minus_sign:`、`:arrow_up:`、`:arrow_down:`
-- `chore`: `:wrench:`、`:hammer:`
-- `ci`: `:construction_worker:`、`:green_heart:`
+- `build`: `:package:`, `:heavy_plus_sign:`, `:heavy_minus_sign:`, `:arrow_up:`, `:arrow_down:`
+- `chore`: `:wrench:`, `:hammer:`
+- `ci`: `:construction_worker:`, `:green_heart:`
 - `docs`: `:memo:`
 - `perf`: `:zap:`
 - `refactor`: `:recycle:`
 - `revert`: `:rewind:`
 - `style`: `:art:`
-- `test`: `:white_check_mark:`、`:test_tube:`
+- `test`: `:white_check_mark:`, `:test_tube:`
 
 ## Gitmoji Reference
 
-官方 gitmoji shortcode 含义如下。输出 commit 时使用 shortcode，不直接使用 Unicode emoji。
+The official gitmoji shortcode meanings are listed below. Use shortcodes in commit messages, not Unicode emoji.
 
-- `:art:`: 改进代码结构或格式。
-- `:zap:`: 提升性能。
-- `:fire:`: 删除代码或文件。
-- `:bug:`: 修复 bug。
-- `:ambulance:`: 紧急热修复。
-- `:sparkles:`: 引入新功能。
-- `:memo:`: 添加或更新文档。
-- `:rocket:`: 部署相关。
-- `:lipstick:`: 添加或更新 UI 与样式文件。
-- `:tada:`: 初始化项目。
-- `:white_check_mark:`: 添加、更新或通过测试。
-- `:lock:`: 修复安全或隐私问题。
-- `:closed_lock_with_key:`: 添加或更新密钥、密文、secrets。
-- `:bookmark:`: 发布或版本标签。
-- `:rotating_light:`: 修复编译器或 linter 警告。
-- `:construction:`: 进行中的工作。
-- `:green_heart:`: 修复 CI 构建。
-- `:arrow_down:`: 降级依赖。
-- `:arrow_up:`: 升级依赖。
-- `:pushpin:`: 固定依赖到特定版本。
-- `:construction_worker:`: 添加或更新 CI 构建系统。
-- `:chart_with_upwards_trend:`: 添加或更新分析、埋点、跟踪代码。
-- `:recycle:`: 重构代码。
-- `:heavy_plus_sign:`: 添加依赖。
-- `:heavy_minus_sign:`: 移除依赖。
-- `:wrench:`: 添加或更新配置文件。
-- `:hammer:`: 添加或更新开发脚本。
-- `:globe_with_meridians:`: 国际化或本地化。
-- `:pencil2:`: 修复拼写或文字错误。
-- `:poop:`: 写下需要后续改进的坏代码。
-- `:rewind:`: 回退变更。
-- `:twisted_rightwards_arrows:`: 合并分支。
-- `:package:`: 添加或更新编译产物或包。
-- `:alien:`: 因外部 API 变化而更新代码。
-- `:truck:`: 移动或重命名资源，例如文件、路径、路由。
-- `:page_facing_up:`: 添加或更新许可证。
-- `:boom:`: 引入破坏性变更。
-- `:bento:`: 添加或更新资源文件。
-- `:wheelchair:`: 改进无障碍访问。
-- `:bulb:`: 添加或更新源码注释。
-- `:beers:`: 写下不严肃或临时性质的代码。
-- `:speech_balloon:`: 添加或更新文本与字面量。
-- `:card_file_box:`: 数据库相关变更。
-- `:loud_sound:`: 添加或更新日志。
-- `:mute:`: 移除日志。
-- `:busts_in_silhouette:`: 添加或更新贡献者。
-- `:children_crossing:`: 改进用户体验或可用性。
-- `:building_construction:`: 架构层面的变更。
-- `:iphone:`: 响应式设计相关。
-- `:clown_face:`: mock 相关。
-- `:egg:`: 添加或更新彩蛋。
-- `:see_no_evil:`: 添加或更新 `.gitignore`。
-- `:camera_flash:`: 添加或更新快照。
-- `:alembic:`: 实验性变更。
-- `:mag:`: 改进 SEO。
-- `:label:`: 添加或更新类型。
-- `:seedling:`: 添加或更新种子文件。
-- `:triangular_flag_on_post:`: 添加、更新或移除 feature flag。
-- `:goal_net:`: 捕获错误。
-- `:dizzy:`: 添加或更新动画与过渡。
-- `:wastebasket:`: 废弃后续需要清理的代码。
-- `:passport_control:`: 授权、角色、权限相关代码。
-- `:adhesive_bandage:`: 非关键问题的简单修复。
-- `:monocle_face:`: 数据探索或检查。
-- `:coffin:`: 删除死代码。
-- `:test_tube:`: 添加失败测试。
-- `:necktie:`: 添加或更新业务逻辑。
-- `:stethoscope:`: 添加或更新健康检查。
-- `:bricks:`: 基础设施相关变更。
-- `:technologist:`: 改进开发者体验。
-- `:money_with_wings:`: 赞助或资金相关基础设施。
-- `:thread:`: 多线程或并发相关代码。
-- `:safety_vest:`: 验证相关代码。
-- `:airplane:`: 改进离线支持。
-- `:t-rex:`: 添加向后兼容代码。
+- `:art:`: improve code structure or format.
+- `:zap:`: improve performance.
+- `:fire:`: remove code or files.
+- `:bug:`: fix a bug.
+- `:ambulance:`: critical hotfix.
+- `:sparkles:`: introduce a new feature.
+- `:memo:`: add or update documentation.
+- `:rocket:`: deployment-related changes.
+- `:lipstick:`: add or update UI and style files.
+- `:tada:`: initialize a project.
+- `:white_check_mark:`: add, update, or pass tests.
+- `:lock:`: fix security or privacy issues.
+- `:closed_lock_with_key:`: add or update secrets.
+- `:bookmark:`: release or version tags.
+- `:rotating_light:`: fix compiler or linter warnings.
+- `:construction:`: work in progress.
+- `:green_heart:`: fix CI builds.
+- `:arrow_down:`: downgrade dependencies.
+- `:arrow_up:`: upgrade dependencies.
+- `:pushpin:`: pin dependencies to specific versions.
+- `:construction_worker:`: add or update CI build systems.
+- `:chart_with_upwards_trend:`: add or update analytics, tracking, or metrics code.
+- `:recycle:`: refactor code.
+- `:heavy_plus_sign:`: add a dependency.
+- `:heavy_minus_sign:`: remove a dependency.
+- `:wrench:`: add or update configuration files.
+- `:hammer:`: add or update development scripts.
+- `:globe_with_meridians:`: internationalization or localization.
+- `:pencil2:`: fix typos or text mistakes.
+- `:poop:`: write code that needs later improvement.
+- `:rewind:`: revert changes.
+- `:twisted_rightwards_arrows:`: merge branches.
+- `:package:`: add or update compiled files or packages.
+- `:alien:`: update code due to external API changes.
+- `:truck:`: move or rename resources, such as files, paths, or routes.
+- `:page_facing_up:`: add or update a license.
+- `:boom:`: introduce breaking changes.
+- `:bento:`: add or update assets.
+- `:wheelchair:`: improve accessibility.
+- `:bulb:`: add or update source comments.
+- `:beers:`: write unserious or temporary code.
+- `:speech_balloon:`: add or update text and literals.
+- `:card_file_box:`: database-related changes.
+- `:loud_sound:`: add or update logs.
+- `:mute:`: remove logs.
+- `:busts_in_silhouette:`: add or update contributors.
+- `:children_crossing:`: improve user experience or usability.
+- `:building_construction:`: architectural changes.
+- `:iphone:`: responsive design changes.
+- `:clown_face:`: mock-related changes.
+- `:egg:`: add or update an easter egg.
+- `:see_no_evil:`: add or update `.gitignore`.
+- `:camera_flash:`: add or update snapshots.
+- `:alembic:`: experimental changes.
+- `:mag:`: improve SEO.
+- `:label:`: add or update types.
+- `:seedling:`: add or update seed files.
+- `:triangular_flag_on_post:`: add, update, or remove feature flags.
+- `:goal_net:`: catch errors.
+- `:dizzy:`: add or update animations and transitions.
+- `:wastebasket:`: deprecate code that should be cleaned up later.
+- `:passport_control:`: authorization, role, or permission code.
+- `:adhesive_bandage:`: simple fixes for non-critical issues.
+- `:monocle_face:`: data exploration or inspection.
+- `:coffin:`: remove dead code.
+- `:test_tube:`: add a failing test.
+- `:necktie:`: add or update business logic.
+- `:stethoscope:`: add or update health checks.
+- `:bricks:`: infrastructure-related changes.
+- `:technologist:`: improve developer experience.
+- `:money_with_wings:`: sponsorship or funding infrastructure.
+- `:thread:`: multithreading or concurrency-related code.
+- `:safety_vest:`: validation-related code.
+- `:airplane:`: improve offline support.
+- `:t-rex:`: add backward-compatible code.
 
 ## Style
 
-- 标题控制在 30 个中文字符左右，动词开头，避免句号。
-- header 最长不超过 100 字符。
-- 正文最多 1 句；如果改动很小，可以只给首行。
-- 中文为主，保留必要的英文模块名、函数名、文件名。
-- 不夸大改动，不把多个无关目的硬塞进一条 commit。
-- 如果改动混杂，先建议拆分提交；用户要求单条时，选择主目的。
+- Keep the title around 30 Chinese characters.
+- Start the title with a verb and do not end it with a full stop.
+- Keep the header under 100 characters.
+- Use at most one sentence in the body; for small changes, output only the header.
+- Use Chinese as the main language, while preserving necessary English module names, function names, and file names.
+- Do not exaggerate the change.
+- Do not force multiple unrelated purposes into one commit.
+- If the changes are mixed, first suggest splitting them into separate commits. If the user requires a single commit, choose the primary purpose.
 
 ## Commit
 
-用户明确要求提交时，先展示将使用的消息，再只暂存相关文件。多行消息用：
+When the user explicitly asks to commit, show the message that will be used first, then stage only the relevant files.
+
+Use this form for multi-line messages:
 
 ```bash
-git commit -m "<type>(<scope>): <emoji-code> <中文标题>" -m "<简要描述>"
+git commit -m "<type>(<scope>): <emoji-code> <Chinese title>" -m "<short Chinese description>"
 ```
