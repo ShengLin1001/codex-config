@@ -1,4 +1,4 @@
 interface:
   display_name: "中文 Git Commit"
-  short_description: "生成简洁中文 conventional commit 信息，包含类型、图案、标题和可选描述。"
-  default_prompt: "Use $p-git-commit to generate a concise Chinese conventional commit message."
+  short_description: "按 Conventional Commits、commitlint 类型和 gitmoji 含义生成中文 commit。"
+  default_prompt: "Use $p-git-commit to generate a concise Chinese Conventional Commit message with gitmoji."
