@@ -18,3 +18,7 @@
 ## Skill 仓库跟踪
 
 安装新的 skill 仓库后，将其仓库地址记录到 `scripts/reinstall-skills.sh` 中的 `repos` 数组里。如果该仓库已经列出，则不要重复添加。
+
+## 其他说明
+
+在未显式说明更新时，不要按照上述工作流运行。例如 “生成 commit” 意味着无须执行 `git pull` 或 `git push`，只需生成 commit message 并运行 `git commit` 即可。
