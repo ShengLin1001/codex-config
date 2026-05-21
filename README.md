@@ -8,7 +8,6 @@ new host:
 - `codex/config.toml`: Codex configuration snapshot.
 - `codex/AGENTS.md`: global operating instructions.
 - `skills/p-skill-installer`: locally authored Codex skill.
-- `memories/`: curated Codex memory registry and rollout summaries.
 - `scripts/reinstall-skills.sh`: reinstall external skills with `npx skills`.
 - `scripts/restore-codex-files.sh`: copy this repository's Codex files into
   `~/.codex`.
