@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Skill Creator"
+  short_description: "Create PJ skills and publish them to codex-config."
+  default_prompt: "Use $p-skill-creator to create a PJ Codex skill, commit it to codex-config, push to GitHub, and update the installed skills."
