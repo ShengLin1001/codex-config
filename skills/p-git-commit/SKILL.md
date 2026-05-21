@@ -186,7 +186,7 @@ feat(DFT): :sparkles: 添加收敛状态检查
 
 ## 提交
 
-当用户明确要求提交时，先展示将要使用的 message，然后只暂存相关文件。例如：“$p-git-commit 提交” 意味着需要执行 `git commit` 命令暂存相关文件，不需要`git pull` 和 `git push`。
+当用户明确要求提交时，先展示将要使用的 message，然后暂存相关文件, 并`git commit`。例如：“$p-git-commit 提交” 意味着需要执行 `git add` 和 `git commit`，不需要`git pull` 和 `git push`。
 
 多行 message 使用以下形式：
 
