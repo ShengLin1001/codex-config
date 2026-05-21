@@ -19,17 +19,17 @@
 在修改 `~/.codex/AGENTS.md` 或 `~/.codex/config.toml` 后，从仓库根目录运行：
 
 ~~~bash
-bash scripts/copy-codex-files.sh
+./scripts/copy-codex-files.sh
 ~~~
 
 这会更新 `codex/AGENTS.md` 和 `codex/config.toml`。
 
-### 恢复到 Codex 环境
+### 恢复到 Codex 环境 (慎重，最好手动检查差异)
 
 从仓库根目录运行：
 
 ~~~bash
-bash scripts/restore-codex-files.sh
+./scripts/restore-codex-files.sh
 ~~~
 
 这会将仓库中的 Codex 配置副本恢复到 `~/.codex`。
@@ -39,16 +39,60 @@ bash scripts/restore-codex-files.sh
 从仓库根目录运行：
 
 ~~~bash
-bash scripts/reinstall-skills.sh
+./scripts/reinstall-skills.sh
 ~~~
 
 该脚本会读取 `scripts/reinstall-skills.sh` 中的 `repos` 数组，并通过 `npx skills add` 安装这些 skill 仓库。
 
 安装新的 skill 仓库后，将其仓库地址添加到 `scripts/reinstall-skills.sh` 中的 `repos` 数组里。如果该仓库已经列出，则不要重复添加。
 
+### 使用 npx 管理 Skills
+
+本机通过 `npx skills` 管理全局用户级 skills，默认安装位置是 `~/.agents/skills`。Codex 可以直接从该目录发现 skills；`npx skills list -g -a codex` 中的 `Agents: not linked` 不等于 Codex 无法使用该 skill。
+
+由于当前 Node 需要显式读取代理环境变量，运行会访问 GitHub 的命令时建议带上：
+
+~~~bash
+NODE_OPTIONS=--use-env-proxy
+~~~
+
+如果要永久生效，可在 `~/.bashrc` 的添加：
+
+~~~bash
+export NODE_OPTIONS="--use-env-proxy"
+~~~
+
+安装或刷新某个 skill 仓库：
+
+~~~bash
+NODE_OPTIONS=--use-env-proxy npx --yes skills add ShengLin1001/codex-config -g --agent codex --skill '*' --yes
+NODE_OPTIONS=--use-env-proxy npx --yes skills add owner/repo -g --agent codex --skill '*' --yes
+~~~
+
+更新已经由 CLI lock 跟踪的 skills：
+
+~~~bash
+NODE_OPTIONS=--use-env-proxy npx --yes skills update -g -y
+NODE_OPTIONS=--use-env-proxy npx --yes skills update p-skill-installer -g -y
+~~~
+
+查看已安装 skills：
+
+~~~bash
+npx --yes skills list -g -a codex
+~~~
+
+移除指定 skill：
+
+~~~bash
+npx --yes skills remove p-skill-installer -g -y
+~~~
+
+不要随意运行 `npx skills remove --all -g`；该命令会移除所有全局 skills。需要批量清理时先确认列表，再逐个指定 skill 名称。
+
 ## 环境规则
 
-与 Codex 相关的 Python 应在 ~/.codex/AGENTS.md 中声明。
+与 Codex 相关的 Python, git 等其他应用路径应在 ~/.codex/AGENTS.md 中声明。
 
 不要将 Codex 相关的 Python 包安装到其他虚拟环境中。
 
@@ -62,6 +106,3 @@ bash scripts/reinstall-skills.sh
 2. 使用 `$p-git-commit` 生成中文 commit message。
 3. 运行 `git push`，将改动推送到 GitHub。
 
-## 其他说明
-
-在未显式说明更新时，不要按照上述工作流运行。例如 “生成commit并git commit” 意味着无须执行 `git pull` 或 `git push`，只需生成 commit message 并运行 `git commit` 即可。
