@@ -24,3 +24,9 @@ for repo in "${repos[@]}"; do
 done
 
 npx --yes skills list "$GLOBAL_FLAG" -a "$AGENT"
+
+# Update
+# npx --yes skills update -g -y
+
+# Remove
+# npx --yes skills remove --all -g

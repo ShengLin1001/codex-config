@@ -1,6 +1,6 @@
 ---
 name: p-skill-installer
-description: PJ 创建的 skill 安装器，通过 npx `skills` CLI 安装、更新并验证 Codex skills。当用户要求使用 `npx skills add` 从 GitHub 仓库添加 skills、安装用户级/全局 skills、验证 Codex skill 发现、排查 npx/GitHub HTTPS 克隆行为、在 `git remote-https` 失败时从 HTTPS 回退到 SSH，或记录受支持的 skill 更新工作流时使用。该 skill 保留 CLI 管理的 lock/update 行为，并避免手动更新 skill 文件。
+description: For test, PJ 创建的 skill 安装器，通过 npx `skills` CLI 安装、更新并验证 Codex skills。当用户要求使用 `npx skills add` 从 GitHub 仓库添加 skills、安装用户级/全局 skills、验证 Codex skill 发现、排查 npx/GitHub HTTPS 克隆行为、在 `git remote-https` 失败时从 HTTPS 回退到 SSH，或记录受支持的 skill 更新工作流时使用。该 skill 保留 CLI 管理的 lock/update 行为，并避免手动更新 skill 文件。
 ---
 
 # P Skill Installer
