@@ -1,0 +1,66 @@
+# gpt-5.5: Start here for demanding agents. It is strongest for ambiguous, multi-step work that needs planning, tool use, validation, and follow-through across a larger context.
+# gpt-5.4: Use this when a workflow is pinned to GPT-5.4. It combines strong coding, reasoning, tool use, and broader workflows.
+# gpt-5.4-mini: Use for agents that favor speed and efficiency over depth, such as exploration, read-heavy scans, large-file review, or processing supporting documents. It works well for parallel workers that return distilled results to the main agent.
+# gpt-5.3-codex-spark: If you have ChatGPT Pro, use this research preview model for near-instant, text-only iteration when latency matters more than broader capability.
+model = "gpt-5.5"
+# high, medium, low
+model_reasoning_effort = "medium"
+
+##########################################################################################
+# Auto-review
+sandbox_mode = "workspace-write"                 # Added by J. P.
+approval_policy = "on-request"                   # Added by J. P.
+approvals_reviewer = "guardian_subagent"               # Added by J. P.
+personality = "pragmatic"
+
+# Default
+# sandbox_mode = "workspace-write"
+# approval_policy = "on-request"
+# approvals_reviewer = "user"
+
+# Full access
+# sandbox_mode = "danger-full-access"
+# approval_policy = "never"
+
+[features]
+terminal_resize_reflow = true
+memories = true
+##########################################################################################
+
+[plugins."github@openai-curated"]
+enabled = true
+
+[projects."/public3/home/scg6928/codex"]
+trust_level = "trusted"
+
+[projects."/public3/home/scg6928/mysoft/test"]
+trust_level = "trusted"
+
+[projects."/public3/home/scg6928"]
+trust_level = "trusted"
+
+[projects."/public3/home/scg6928/mysoft/pei/pjvasp_package"]
+trust_level = "trusted"
+
+[projects."/public3/home/scg6928/mysoft/tools/codex"]
+trust_level = "trusted"
+
+[projects."/public3/home/scg6928/mysoft/pei/codex-config"]
+trust_level = "trusted"
+
+[notice.model_migrations]
+"gpt-5.3-codex" = "gpt-5.4"
+
+[tui]
+terminal_title = ["activity", "current-dir", "run-state", "context-remaining"]
+
+[tui.model_availability_nux]
+"gpt-5.5" = 4
+
+[memories]
+use_memories = true
+generate_memories = true
+
+[mcp_servers.pjvasp-git]
+command = "/public3/home/scg6928/mysoft/env/pyenv/codex/bin/mcp-server-git"
+args = ["--repository", "/public3/home/scg6928/mysoft/pei/pjvasp_package"]

@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Skill Installer"
+  short_description: "PJ npx installer for Codex skills."
+  default_prompt: "Use $p-skill-installer to install or update Codex skills with npx, then verify HTTPS GitHub access, SSH fallback if needed, Codex discovery, and CLI updates."

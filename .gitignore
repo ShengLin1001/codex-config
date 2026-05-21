@@ -1,0 +1,10 @@
+.DS_Store
+*.pyc
+__pycache__/
+
+# Do not commit transient Codex runtime state or secrets.
+auth.json
+sessions/
+logs/
+tmp/
+*.log
