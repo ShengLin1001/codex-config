@@ -102,17 +102,12 @@ npx --yes skills add https://github.com/ShengLin1001/codex-config.git -g --agent
 npx --yes skills update -g -y
 ~~~
 
-然后验证 Codex 是否能发现这些 skills：
+查看 CLI 的全局安装状态：
 
 ~~~bash
 npx --yes skills list -g -a codex
 ~~~
 
-如果 CLI 安装到了 `~/.agents/skills`，但报告新的 skill 为
-`not linked`，则只创建一个明确的符号链接：
-
-~~~bash
-ln -s ~/.agents/skills/<skill-name> ~/.codex/skills/<skill-name>
-~~~
+如果 CLI 安装到了 `~/.agents/skills`，但报告新的 skill 为 `not linked`，不要创建 `~/.codex/skills/<skill-name>` 符号链接。当前 Codex 可以直接从 `~/.agents/skills` 发现并调用用户级 skills；`not linked` 只是 `skills` CLI 的 agent linkage 显示，不等同于 Codex 不可用。真正的验证方式是在 Codex 中调用新 skill。
 
 不要手动编辑 `~/.agents/skills` 或 `~/.agents/.skill-lock.json`。

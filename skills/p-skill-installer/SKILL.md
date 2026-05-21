@@ -59,15 +59,15 @@ git@github.com:owner/repo.git
 npx --yes skills add vercel-labs/agent-skills -g --agent codex --skill '*' --yes
 ~~~
 
-预期结果：CLI 报告 HTTPS GitHub source，克隆仓库，发现 skills，将它们安装到 `~/.agents/skills` 下，并映射到 Codex。
+预期结果：CLI 报告 HTTPS GitHub source，克隆仓库，发现 skills，并将它们安装到 `~/.agents/skills` 下。
 
-验证 Codex 是否能发现这些 skills：
+查看 CLI 的全局安装状态：
 
 ~~~bash
 npx --yes skills list -g -a codex
 ~~~
 
-预期结果：已安装 skills 列表中显示 `Agents: Codex`。
+如果这里显示 `Agents: not linked`，不要因此创建 `~/.codex/skills/<skill-name>` 符号链接。当前 Codex 可以直接从 `~/.agents/skills` 发现并调用用户级 skills；`not linked` 只是 `skills` CLI 的 agent linkage 显示，不等同于 Codex 不可用。真正的验证方式是在 Codex 中调用对应 skill。
 
 验证更新支持：
 
@@ -79,6 +79,4 @@ npx --yes skills update -g -y
 
 ## 发现链接
 
-Codex 从 `~/.codex/skills` 读取用户级 skills。`skills` CLI 可能会把全局 skill 内容放在 `~/.agents/skills` 下。如果 CLI 成功后，已安装的 skills 对 Codex 仍不可见，则只创建明确的逐个 skill 符号链接，从 `~/.codex/skills/<skill-name>` 指向 `~/.agents/skills/<skill-name>`。
-
-这些符号链接仅用于 Codex 发现。source 内容和 `.skill-lock.json` 仍应由 `npx skills` 管理。
+Codex 从 `~/.agents/skills` 读取用户级 skills。无需在 `~/.codex/skills/<skill-name>` 创建符号链接指向 `~/.agents/skills/<skill-name>`。不要因为 `npx skills list -g -a codex` 显示 `Agents: not linked` 就创建符号链接；只有在用户明确要求调试 Codex 发现路径，且实测 Codex 无法调用该 skill 时，才进一步排查。
