@@ -1,13 +1,12 @@
 ---
 name: p-git-commit
-description: For test 生成简洁的中文 commit message，遵循 Conventional Commits v1.0.0、@commitlint/config-conventional 的 type 枚举，以及官方 gitmoji shortcode 含义。当用户要求编写、格式化、润色、选择或创建 git commit message 时使用。
+description: 生成简洁的中文 commit message，遵循 Conventional Commits v1.0.0、@commitlint/config-conventional 的 type 枚举，以及官方 gitmoji shortcode 含义。当用户要求编写、格式化、润色、选择或创建 git commit message 时使用。
 ---
 
 # P Git Commit
 
 ## 概述
 
-For test 
 生成简洁、中文、易于快速浏览的 Git commit message。默认情况下，只输出建议的 commit message。只有当用户明确要求提交时，才运行 `git add` 或 `git commit`。
 
 本 skill 遵循三层约定：
