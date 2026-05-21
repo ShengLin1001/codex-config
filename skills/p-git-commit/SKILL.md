@@ -186,7 +186,9 @@ feat(DFT): :sparkles: 添加收敛状态检查
 
 ## 提交
 
-当用户明确要求提交时，先展示将要使用的 message，然后暂存相关文件, 并`git commit`。例如：“$p-git-commit 提交” 意味着需要执行 `git add` 和 `git commit`，不需要`git pull` 和 `git push`。
+当用户明确要求提交时，先展示将要使用的 message，然后暂存相关文件，并 `git commit`。例如：“$p-git-commit 提交” 意味着需要执行 `git add` 和 `git commit`，不需要`git pull` 和 `git push`。
+
+在执行 `git add` 和 `git commit` 需要写入 `.git/index`、`.git/index.lock` 或 Git 对象；由于该环境在沙箱内可能把 `.git` 视为只读，执行这些命令时应直接申请更高权限，不必先用默认权限试错。申请权限时保持命令范围精确，例如只对 `git add <相关文件>` 或 `git commit -m "<message>"` 提权。
 
 多行 message 使用以下形式：
 
