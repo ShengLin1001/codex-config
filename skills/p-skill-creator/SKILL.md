@@ -89,20 +89,21 @@ git push
 If unrelated changes exist, leave them untouched and commit only the new or
 updated skill path.
 
-## Install Or Update Locally
+## Install Locally
 
-After pushing, use the `p-skill-installer` workflow to refresh the installed
-skills from GitHub:
-
-```bash
-npx --yes skills update -g -y
-```
-
-If the new skill is not installed by update because it was not previously in the
-global lock, install from the repo with:
+After pushing, use the `p-skill-installer` install workflow to install or
+refresh the repository skills from GitHub:
 
 ```bash
 npx --yes skills add https://github.com/ShengLin1001/codex-config.git -g --agent codex --skill '*' --yes
+```
+
+Use install rather than update here because newly created skills may not exist
+in the global lock yet. After the repository has been installed once, future
+routine refreshes can still use:
+
+```bash
+npx --yes skills update -g -y
 ```
 
 Then verify Codex discovery:
