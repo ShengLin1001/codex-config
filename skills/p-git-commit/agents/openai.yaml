@@ -1,4 +1,4 @@
 interface:
-  display_name: "P Git Commit"
-  short_description: "Generate Chinese commits following Conventional Commits, commitlint types, and gitmoji meanings."
+  display_name: "P Git Commit For test "
+  short_description: " For test Generate Chinese commits following Conventional Commits, commitlint types, and gitmoji meanings."
   default_prompt: "Use $p-git-commit to generate a concise Chinese Conventional Commit message with gitmoji."
