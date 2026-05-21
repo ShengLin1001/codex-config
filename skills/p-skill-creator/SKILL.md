@@ -32,7 +32,7 @@ $PJ_CODEX_CONFIG/skills/<skill-name>/agents/openai.yaml
 ## Create
 
 Use the system `skill-creator` initializer to create the skill in a temporary
-or staging location first. Use the Codex-specific Python environment:
+or staging location first. On CentOS, use the Codex-specific Python environment:
 
 ```bash
 /public3/home/scg6928/mysoft/env/pyenv/codex/bin/python \
@@ -43,6 +43,9 @@ or staging location first. Use the Codex-specific Python environment:
   --interface short_description='<Short description>' \
   --interface default_prompt='Use $<skill-name> to <do the workflow>.'
 ```
+
+On Windows or other environments, use the default `python` command and adjust
+the path to `init_skill.py` accordingly.
 
 Then edit only the generated skill files needed for the requested workflow.
 Keep `SKILL.md` concise, imperative, and focused on reusable procedural

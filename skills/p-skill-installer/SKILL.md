@@ -14,25 +14,18 @@ direct edits under `~/.agents/skills`.
 
 ## Environment
 
-Use the local Git and curl runtime that work on this host:
+On CentOS, use the local Git and curl runtime that work on this host:
 
 ```bash
 export PATH=/public3/home/scg6928/mysoft/tools/git/2.43.7/bin:$PATH
 export LD_LIBRARY_PATH=/public3/soft/curl/lib:$LD_LIBRARY_PATH
 ```
 
-Rely on the base proxy exported by `~/.bash_soft_env`:
+On Windows or other environments, use the default `git` and `curl` commands and
+adjust the workflow accordingly.
 
-```bash
-export http_proxy="http://127.0.0.1:37897"
-export https_proxy="http://127.0.0.1:37897"
-export HTTP_PROXY="http://127.0.0.1:37897"
-export HTTPS_PROXY="http://127.0.0.1:37897"
-```
-
-Do not add Git-specific `http.proxy` or `https.proxy` values in `~/.gitconfig`.
-Do not add a GitHub `insteadOf` rewrite from HTTPS to SSH unless the user
-explicitly asks for an SSH-only workaround.
+Do not add a GitHub `insteadOf` rewrite from HTTPS to SSH unless HTTPS cloning
+fails.
 
 ## Install
 
@@ -81,9 +74,6 @@ to:
 git@github.com:owner/repo.git
 ```
 
-Use SSH only as the fallback after confirming `git remote-https` is not working
-through the base proxy environment.
-
 Then verify the CLI install path:
 
 ```bash
@@ -119,16 +109,3 @@ from `~/.codex/skills/<skill-name>` to `~/.agents/skills/<skill-name>`.
 
 Those symlinks are only for Codex discovery. Keep the source contents and
 `.skill-lock.json` managed by `npx skills`.
-
-## Troubleshooting
-
-If HTTPS clone fails, inspect the environment before changing Git configuration:
-
-```bash
-env | grep -E '^(http_proxy|https_proxy|HTTP_PROXY|HTTPS_PROXY)='
-git config --global --show-origin --get-regexp '^(http|https)\.proxy|^url\.'
-```
-
-The preferred state is no Git-specific proxy and no GitHub `insteadOf` rewrite.
-If stale Git proxy or rewrite entries exist, remove only those specific Git
-config keys after confirming with the user.
