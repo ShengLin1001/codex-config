@@ -1,4 +1,4 @@
 interface:
-  display_name: "中文 Git Commit"
+  display_name: "P Git Commit"
   short_description: "按 Conventional Commits、commitlint 类型和 gitmoji 含义生成中文 commit。"
   default_prompt: "Use $p-git-commit to generate a concise Chinese Conventional Commit message with gitmoji."

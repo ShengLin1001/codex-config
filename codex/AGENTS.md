@@ -14,3 +14,4 @@ Remove-Item "C:\path\to\file.txt"
 - Python: `/public3/home/scg6928/mysoft/env/pyenv/codex/bin/python`
 - pip: `/public3/home/scg6928/mysoft/env/pyenv/codex/bin/python -m pip`
 不要把 Codex 相关包安装到主要使用的 `/public3/home/scg6928/mysoft/env/pyenv/dft` 虚拟环境中。
+生成 Git commit 信息时，默认使用 `$p-git-commit` skill 的规范。
