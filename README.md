@@ -61,3 +61,7 @@ bash scripts/reinstall-skills.sh
 1. 运行 `git pull`，同步远程分支。
 2. 使用 `$p-git-commit` 生成中文 commit message。
 3. 运行 `git push`，将改动推送到 GitHub。
+
+## 其他说明
+
+在未显式说明更新时，不要按照上述工作流运行。例如 “生成commit并git commit” 意味着无须执行 `git pull` 或 `git push`，只需生成 commit message 并运行 `git commit` 即可。

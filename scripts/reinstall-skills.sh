@@ -25,7 +25,7 @@ done
 
 npx --yes skills list "$GLOBAL_FLAG" -a "$AGENT"
 
-# Update
+# Update, Needs node > 18 
 # npx --yes skills update -g -y
 
 # Remove
