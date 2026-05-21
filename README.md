@@ -1,67 +1,63 @@
 # codex-config
 
-This repository maintains personal Codex configuration, global instructions, restore scripts, and custom skills. It is intended to make the same Codex setup easy to restore on this CentOS HPC host or on a new environment.
+本仓库用于维护个人 Codex 配置、全局说明、恢复脚本和自定义 skills。它的目的是让同一套 Codex 设置可以方便地在当前 CentOS HPC 主机或新的环境中恢复。
 
-## Repository Contents
+## 仓库内容
 
-- `AGENTS.md`: collaboration and update rules for this repository.
-- `codex/config.toml`: repository copy of `~/.codex/config.toml`.
-- `codex/AGENTS.md`: repository copy of `~/.codex/AGENTS.md`, used to preserve Codex global instructions.
-- `skills/`: custom Codex skills maintained in this repository.
-- `scripts/copy-codex-files.sh`: copies `AGENTS.md` and `config.toml` from `~/.codex` into this repository's `codex/` directory.
-- `scripts/restore-codex-files.sh`: restores Codex configuration from this repository into `~/.codex`.
-- `scripts/reinstall-skills.sh`: reinstalls external skill repositories through `npx skills`.
+- `AGENTS.md`：本仓库的协作和更新规则。
+- `codex/config.toml`：`~/.codex/config.toml` 的仓库副本。
+- `codex/AGENTS.md`：`~/.codex/AGENTS.md` 的仓库副本，用于保存 Codex 全局说明。
+- `skills/`：本仓库维护的自定义 Codex skills。
+- `scripts/copy-codex-files.sh`：将 `~/.codex` 中的 `AGENTS.md` 和 `config.toml` 复制到本仓库的 `codex/` 目录。
+- `scripts/restore-codex-files.sh`：从本仓库将 Codex 配置恢复到 `~/.codex`。
+- `scripts/reinstall-skills.sh`：通过 `npx skills` 重新安装外部 skill 仓库。
 
-## Common Workflows
+## 常用工作流
 
-### Sync From the Current Codex Environment
+### 从当前 Codex 环境同步
 
-After changing `~/.codex/AGENTS.md` or `~/.codex/config.toml`, run this from the repository root:
+在修改 `~/.codex/AGENTS.md` 或 `~/.codex/config.toml` 后，从仓库根目录运行：
 
-```bash
+~~~bash
 bash scripts/copy-codex-files.sh
-```
+~~~
 
-This updates `codex/AGENTS.md` and `codex/config.toml`.
+这会更新 `codex/AGENTS.md` 和 `codex/config.toml`。
 
-### Restore Into the Codex Environment
+### 恢复到 Codex 环境
 
-Run this from the repository root:
+从仓库根目录运行：
 
-```bash
+~~~bash
 bash scripts/restore-codex-files.sh
-```
+~~~
 
-This restores the repository copy of the Codex configuration into `~/.codex`.
+这会将仓库中的 Codex 配置副本恢复到 `~/.codex`。
 
-### Reinstall External Skills
+### 重新安装外部 Skills
 
-Run this from the repository root:
+从仓库根目录运行：
 
-```bash
+~~~bash
 bash scripts/reinstall-skills.sh
-```
+~~~
 
-The script reads the `repos` array in `scripts/reinstall-skills.sh` and installs those skill repositories through `npx skills add`.
+该脚本会读取 `scripts/reinstall-skills.sh` 中的 `repos` 数组，并通过 `npx skills add` 安装这些 skill 仓库。
 
-After installing a new skill repository, add its repository address to the `repos` array in `scripts/reinstall-skills.sh`. If the repository is already listed, do not add it again.
+安装新的 skill 仓库后，将其仓库地址添加到 `scripts/reinstall-skills.sh` 中的 `repos` 数组里。如果该仓库已经列出，则不要重复添加。
 
-## Environment Rules
+## 环境规则
 
-The current host is a CentOS HPC environment. Codex-related Python work should use this isolated virtual environment by default:
+与 Codex 相关的 Python 应在 ~/.codex/AGENTS.md 中声明。
 
-```bash
-/public3/home/scg6928/mysoft/env/pyenv/codex/bin/python
-```
+不要将 Codex 相关的 Python 包安装到其他虚拟环境中。
 
-Do not install Codex-related Python packages into the main `dft` virtual environment.
+如果缺少某个必要命令，或其版本不合适，应先检查是否可以通过 `module avail` 找到合适的软件。
 
-If a required command is missing or its version is unsuitable, first check whether suitable software is available through `module avail`.
+## Git 工作流
 
-## Git Workflow
+更新本仓库时，按以下顺序执行：
 
-When updating this repository, follow this order:
-
-1. Run `git pull` to sync the remote branch.
-2. Use `$p-git-commit` to generate a Chinese commit message.
-3. Run `git push` to push changes to GitHub.
+1. 运行 `git pull`，同步远程分支。
+2. 使用 `$p-git-commit` 生成中文 commit message。
+3. 运行 `git push`，将改动推送到 GitHub。

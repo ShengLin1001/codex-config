@@ -1,111 +1,84 @@
 ---
 name: p-skill-installer
-description: PJ-created skill installer for installing, updating, and verifying Codex skills with the npx `skills` CLI on this CentOS HPC environment. Use when the user asks to add skills from GitHub repos with `npx skills add`, install user-level/global skills, verify Codex skill discovery, troubleshoot npx/GitHub HTTPS clone behavior, fall back from HTTPS to SSH when `git remote-https` fails, or document the supported skill update workflow. This skill preserves CLI-managed lock/update behavior and avoids manual skill file updates.
+description: PJ 创建的 skill 安装器，通过 npx `skills` CLI 安装、更新并验证 Codex skills。当用户要求使用 `npx skills add` 从 GitHub 仓库添加 skills、安装用户级/全局 skills、验证 Codex skill 发现、排查 npx/GitHub HTTPS 克隆行为、在 `git remote-https` 失败时从 HTTPS 回退到 SSH，或记录受支持的 skill 更新工作流时使用。该 skill 保留 CLI 管理的 lock/update 行为，并避免手动更新 skill 文件。
 ---
 
 # P Skill Installer
 
-## Overview
+## 概述
 
-Use this workflow to install GitHub-hosted skills through the official `skills`
-CLI invoked by `npx`, keeping installs global/user-level and updateable through
-the CLI. Do not replace this with manual zip downloads, local checkouts, or
-direct edits under `~/.agents/skills`.
+使用此工作流通过由 `npx` 调用的官方 `skills` CLI 安装托管在 GitHub 上的 skills，并保持安装为全局/用户级，使其可以通过 CLI 更新。不要用手动下载 zip、本地 checkout，或直接编辑 `~/.agents/skills` 下的文件来替代此流程。
 
-## Environment
+## 安装
 
-On CentOS, use the local Git and curl runtime that work on this host:
+使用全局模式，并使用小写的 Codex agent id：
 
-```bash
-export PATH=/public3/home/scg6928/mysoft/tools/git/2.43.7/bin:$PATH
-export LD_LIBRARY_PATH=/public3/soft/curl/lib:$LD_LIBRARY_PATH
-```
-
-On Windows or other environments, use the default `git` and `curl` commands and
-adjust the workflow accordingly.
-
-Do not add a GitHub `insteadOf` rewrite from HTTPS to SSH unless HTTPS cloning
-fails.
-
-## Install
-
-Use global mode and the lower-case Codex agent id:
-
-```bash
+~~~bash
 npx --yes skills add vercel-labs/agent-skills -g --agent codex --skill '*' --yes
-```
+~~~
 
-For another GitHub repo, keep the same shape:
+对于其他 GitHub 仓库，保持相同格式：
 
-```bash
+~~~bash
 npx --yes skills add owner/repo -g --agent codex --skill '*' --yes
-```
+~~~
 
-Use the HTTPS shorthand first. If the repo is not a `skills`-compatible repo,
-confirm its structure has `skills/<skill-name>/SKILL.md` before trying workarounds.
+优先使用 HTTPS 简写形式。如果该仓库不是 `skills` 兼容仓库，应先确认其结构中包含 `skills/<skill-name>/SKILL.md`，再尝试其他 workaround。
 
-## Verify
+## 验证
 
-First verify GitHub HTTPS access without SSH rewriting:
+首先在不使用 SSH 重写的情况下验证 GitHub HTTPS 访问：
 
-```bash
+~~~bash
 GIT_TRACE=1 git ls-remote https://github.com/vercel-labs/agent-skills.git HEAD
-```
+~~~
 
-The trace should show `git remote-https ...`, not `ssh ... git@github.com`, and
-the command should return a commit hash for `HEAD`.
+trace 应显示 `git remote-https ...`，而不是 `ssh ... git@github.com`，并且该命令应返回 `HEAD` 对应的 commit hash。
 
-If this HTTPS check fails, convert the GitHub source to SSH for the install
-instead of manually downloading or copying skill files:
+如果此 HTTPS 检查失败，则在安装时将 GitHub source 转换为 SSH，而不是手动下载或复制 skill 文件：
 
-```bash
+~~~bash
 npx --yes skills add git@github.com:vercel-labs/agent-skills.git -g --agent codex --skill '*' --yes
-```
+~~~
 
-For another GitHub repo, convert:
+对于其他 GitHub 仓库，将：
 
-```text
+~~~text
 https://github.com/owner/repo.git
-```
+~~~
 
-to:
+转换为：
 
-```text
+~~~text
 git@github.com:owner/repo.git
-```
+~~~
 
-Then verify the CLI install path:
+然后验证 CLI 安装路径：
 
-```bash
+~~~bash
 npx --yes skills add vercel-labs/agent-skills -g --agent codex --skill '*' --yes
-```
+~~~
 
-Expected result: the CLI reports the HTTPS GitHub source, clones the repository,
-finds the skills, installs them under `~/.agents/skills`, and maps them to Codex.
+预期结果：CLI 报告 HTTPS GitHub source，克隆仓库，发现 skills，将它们安装到 `~/.agents/skills` 下，并映射到 Codex。
 
-Verify Codex discovery:
+验证 Codex 是否能发现这些 skills：
 
-```bash
+~~~bash
 npx --yes skills list -g -a codex
-```
+~~~
 
-Expected result: installed skills list `Agents: Codex`.
+预期结果：已安装 skills 列表中显示 `Agents: Codex`。
 
-Verify update support:
+验证更新支持：
 
-```bash
+~~~bash
 npx --yes skills update -g -y
-```
+~~~
 
-Expected result: the CLI checks global skills and reports they are updated or
-already up to date. Future updates must use this command, not manual file edits.
+预期结果：CLI 检查全局 skills，并报告它们已更新或已经是最新版本。未来更新必须使用此命令，而不是手动编辑文件。
 
-## Discovery Links
+## 发现链接
 
-Codex reads user-level skills from `~/.codex/skills`. The `skills` CLI may place
-global skill contents under `~/.agents/skills`. If installed skills are not
-visible to Codex after the CLI succeeds, create only explicit per-skill symlinks
-from `~/.codex/skills/<skill-name>` to `~/.agents/skills/<skill-name>`.
+Codex 从 `~/.codex/skills` 读取用户级 skills。`skills` CLI 可能会把全局 skill 内容放在 `~/.agents/skills` 下。如果 CLI 成功后，已安装的 skills 对 Codex 仍不可见，则只创建明确的逐个 skill 符号链接，从 `~/.codex/skills/<skill-name>` 指向 `~/.agents/skills/<skill-name>`。
 
-Those symlinks are only for Codex discovery. Keep the source contents and
-`.skill-lock.json` managed by `npx skills`.
+这些符号链接仅用于 Codex 发现。source 内容和 `.skill-lock.json` 仍应由 `npx skills` 管理。

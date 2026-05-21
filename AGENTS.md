@@ -1,20 +1,20 @@
-# Project Collaboration Instructions
+# 项目协作说明
 
-This repository maintains Codex configuration, restore scripts, and custom skills.
+本仓库用于维护 Codex 配置、恢复脚本和自定义 skills。
 
-## Scope
+## 范围
 
-Keep this file focused on repository-level rules and skill routing. Do not duplicate detailed procedures that already live in `skills/*/SKILL.md`.
+保持此文件聚焦于仓库级规则和 skill 路由。不要重复 `skills/*/SKILL.md` 中已经包含的详细流程。
 
-## Update Workflow
+## 更新工作流
 
-When updating this project, follow this order:
+更新此项目时，按以下顺序执行：
 
-1. Run `git pull` first to sync the latest remote changes.
-2. Commit only after reviewing the actual diff and deciding whether the changes should be split.
-3. Use `$p-git-commit` to generate commit messages and to handle commit-message rules.
-4. After committing, run `git push` to push changes to the remote repository.
+1. 先运行 `git pull`，同步远程仓库的最新改动。
+2. 只有在查看实际 diff 并判断改动是否需要拆分后，才进行 commit。
+3. 使用 `$p-git-commit` 生成 commit message，并处理 commit message 规则。
+4. commit 后，运行 `git push` 将改动推送到远程仓库。
 
-## Skill Repository Tracking
+## Skill 仓库跟踪
 
-When a new skill repository is installed, record its repository address in the `repos` array in `scripts/reinstall-skills.sh`. If the repository is already listed, do not add it again.
+安装新的 skill 仓库后，将其仓库地址记录到 `scripts/reinstall-skills.sh` 中的 `repos` 数组里。如果该仓库已经列出，则不要重复添加。

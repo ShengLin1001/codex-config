@@ -1,125 +1,118 @@
 ---
 name: p-skill-creator
-description: PJ-created workflow for creating new Codex skills, publishing them into the codex-config repository, committing and pushing the repository, and refreshing the installed skills with p-skill-installer. Use when the user asks to create a PJ skill, turn a repeated local workflow into a reusable skill, move a generated skill into the `$PJ_CODEX_CONFIG/skills` repository layout, or publish/update skills through `https://github.com/ShengLin1001/codex-config.git`.
+description: PJ 创建的工作流，用于创建新的 Codex skills，将它们发布到 codex-config 仓库，提交并推送该仓库，并使用 p-skill-installer 刷新已安装的 skills。当用户要求创建 PJ skill、将重复性的本地工作流转化为可复用 skill、把生成的 skill 移动到 `$PJ_CODEX_CONFIG/skills` 仓库布局中，或通过 `https://github.com/ShengLin1001/codex-config.git` 发布/更新 skills 时使用。
 ---
 
 # P Skill Creator
 
-## Overview
+## 概述
 
-Create PJ-owned Codex skills and publish them through the `codex-config`
-repository so they can be installed and updated with `p-skill-installer`.
+创建 PJ 自有的 Codex skills，并通过 `codex-config`
+仓库发布它们，以便使用 `p-skill-installer` 进行安装和更新。
 
-## Repository
+## 仓库
 
-Resolve the repository path from `PJ_CODEX_CONFIG`:
+从 `PJ_CODEX_CONFIG` 解析仓库路径：
 
-```bash
+~~~bash
 printf '%s\n' "${PJ_CODEX_CONFIG:-}"
-```
+~~~
 
-If `PJ_CODEX_CONFIG` is empty, stop and ask the user to provide the local
-`codex-config` repository path. Do not guess. After the user provides a path,
-use it as the repository root for the current task.
+如果 `PJ_CODEX_CONFIG` 为空，则停止并要求用户提供本地
+`codex-config` 仓库路径。不要猜测。用户提供路径后，
+将其作为当前任务的仓库根目录。
 
-The target layout is:
+目标布局如下：
 
-```text
+~~~text
 $PJ_CODEX_CONFIG/skills/<skill-name>/SKILL.md
 $PJ_CODEX_CONFIG/skills/<skill-name>/agents/openai.yaml
-```
+~~~
 
-## Create
+## 创建
 
-Use the system `skill-creator` initializer to create the skill in a temporary
-or staging location first. On CentOS, use the Codex-specific Python environment:
+先使用系统 `skill-creator` 初始化器在临时位置或暂存位置创建 skill。
+使用 Codex 专用的 Python 环境：
 
-```bash
-/public3/home/scg6928/mysoft/env/pyenv/codex/bin/python \
-  /public3/home/scg6928/.codex/skills/.system/skill-creator/scripts/init_skill.py \
+~~~bash
+python \
+  ~/.codex/skills/.system/skill-creator/scripts/init_skill.py \
   <skill-name> \
   --path <staging-parent> \
   --interface display_name='<Display Name>' \
   --interface short_description='<Short description>' \
   --interface default_prompt='Use $<skill-name> to <do the workflow>.'
-```
+~~~
 
-On Windows or other environments, use the default `python` command and adjust
-the path to `init_skill.py` accordingly.
+然后只编辑所请求工作流所需的已生成 skill 文件。
+保持 `SKILL.md` 简洁、命令式，并聚焦于可复用的流程性知识。
+除非用户明确要求，否则不要添加 README、更新日志、安装指南或其他辅助文档。
 
-Then edit only the generated skill files needed for the requested workflow.
-Keep `SKILL.md` concise, imperative, and focused on reusable procedural
-knowledge. Do not add README, changelog, installation guide, or other auxiliary
-documentation unless the user explicitly asks.
+发布前验证 skill：
 
-Validate the skill before publishing:
-
-```bash
-/public3/home/scg6928/mysoft/env/pyenv/codex/bin/python \
-  /public3/home/scg6928/.codex/skills/.system/skill-creator/scripts/quick_validate.py \
+~~~bash
+python \
+  ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py \
   <path-to-staged-skill>
-```
+~~~
 
-## Move Into Repository
+## 移入仓库
 
-Move the finished skill directory into:
+将完成后的 skill 目录移动到：
 
-```text
+~~~text
 $PJ_CODEX_CONFIG/skills/<skill-name>
-```
+~~~
 
-If a same-named skill already exists in the repository, inspect it first and
-update it in place. Do not overwrite or remove it blindly. Respect the user's
-rule against bulk deletion; never use `rm -rf` or recursive delete commands.
+如果仓库中已经存在同名 skill，先检查它，并在原位置更新。
+不要盲目覆盖或删除它。遵守用户禁止批量删除的规则；
+绝不要使用 `rm -rf` 或递归删除命令。
 
-## Commit And Push
+## 提交并推送
 
-From `$PJ_CODEX_CONFIG`, inspect changes before committing:
+在 `$PJ_CODEX_CONFIG` 中，提交前先检查改动：
 
-```bash
+~~~bash
 git status --short
 git diff -- skills/<skill-name>
-```
+~~~
 
-Commit only the intended skill files:
+只提交目标 skill 文件：
 
-```bash
+~~~bash
 git add skills/<skill-name>
 git commit -m "Add <skill-name> skill"
 git push
-```
+~~~
 
-If unrelated changes exist, leave them untouched and commit only the new or
-updated skill path.
+如果存在无关改动，保持它们不变，只提交新增或更新的 skill 路径。
 
-## Install Locally
+## 本地安装
 
-After pushing, use the `p-skill-installer` install workflow to install or
-refresh the repository skills from GitHub:
+推送后，使用 `p-skill-installer` 的安装工作流，从 GitHub 安装或刷新仓库中的 skills：
 
-```bash
+~~~bash
 npx --yes skills add https://github.com/ShengLin1001/codex-config.git -g --agent codex --skill '*' --yes
-```
+~~~
 
-Use install rather than update here because newly created skills may not exist
-in the global lock yet. After the repository has been installed once, future
-routine refreshes can still use:
+这里使用 install 而不是 update，因为新创建的 skills 可能尚未存在于全局 lock 中。
+仓库安装过一次后，之后的常规刷新仍然可以使用：
 
-```bash
+~~~bash
 npx --yes skills update -g -y
-```
+~~~
 
-Then verify Codex discovery:
+然后验证 Codex 是否能发现这些 skills：
 
-```bash
+~~~bash
 npx --yes skills list -g -a codex
-```
+~~~
 
-If the CLI installs under `~/.agents/skills` but reports the new skill as
-`not linked`, create only a single explicit symlink:
+如果 CLI 安装到了 `~/.agents/skills`，但报告新的 skill 为
+`not linked`，则只创建一个明确的符号链接：
 
-```bash
+~~~bash
 ln -s ~/.agents/skills/<skill-name> ~/.codex/skills/<skill-name>
-```
+~~~
 
-Do not manually edit `~/.agents/skills` or `~/.agents/.skill-lock.json`.
+不要手动编辑 `~/.agents/skills` 或 `~/.agents/.skill-lock.json`。
