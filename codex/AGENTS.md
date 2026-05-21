@@ -1,10 +1,10 @@
-# Codex 全局约束
+# Codex Global Constraints
 
-## 文件删除安全
+## File Deletion Safety
 
-禁止批量删除文件或目录。
+Do not delete files or directories in bulk.
 
-不要使用：
+Do not use:
 
 - `del /s`
 - `rd /s`
@@ -12,29 +12,29 @@
 - `Remove-Item -Recurse`
 - `rm -rf`
 
-需要删除文件时，只能一次删除一个明确路径的文件。
+When deleting files, delete only one explicit file path at a time.
 
-正确示例：
+Correct example:
 
 ```powershell
 Remove-Item "C:\path\to\file.txt"
 ```
 
-如果需要批量删除文件，应停止操作，并向用户请求，让用户手动删除。
+If bulk file deletion is needed, stop and ask the user to delete the files manually.
 
-## 平台环境
+## Platform Environment
 
-当前平台是 CentOS 超算平台。调用命令时如果命令不存在或版本不符合要求，先检查是否可以通过 `module avail` 调用合适的软件。
+The current platform is a CentOS HPC environment. When a required command is missing or its version is unsuitable, first check whether suitable software is available through `module avail`.
 
-## Python 环境
+## Python Environment
 
-后续 Codex 相关 Python 操作默认使用隔离虚拟环境：
+For future Codex-related Python operations, use this isolated virtual environment by default:
 
 - Python: `/public3/home/scg6928/mysoft/env/pyenv/codex/bin/python`
 - pip: `/public3/home/scg6928/mysoft/env/pyenv/codex/bin/python -m pip`
 
-不要把 Codex 相关包安装到主要使用的 `/public3/home/scg6928/mysoft/env/pyenv/dft` 虚拟环境中。
+Do not install Codex-related packages into the main `/public3/home/scg6928/mysoft/env/pyenv/dft` virtual environment.
 
 ## Git Commit
 
-生成 Git commit 信息时，默认使用 `$p-git-commit` skill 的规范。
+When generating Git commit messages, use the `$p-git-commit` skill by default.
