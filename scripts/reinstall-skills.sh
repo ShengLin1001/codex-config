@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-AGENT="${AGENT:-codex}"
+# Agents to install skills into (space-separated).
+# Defaults to both Codex and Claude Code. Override examples:
+#   AGENTS="claude-code" bash scripts/reinstall-skills.sh   # only Claude Code
+#   AGENTS="codex"       bash scripts/reinstall-skills.sh   # only Codex
+#   AGENTS="*"           bash scripts/reinstall-skills.sh   # all detected agents
+# Backward compat: the old single-agent AGENT variable is still honored.
+AGENTS="${AGENTS:-${AGENT:-codex claude-code}}"
 GLOBAL_FLAG="${GLOBAL_FLAG:--g}"
+read -r -a AGENT_LIST <<< "$AGENTS"
 
 if ! command -v npx >/dev/null 2>&1; then
   if command -v module >/dev/null 2>&1; then
@@ -20,13 +27,15 @@ repos=(
 )
 
 for repo in "${repos[@]}"; do
-  npx --yes skills add "$repo" "$GLOBAL_FLAG" --agent "$AGENT" --skill '*' --yes
+  for agent in "${AGENT_LIST[@]}"; do
+    npx --yes skills add "$repo" "$GLOBAL_FLAG" --agent "$agent" --skill '*' --yes
+  done
 done
 
-npx --yes skills list "$GLOBAL_FLAG" -a "$AGENT"
+npx --yes skills list "$GLOBAL_FLAG"
 
-# Update, Needs node > 18 
+# Update existing skills to their latest versions (needs node > 18):
 # npx --yes skills update -g -y
 
-# Remove
+# Remove all global skills:
 # npx --yes skills remove --all -g
