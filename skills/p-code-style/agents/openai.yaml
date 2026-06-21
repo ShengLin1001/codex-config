@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Code Style"
+  short_description: "约束 Claude 为 PJ 写工作流/自动化/脚本生成类代码时的风格与工程习惯，使首版即贴近 PJ 手写标准"
+  default_prompt: "Use $p-code-style to write workflow/automation/script-generation code matching PJ standards."
