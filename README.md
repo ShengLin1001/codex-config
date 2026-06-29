@@ -11,6 +11,7 @@
 - `scripts/copy-codex-files.sh`：将 `~/.codex` 中的 `AGENTS.md` 和 `config.toml` 复制到本仓库的 `codex/` 目录。
 - `scripts/restore-codex-files.sh`：从本仓库将 Codex 配置恢复到 `~/.codex`。
 - `scripts/reinstall-skills.sh`：通过 `npx skills` 重新安装外部 skill 仓库。
+- `scripts/reinstall-plugins.sh` / `scripts/reinstall-plugins.ps1`：通过 `codex plugin` 重新注册外部 plugin marketplace 并安装插件。
 
 ## 常用工作流
 
@@ -45,6 +46,22 @@
 该脚本会读取 `scripts/reinstall-skills.sh` 中的 `repos` 数组，并通过 `npx skills add` 安装这些 skill 仓库。
 
 安装新的 skill 仓库后，将其仓库地址添加到 `scripts/reinstall-skills.sh` 中的 `repos` 数组里。如果该仓库已经列出，则不要重复添加。
+
+### 重新安装外部 Plugins
+
+从仓库根目录运行：
+
+~~~bash
+./scripts/reinstall-plugins.sh
+~~~
+
+在 Windows PowerShell 中运行：
+
+~~~powershell
+.\scripts\reinstall-plugins.ps1
+~~~
+
+该脚本会注册 `scripts/reinstall-plugins.sh` / `scripts/reinstall-plugins.ps1` 中的 plugin marketplaces，并安装对应插件。目前会自动注册 `DietrichGebert/ponytail` 并安装 `ponytail@ponytail`。
 
 ### 使用 npx 管理 Skills
 
