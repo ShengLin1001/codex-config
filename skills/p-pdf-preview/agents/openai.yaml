@@ -1,4 +1,0 @@
-interface:
-  display_name: "P PDF Preview"
-  short_description: "Create literature folders and DOI inputs"
-  default_prompt: "Use $p-pdf-preview to create a standard literatures folder with dois_row.txt and summary.md for this DOI or topic."
