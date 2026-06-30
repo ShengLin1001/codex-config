@@ -1,20 +1,28 @@
 ---
 name: p-pdf-download
-description: 当用户要求用 scansci-pdf 下载学术 PDF / DOI 全文时使用。按出版商分流——Elsevier(10.1016) 走 get/batch 官方 API；其余出版商走 browser-get --manual 官方浏览器、由用户逐篇人工过验证。会自动拆分混合 DOI 列表，并剔除预印本 / arXiv / SI。
+description: 当用户要求用 scansci-pdf 下载学术 PDF / DOI 全文时使用。所有出版商（含 Elsevier 10.1016）一律走 browser-get --manual 官方浏览器、由用户逐篇人工过验证，确保拿到官网正文当前版而非 API 历史版。会剔除预印本 / arXiv / SI 并去重。
 ---
 
-# PDF 下载（按出版商分流）
+# PDF 下载（统一走可见浏览器）
 
 ## 核心原则
 
-只要官方版。**Elsevier 走 API，其余出版商走可见浏览器手动模式**，由用户逐篇过人机验证 / 登录机构 / 打开 PDF，脚本只负责抓取出现的官方 PDF。不引入 Sci-Hub / LibGen 等灰色来源。**预印本、arXiv、SI（补充材料）都不要。**
+只要官网正文的**当前版**。**所有出版商一律走可见浏览器手动模式（`browser-get --manual`）**，由用户逐篇过人机验证 / 登录机构 / 打开 PDF，脚本只负责抓取出现的官方 PDF。不引入 Sci-Hub / LibGen 等灰色来源。**预印本、arXiv、SI（补充材料）都不要。**
 
-| 输入 | Elsevier（DOI 前缀 `10.1016/`） | 其余所有出版商 |
-| --- | --- | --- |
-| 单篇 | `scansci-pdf get <DOI> --output DIR` | `scansci-pdf browser-get <DOI> --manual --output DIR` |
-| 多篇 | `scansci-pdf batch dois.txt --output DIR` | `scansci-pdf browser-get --file dois.txt --manual --output DIR` |
+底层命令是 `scansci-pdf browser-get <DOI> --manual --output <绝对目录>`；本技能用 `scripts/pdf_download.py` 按 `dois_row.txt` 逐篇编排，并把每篇落到约定好的目录里。目录与 `dois_row.txt` 由上游 **p-pdf-preview（literature-folder-builder）** skill 建好，本脚本只消费、不取名：
 
-> Elsevier 已配置官方 API，`get`/`batch` 能直接拿到正文 PDF，无需浏览器。其余出版商（Nature、APS、Wiley、Science、RSC、IEEE、ACM、OUP…）多半有 Cloudflare 或付费墙，必须用可见浏览器由用户手动通过，才能保证是官网正文。
+```
+单篇:        literatures/YYMMDD_简练中文名/     # 目录名 = 据文章内容取的中文名
+               dois_row.txt              # 仅 1 行 DOI
+               <DOI>_Official.pdf        # 直接落在此目录（与 dois_row.txt 同级）
+多篇(调研):  literatures/YYMMDD_investigate_主题/   # 目录名 = investigate_<调研主题>
+               dois_row.txt              # 每行 "DOI<TAB>子目录名"
+               summary.md                # 上游写的调研摘要，下载脚本不动它
+               子目录名1/<DOI1>_Official.pdf
+               子目录名2/<DOI2>_Official.pdf
+```
+
+> **为什么 Elsevier 也走浏览器**：Elsevier 官方 API（`get`/`batch`）有时会落到论文的**历史版本**，而非 ScienceDirect 官网当前的下载版。为保证逐篇都是官网正文当前版，本技能不再用 API，Elsevier 与其余出版商（Nature、APS、Wiley、Science、RSC、IEEE、ACM、OUP…）统一走 `browser-get --manual`，由用户在真实出版商页面手动通过。
 
 ## 环境加载
 
@@ -32,13 +40,13 @@ export PYTHONIOENCODING=utf-8
 
 ```bash
 scanscipy
-scansci-pdf --help            # 确认 get / batch / browser-get 都在
-scansci-pdf browser-status    # 非 Elsevier 路径需要 CloakBrowser 可用
+scansci-pdf --help            # 确认 browser-get 在
+scansci-pdf browser-status    # 浏览器路径需要 CloakBrowser 可用
 ```
 
 - `browser-get` 会弹出**可见**浏览器，必须在用户的桌面会话里运行，不能在无头 / CI 环境里跑。
 - 付费墙文章需要机构访问：用户在校园网内，或开了全隧道 VPN 客户端（aTrust/EasyConnect）；手动模式下由用户自行在页面里登录机构。
-- 若 `browser-status` 显示未安装，这是非 Elsevier 路径的硬性阻断，先报告。
+- 若 `browser-status` 显示未安装，这是硬性阻断，先报告。
 
 ## 步骤 0 · 整理 DOI 列表（剔除不需要的）
 
@@ -61,76 +69,57 @@ grep -vE '^[[:space:]]*(#|$)' dois.raw.txt \
 - 注意：`10.1101` 既是 bioRxiv/medRxiv 也是 CSH 正式期刊，**不要**只凭前缀盲删。上面的正则按"日期式后缀"识别预印本（如 `10.1101/2020.03.22.20041079`），同时保留 `10.1101/gr.*`、`10.1101/gad.*` 这类 CSH 正式期刊。
 - 剔除后给用户一句话说明丢了哪些行，便于核对。
 
-## 步骤 1 · 按出版商拆分（混合列表才需要）
+## 步骤 1 · 建目录 + 写 dois_row.txt（交给上游 p-pdf-preview skill）
 
-把干净列表按 `10.1016/` 拆成两份，分别处理：
+目录组织、取名、写 `dois_row.txt`（多篇还有 `summary.md`）这一步**不在本技能里做**，由 **p-pdf-preview（literature-folder-builder）** skill 负责——它读文章内容取中文目录名 / 子目录名，在 `literatures/` 下建好标准结构。把步骤 0 整理好的干净 DOI 交给它即可。
 
-```bash
-grep -E  '10\.1016/' dois.clean.txt > doi-elsevier.txt     || true
-grep -vE '10\.1016/' dois.clean.txt > doi-non-elsevier.txt || true
-wc -l doi-elsevier.txt doi-non-elsevier.txt
-```
+本技能与它的对接契约（`pdf_download.py` 据此解析）：
 
-匹配不锚定行首，能同时覆盖裸 DOI 和 `https://doi.org/10.1016/...` 形式。哪个文件为空就跳过对应步骤。单篇输入则直接判断该 DOI 是否含 `10.1016/`，无需建文件。
+- 文件名 `dois_row.txt`（脚本也兼容旧名 `dois.row.txt`）。
+- 单篇：1 行 DOI，PDF 落到 `dois_row.txt` 同级目录。
+- 多篇：每行 `DOI<TAB>子目录名`（上游固定 TAB；脚本也容忍空格 / ` | `），各篇落到对应子目录。
+- 空行与 `#` 注释行忽略；重复 DOI 自动去重；缺子目录名时脚本回退为清洗后的 DOI 并告警。
 
-## 步骤 2a · Elsevier 下载（API 官方）
-
-```bash
-# 单篇
-scansci-pdf get 10.1016/j.actamat.2026.122243 --output DIR --no-bibtex
-# 多篇
-scansci-pdf batch doi-elsevier.txt --output DIR
-```
-
-- `get`/`batch` 经官方 Elsevier API 取正文 PDF；`batch` 会把汇总写到 `DIR/batch_results.json`。
-- 只有真正落地了 PDF 才算成功。若返回的是 full text 但 `pdf_path` 为空、或只拿到 XML，**不要当作成功**——对该 DOI 改走 `browser-get --manual`（ScienceDirect 页面）兜底。
-- 如果 Elsevier 命令大量失败，先确认 API key：`scansci-pdf elsevier-setup`（无参数会显示是否已配置）。
-
-## 步骤 2b · 非 Elsevier 下载（浏览器手动）
+## 步骤 2 · 运行下载脚本
 
 ```bash
-# 单篇
-scansci-pdf browser-get 10.1103/PhysRevB.88.064104 --manual --output DIR
-# 多篇
-scansci-pdf browser-get --file doi-non-elsevier.txt --manual --output DIR --wait 300
+scanscipy                                   # 先激活 venv，使 scansci-pdf 进 PATH
+export PYTHONUTF8=1; export PYTHONIOENCODING=utf-8
+python <技能目录>/scripts/pdf_download.py literatures/<YYMMDD_目录>/dois_row.txt
+# 传目录亦可，脚本会自动找其中的 dois_row.txt：
+python <技能目录>/scripts/pdf_download.py literatures/<YYMMDD_目录>
 ```
 
-`--manual` 模式的分工——**用户做、脚本抓**：
+脚本按行数自动判定单 / 多篇，逐篇调用 `scansci-pdf browser-get <DOI> --manual --output <绝对目录>`：单篇落到 `dois_row.txt` 同级目录，多篇落到各自子目录。**先 `--dry-run` 看一眼每篇的落盘目录对不对，再去掉它正式跑。**
 
-1. 脚本逐篇打开真实出版商页面（不经 WebVPN 改写），弹出可见浏览器。
+脚本参数：
+
+- `--dry-run`：只打印将执行的命令与落盘目录，不真正下载。
+- `--wait N`：每篇手动操作超时秒数（默认 300）。机构登录慢时调大，如 `--wait 600`。
+- `--skip-existing`：目标目录已有 PDF 时跳过。**默认强制重抓**（保证拿官网当前版、避免历史版残留），只有想在失败后只补缺时才加这个开关。
+
+`--manual` 模式的分工——**用户做、脚本抓**（每篇串行，不能并发）：
+
+1. 脚本逐篇打开真实出版商页面（不经 WebVPN 改写），弹出可见浏览器。Elsevier 会落到 ScienceDirect 当前版页面。
 2. 用户负责：过 Cloudflare 人机验证 → 登录机构 → **点开/打开正文 PDF**。
 3. 脚本捕捉任意标签页里出现的 PDF，自动落盘为 `<doi>_Official.pdf`，然后切到下一篇。
 4. **SI 自动排除**：MOESM / MediaObjects / ESM / supplementary / supp 等补充材料链接在抓取层被丢弃，不会被误存为正文。
 
-参数：
-
-- `--manual` / `-m`：手动模式（本技能的非 Elsevier 默认方式，最稳，覆盖 IEEE/ACM 等 JS 阅读器）。
-- `--file` / `-f`：从文件读 DOI（每行一个，空行和 `#` 注释自动忽略）。
-- `--output`：下载目录。
-- `--wait`：每篇等待手动操作的超时秒数（默认 300）。机构登录较慢时调大，如 `--wait 600`。
-
-> 提示：少数出版商（Nature/Springer/Science 等会发 `citation_pdf_url`）不加 `--manual` 的自动模式也能抓到正文。但本技能默认用 `--manual` 以保证逐篇都是官网正文；只有用户明确想试自动模式时才去掉 `--manual`。
-
-## --output 路径控制
-
-`get`、`batch`、`browser-get` 三个命令都支持 `--output DIR`，统一控制落盘目录。建议：
-
-- 同一批任务用同一个 `--output`，Elsevier 与非 Elsevier 两条线汇到同一目录便于核对。
-- 不传 `--output` 时落到配置里的默认目录（`~/.scansci-pdf/papers`）。
+> 提示：少数出版商（Nature/Springer/Science 等会发 `citation_pdf_url`）不加 `--manual` 的自动模式也能抓到正文。但本技能默认用 `--manual` 以保证逐篇都是官网正文当前版；只有用户明确想试自动模式时才另行手动调 `browser-get`。
 
 ## 失败处理
 
 - **不要把 HTML / 机器人验证页当成 PDF。** browser-get 已校验 `%PDF-` magic bytes 且大小 >5KB；若用户关窗太快或没点开 PDF，会判为该篇失败，重跑那一篇即可。
-- **付费墙非 Elsevier**：手动模式下用户必须在页面里登录机构后再打开 PDF；脚本自己做不了 Shibboleth 登录，抓取循环会在用户操作期间重试。
+- **付费墙**：手动模式下用户必须在页面里登录机构后再打开 PDF；脚本自己做不了 Shibboleth 登录，抓取循环会在用户操作期间重试。
 - **APS（journals.aps.org / link.aps.org）**：Cloudflare 保护，**不能**走 ZJU WebVPN 改写代理；只能用 `browser-get --manual`（真实域名 + 用户手过验证 + 机构 IP/VPN）。
-- **Elsevier 命令报 import error / publisher-batch 失败**：视为当前安装的包 bug，改用 `get`/`batch`/`browser-get` 直接探测，不要纠缠该子命令。
+- **Elsevier / ScienceDirect**：在弹出的页面上由用户登录机构后点开正文 PDF；落盘的就是官网当前版，避免了 API 的历史版问题。
 - **抓到的是 SI**：说明用户当时没登录机构、正文被墙而 SI 免费。让用户先登录机构再打开正文；列表层与抓取层的 SI 过滤是兜底而非替代登录。
 
 ## 报告结果
 
-完成后向用户说明：
+脚本结尾自带 summary（成功 / 失败 / 共计 + 逐篇落盘路径）。完成后再向用户说明：
 
 - 列表整理情况：剔除了哪些预印本 / arXiv 行、去重后剩几条。
-- 出版商拆分：Elsevier N 篇、非 Elsevier M 篇。
-- 各自走的命令路径（`get`/`batch` 还是 `browser-get --manual`）与成功数。
-- 每篇成功 PDF 的落盘路径；失败的给一句简短原因（关窗太快、未登录机构、Cloudflare 没过、Elsevier 只拿到 full text 无 PDF 等）。
+- 目录：单篇 `YYMMDD_中文名/` 还是多篇 `YYMMDD_investigate_主题/`，以及各篇子目录名。
+- 成功数与每篇 PDF 的落盘路径；失败的给一句简短原因（关窗太快、未登录机构、Cloudflare 没过等）。
+- 有失败时：用同一份 `dois_row.txt` 加 `--skip-existing` 重跑，已落 PDF 跳过、只补失败的几篇（不加则默认全部重抓）。
