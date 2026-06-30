@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Plugin Installer"
+  short_description: "Install/repair Codex & Claude Code plugin marketplaces (Windows)"
+  default_prompt: "Use $p-plugin-installer to install or repair a Codex or Claude Code plugin marketplace on Windows."
