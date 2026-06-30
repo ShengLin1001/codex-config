@@ -1,0 +1,4 @@
+interface:
+  display_name: "P PDF Download"
+  short_description: "Download official DOI PDFs via scansci-pdf: Elsevier(10.1016) through get/batch API, all other publishers through browser-get --manual."
+  default_prompt: "Use $p-pdf-download to download official PDFs for these DOIs: route Elsevier (10.1016) to get/batch, all others to browser-get --manual, split mixed lists, and drop preprints/arXiv/SI."
