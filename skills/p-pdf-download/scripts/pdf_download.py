@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """按 dois_row.txt 逐篇调用 scansci-pdf browser-get 下载官网正文 PDF。
 
-上游是 p-pdf-preview（literature-folder-builder）skill：它在 literatures/ 下建好目录、
-写好 dois_row.txt（多篇还有 summary.md），本脚本只消费、不取名。两者靠 dois_row.txt 对接。
+本 skill 先在 literatures/ 下建好目录、写好 dois_row.txt（多篇还有 summary.md），
+本脚本只消费、不取名。
 
 Functions:
     fail / warn: 统一错误与告警出口。
@@ -14,19 +14,19 @@ Functions:
     download_one: 跑一篇 browser-get 并判定是否真落地 PDF。
     main: 编排 check → prepare → main → summary。
 
-目录约定（上游 p-pdf-preview 已按文章内容取好目录名与子目录名写入 dois_row.txt，本脚本只消费）:
+目录约定（目录名与子目录名已由本 skill 写入 dois_row.txt，本脚本只消费）:
     单篇:        literatures/YYMMDD_中文名/
                    dois_row.txt              # 仅 1 行 DOI
                    <DOI>_Official.pdf        # 直接落在此目录
     多篇(调研):  literatures/YYMMDD_investigate_主题/
-                   dois_row.txt              # 每行 "DOI<TAB>子目录名"
-                   summary.md                # 上游写的调研摘要，本脚本不动
+                   dois_row.txt              # 每行 "DOI<空格>子目录名"
+                   summary.md                # 建目录阶段写的调研摘要，本脚本不动
                    子目录名1/<DOI1>_Official.pdf
                    子目录名2/<DOI2>_Official.pdf
 
 dois_row.txt 每行格式:
     单篇:  仅写 DOI（即便写了子目录名也忽略，直接落同级目录）。
-    多篇:  DOI<TAB>子目录名   （上游固定用 TAB；本脚本也容忍空格 / " | "，缺名回退为 DOI 清洗后的目录名）。
+    多篇:  DOI<空格>子目录名   （规范写法用空格；本脚本也兼容 TAB / " | "，缺名回退为 DOI 清洗后的目录名）。
     空行与 # 注释行忽略；重复 DOI 自动去重。
 
 模式判定: 有效 DOI 行数 == 1 → 单篇; >= 2 → 多篇。
@@ -75,13 +75,13 @@ def parse_dois(path_file):
     """解析 dois_row.txt → 去重后的 [(doi, 子目录名 or None)]。"""
     lentry = []
     seen = set()
-    # utf-8-sig：上游若用 PowerShell（Out-File / Set-Content -Encoding utf8）写出会带 BOM，
+    # utf-8-sig：建目录步骤若用 PowerShell（Out-File / Set-Content -Encoding utf8）写出会带 BOM，
     # 普通 utf-8 读 + strip() 不会去掉 ﻿，会污染第一行 DOI 导致首篇解析失败。
     for line in path_file.read_text(encoding="utf-8-sig").splitlines():
         line = line.strip()
         if not line or line.startswith("#"):
             continue
-        # DOI 不含空白：先按 TAB / " | " 显式分隔，否则首段空白即 DOI 与名字的分界
+        # DOI 不含空白：空格是规范分隔；TAB / " | " 作为旧格式兼容
         if "\t" in line:
             doi, _, name = line.partition("\t")
         elif " | " in line:
@@ -105,7 +105,7 @@ def check_dois_file(arg_path):
     """传文件就用文件，传目录就找其中的 DOI 列表（兼容 dois_row.txt / dois.row.txt）；返回绝对 Path。"""
     path_file = Path(arg_path).expanduser()
     if path_file.is_dir():
-        # 上游 p-pdf-preview 写的是 dois_row.txt；dois.row.txt 作旧名兜底
+        # 标准名是 dois_row.txt；dois.row.txt 作旧名兜底
         lcandidate = [path_file / name for name in ("dois_row.txt", "dois.row.txt")]
         lfound = [cand for cand in lcandidate if cand.is_file()]
         if not lfound:
