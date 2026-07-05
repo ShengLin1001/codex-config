@@ -1,0 +1,4 @@
+interface:
+  display_name: "P PDF Nature Downloader"
+  short_description: "Download PDFs with nature-downloader and Chrome CARSI access"
+  default_prompt: "Use $p-pdf-nature-downloader to download PDFs from a DOI list through nature-downloader, web-access CDP, and the user's authenticated Chrome library session."
