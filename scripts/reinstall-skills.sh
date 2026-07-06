@@ -11,6 +11,13 @@ AGENTS="${AGENTS:-${AGENT:-codex claude-code}}"
 GLOBAL_FLAG="${GLOBAL_FLAG:--g}"
 read -r -a AGENT_LIST <<< "$AGENTS"
 
+# Avoid GitHub's 60 req/hr anonymous API rate limit (causes "Failed to update"):
+# reuse the gh login token when GITHUB_TOKEN isn't already set.
+if [ -z "${GITHUB_TOKEN:-}" ] && command -v gh >/dev/null 2>&1; then
+  GITHUB_TOKEN="$(gh auth token 2>/dev/null || true)"
+  export GITHUB_TOKEN
+fi
+
 if ! command -v npx >/dev/null 2>&1; then
   if command -v module >/dev/null 2>&1; then
     module avail node 2>&1 || true
