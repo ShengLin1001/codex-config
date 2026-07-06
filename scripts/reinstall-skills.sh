@@ -10,7 +10,6 @@ set -euo pipefail
 AGENTS="${AGENTS:-${AGENT:-codex claude-code}}"
 GLOBAL_FLAG="${GLOBAL_FLAG:--g}"
 read -r -a AGENT_LIST <<< "$AGENTS"
-SKILLS_DIR="${SKILLS_DIR:-$HOME/.agents/skills}"
 
 # Avoid GitHub's 60 req/hr anonymous API rate limit (causes "Failed to update"):
 # reuse the gh login token when GITHUB_TOKEN isn't already set.
@@ -36,12 +35,7 @@ repos=(
   "https://github.com/eze-is/web-access.git"
 )
 
-if [ -d "$SKILLS_DIR" ]; then
-  mapfile -t INSTALLED_SKILLS < <(find "$SKILLS_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)
-  if [ "${#INSTALLED_SKILLS[@]}" -gt 0 ]; then
-    npx --yes skills remove "${INSTALLED_SKILLS[@]}" "$GLOBAL_FLAG" --yes
-  fi
-fi
+npx --yes skills remove --all "$GLOBAL_FLAG"
 
 for repo in "${repos[@]}"; do
   # Install once per repo; the CLI links the same global skill set to both agents.
@@ -55,4 +49,5 @@ done
 # Update existing skills to their latest versions (needs node > 18):
 # npx --yes skills update -g -y
 
-# Avoid `skills remove --all -g`: it also scans agent-specific global dirs.
+# Remove all global skills:
+# npx --yes skills remove --all -g
