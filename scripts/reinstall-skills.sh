@@ -10,6 +10,7 @@ set -euo pipefail
 AGENTS="${AGENTS:-${AGENT:-codex claude-code}}"
 GLOBAL_FLAG="${GLOBAL_FLAG:--g}"
 read -r -a AGENT_LIST <<< "$AGENTS"
+SKILLS_DIR="${SKILLS_DIR:-$HOME/.agents/skills}"
 
 # Avoid GitHub's 60 req/hr anonymous API rate limit (causes "Failed to update"):
 # reuse the gh login token when GITHUB_TOKEN isn't already set.
@@ -28,21 +29,30 @@ fi
 
 repos=(
   "vercel-labs/agent-skills"
+  "vercel-labs/skills"
   "https://github.com/ShengLin1001/codex-config.git"
   "https://github.com/Imbad0202/academic-research-skills-codex.git"
   "https://github.com/Yuan1z0825/nature-skills.git"
+  "https://github.com/eze-is/web-access.git"
 )
 
+if [ -d "$SKILLS_DIR" ]; then
+  mapfile -t INSTALLED_SKILLS < <(find "$SKILLS_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)
+  if [ "${#INSTALLED_SKILLS[@]}" -gt 0 ]; then
+    npx --yes skills remove "${INSTALLED_SKILLS[@]}" "$GLOBAL_FLAG" --yes
+  fi
+fi
+
 for repo in "${repos[@]}"; do
-  for agent in "${AGENT_LIST[@]}"; do
-    npx --yes skills add "$repo" "$GLOBAL_FLAG" --agent "$agent" --skill '*' --yes
-  done
+  # Install once per repo; the CLI links the same global skill set to both agents.
+  npx --yes skills add "$repo" "$GLOBAL_FLAG" --agent "${AGENT_LIST[@]}" --skill '*' --yes
 done
 
-npx --yes skills list "$GLOBAL_FLAG"
+for agent in "${AGENT_LIST[@]}"; do
+  npx --yes skills list "$GLOBAL_FLAG" --agent "$agent"
+done
 
 # Update existing skills to their latest versions (needs node > 18):
 # npx --yes skills update -g -y
 
-# Remove all global skills:
-# npx --yes skills remove --all -g
+# Avoid `skills remove --all -g`: it also scans agent-specific global dirs.
