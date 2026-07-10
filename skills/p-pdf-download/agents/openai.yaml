@@ -1,4 +1,4 @@
 interface:
   display_name: "P PDF Download"
-  short_description: "Create literature folders and download PDFs"
-  default_prompt: "Use $p-pdf-download to create a standard root_dir folder (default: literatures) with dois_row.txt/summary.md, then run the bundled pdf_download.py for this DOI or topic."
+  short_description: "Batch-download PDFs from a dois.txt"
+  default_prompt: "Use $p-pdf-download to batch-download the PDFs listed in dois.txt (one DOI per line) into the current directory via the bundled pdf_download.py."
