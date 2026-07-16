@@ -1,0 +1,4 @@
+interface:
+  display_name: "P PDF to Zotero"
+  short_description: "Import PDFs with selective ratings and Extra notes"
+  default_prompt: "Use $p-pdf2zotero to import these local PDFs into the specified Zotero collection, rate only important papers, and add concise Extra descriptions."
