@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Plot Figure"
+  short_description: "为 PJ 编写统一 mymetal 风格的科研出版级 matplotlib 绘图代码"
+  default_prompt: "Use $p-plot-figure to write mymetal-style publication matplotlib plotting code for PJ."
