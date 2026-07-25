@@ -1,4 +1,4 @@
 interface:
   display_name: "P Article Polishing"
-  short_description: "按 PJ 与导师修订偏好润色英文科研论文"
-  default_prompt: "Use $p-article-polishing to polish this scientific manuscript while preserving technical meaning and checking logic, numbers, figures, terms, and references."
+  short_description: "用 Git 回溯润色 Markdown/LaTeX 科研论文"
+  default_prompt: "Use $p-article-polishing to revise this Git-tracked Markdown or LaTeX manuscript with minimal diffs while preserving scientific meaning, commands, citations, figures, numbers, and terminology."
