@@ -1,13 +1,13 @@
 ---
 name: p-article-polishing
-description: "Polish scientific manuscripts in PJ's established revision style, preferably as Git-tracked Markdown or LaTeX: preserve technical claims, repair causal logic before wording, add quantitative support already present in the manuscript, and audit definitions, figures, numbers, citations, and references. Use for academic articles, abstracts, introductions, methods, results, discussions, conclusions, and figure captions."
+description: "Polish scientific manuscripts in PJ's established writing style, preferably as Git-tracked Markdown or LaTeX, and merge an advisor's tracked Word revisions back into the canonical text source. Preserve technical claims, intentional hyphenation, commands, citations, figures, numbers, and terminology. Use for academic articles, abstracts, introductions, methods, results, discussions, conclusions, figure captions, and advisor revision rounds."
 ---
 
 # P Article Polishing
 
-用于科研论文润色，优先处理 Git 跟踪的 Markdown 或 LaTeX，Word 仅作为兼容输入。目标不是把文字改得更华丽，而是让论证更清楚、数据更具体、术语更准确，同时保留作者原有技术判断和行文习惯。
+用于科研论文润色。Git 跟踪的 Markdown 或 LaTeX 是正文唯一权威源；Word 是导师审阅和修订的交换格式。目标不是记录谁在何时改过什么，而是稳定复现 PJ 的写作方式，并把导师在 Word 中确认的修改准确合并回文本源。
 
-开始前完整阅读 [references/style-profile.md](references/style-profile.md)。当前风格基线来自 PJ 两篇论文的多轮 Word 修订、批注和后续净稿；后续以已确认的 Git 历史持续校正。材料学例句只说明写法，不得把其中的科学内容迁移到别的文章。
+开始前完整阅读 [references/style-profile.md](references/style-profile.md)。它是直接用于改写的风格规范；历史文件和 Git commit 只是校正该规范的证据，不是润色任务的输出模板。
 
 ## 约束
 
@@ -16,6 +16,7 @@ description: "Polish scientific manuscripts in PJ's established revision style, 
 - 不因“语言更顺”而改变因果方向、比较基准、限定条件、符号、数值或单位。
 - 不把导师或合作者的一次修订机械当成真理；历史修订用于提炼稳定偏好，语法和科学内容仍需独立核对。
 - 原文有歧义或证据不足时，保留原意并标记 `AUTHOR CHECK`；不要替作者猜答案。
+- PJ 的连字符和悬挂连字符用法属于正确的作者风格，不得作为语法错误标记或擅自规范化。
 - 对 Git 跟踪的 `.md` / `.tex` 做最小原位修改，由 Git 保留回溯能力；不在 Git 中的文件和 Word 文件默认输出 sibling，除非用户明确要求覆盖。
 - 不执行整文件格式化、自动换行或段落重排来制造无意义 diff。
 - 不主动 commit、push、reset、restore 或 checkout；只有用户明确要求时才改变 Git 历史或远程状态。
@@ -108,7 +109,7 @@ LaTeX 中保留宏、命令、环境、`\label`、`\ref`、`\cite`、交叉引�
 - 用准确、克制的动词，删除无证据的 `perfect`, `remarkable`, `universal`, `fundamental` 等强化词。
 - 同一概念只保留一个术语；尤其区分内禀/外加、面内/面外、单轴/等双轴、热力学/动力学。
 - 不让读者自行换算关键应变、差值或阈值；稿件已有数据时直接写出。
-- 保持 `Fig.`/`Figure`、箭头/连字符、单复数、冠词、时态和符号格式一致。
+- 保持 `Fig.`/`Figure`、箭头、单复数、冠词、时态和符号格式一致；连字符遵循 style profile，不按通用语法偏好改动。
 
 ### 6. 按章节检查
 
@@ -151,9 +152,9 @@ git status --short
 
 确认 diff 只包含目标文字，没有整段 reflow、公式/命令损坏或无关文件。若仓库已有 `Makefile`、`latexmkrc`、README 构建命令或 Markdown 检查工具，使用现有命令验证；不要为一次润色新建构建系统。
 
-## Word 兼容入口
+## 合并导师的 Word 修订
 
-旧稿只有 `.docx` 或需要继续从 Word 修订更新风格证据时，运行：
+Word 是导师的审阅界面，Markdown/LaTeX 是持续维护的正文。现有脚本必须保留，用它提取 Word 中的 tracked changes 和 comments：
 
 ```powershell
 python scripts/extract_docx_revisions.py manuscript.docx -author "Yang Gao"
@@ -161,7 +162,29 @@ python scripts/extract_docx_revisions.py manuscript.docx -comments_only
 python scripts/extract_docx_revisions.py -selftest
 ```
 
-脚本只读 DOCX，向标准输出打印修订前后文本、修订作者、批注和锚定段落。净稿之间的差异不能可靠归属作者，必须结合文件名、Word 元数据和时间线判断。Word 证据只用于补充风格基线，不改变 Markdown/LaTeX + Git 的默认工作流。
+脚本只读 DOCX，打印每段修改前文本、导师修改后文本、作者、批注和锚定段落。它不直接写 Markdown/LaTeX；合并时执行语义三方比较：
+
+- **base**：导出给导师的 Markdown/LaTeX 对应 commit；
+- **theirs**：导师在 Word 中的修订后文本；
+- **ours**：当前 Markdown/LaTeX 工作树。
+
+推荐在导出 Word 前记录：
+
+```bash
+git rev-parse --short HEAD
+```
+
+将短 SHA 写入 Word 文件名或同时记录在交接说明中。收到导师稿后：
+
+1. 确认 Word 基于哪个 commit；无法可靠确定 base 时先问用户，不根据日期硬猜。
+2. 用脚本提取导师的修订和批注。
+3. 从 base 找到对应原段，并在当前 Markdown/LaTeX 中定位同一论证单元。
+4. 若 ours 与 base 相同，应用导师修改，同时恢复 LaTeX 命令、引用和数学标记。
+5. 若 ours 已变化，合并导师的**修改意图**，保留 ours 中更新的数据、机理和结构；不得整段覆盖。
+6. 导师批注转为待确认清单或源文件中的临时 `AUTHOR CHECK`，不要把批注正文写进论文。
+7. 用 `git diff --word-diff=plain` 检查每项合并，确认没有遗漏导师修改，也没有损坏 Markdown/LaTeX 结构。
+
+纯格式修改、作者单位变化和 Word 排版不自动回写正文。MathType、公式对象或域代码的提取空白不得当作导师删除。导师的文字修改与当前数据冲突时，以当前已确认数据为准并报告冲突。
 
 ## 交付
 
