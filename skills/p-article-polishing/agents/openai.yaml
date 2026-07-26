@@ -1,4 +1,4 @@
 interface:
   display_name: "P Article Polishing"
-  short_description: "按历史修订确认的 PJ 偏好润色通用英文科研文章，并按需调用参考论文语料"
-  default_prompt: "Use $p-article-polishing to polish or draft this academic text in PJ's evidence-backed style without changing scientific meaning."
+  short_description: "先定架构与主线再润色语言，写改材料、凝聚态与计算方向的英文科研文章"
+  default_prompt: "Use $p-article-polishing to structure or polish this academic text: outline first if the structure is in play, then polish language without changing scientific meaning."
