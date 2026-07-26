@@ -32,7 +32,7 @@ repos=(
   "https://github.com/ShengLin1001/codex-config.git"
   "https://github.com/Imbad0202/academic-research-skills-codex.git"
   "https://github.com/Yuan1z0825/nature-skills.git"
-  "https://github.com/eze-is/web-access.git"
+  #"https://github.com/eze-is/web-access.git"
 )
 
 npx --yes skills remove --all "$GLOBAL_FLAG"

@@ -1,4 +1,4 @@
 interface:
   display_name: "P Article Polishing"
-  short_description: "从历史修订和最终成稿提炼并应用 PJ 的科研写作风格"
-  default_prompt: "Use $p-article-polishing to infer PJ's preferred and disliked writing patterns from revision history and final manuscripts, then apply them to the target text."
+  short_description: "约束 Claude 按 PJ 已接收论文的定稿风格写/润色英文科研论文，使初稿即贴近 PJ 标准"
+  default_prompt: "Use $p-article-polishing to polish or draft academic prose in PJ's accepted-manuscript style."
