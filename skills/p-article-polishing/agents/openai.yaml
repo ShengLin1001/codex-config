@@ -1,4 +1,4 @@
 interface:
   display_name: "P Article Polishing"
-  short_description: "约束 Claude 按 PJ 已接收论文的定稿风格写/润色英文科研论文，使初稿即贴近 PJ 标准"
-  default_prompt: "Use $p-article-polishing to polish or draft academic prose in PJ's accepted-manuscript style."
+  short_description: "按历史修订确认的 PJ 偏好润色通用英文科研文章，并按需调用参考论文语料"
+  default_prompt: "Use $p-article-polishing to polish or draft this academic text in PJ's evidence-backed style without changing scientific meaning."
