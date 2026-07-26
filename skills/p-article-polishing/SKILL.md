@@ -1,6 +1,6 @@
 ---
 name: p-article-polishing
-description: Apply PJ's evidence-backed writing preferences when polishing, drafting, translating, or restructuring English academic manuscripts across scientific fields. Use for manuscript sections, abstracts, introductions, methods, results, discussions, conclusions, figure captions, and reviewer responses; also use when updating PJ's likes and avoids from historical revisions or refreshing the bundled academic-expression corpus. Preserve scientific meaning, data, citations, terminology, formulas, and confirmed author-specific notation.
+description: Apply PJ's evidence-backed writing preferences when polishing, drafting, translating, or restructuring English academic manuscripts across scientific fields. Use for manuscript sections, abstracts, introductions, methods, results, discussions, conclusions, figure captions, and reviewer responses; also use when comparing alternative academic phrasings, explaining why one expression is better than another, updating PJ's likes and avoids from historical revisions, or refreshing the source-traceable expression bank from bundled reference papers. Preserve scientific meaning, data, citations, terminology, formulas, and confirmed author-specific notation.
 ---
 
 # P Article Polishing
@@ -10,7 +10,7 @@ description: Apply PJ's evidence-backed writing preferences when polishing, draf
 ## 按需读取
 
 - 每次任务都读取 [references/personal-style.md](references/personal-style.md)。
-- 写或重构整段、整节、摘要、引言、Discussion 或结论时，再读取 [references/academic-style.md](references/academic-style.md) 中对应部分。
+- 写或重构整段、整节、摘要、引言、Discussion、结论，或比较多种学术表达时，再读取 [references/academic-style.md](references/academic-style.md) 中对应部分。
 - 只有在更新个人偏好、核查冲突或用户要求说明依据时，才读取 [references/evidence.md](references/evidence.md)。
 - 只有在新增、替换或重新提炼参考论文时，才读取 [references/corpus-index.md](references/corpus-index.md) 和相应 PDF。
 - 只有在读取新的 DOCX tracked changes 或 comments 时，才运行 `scripts/extract_docx_revisions.py`。
@@ -42,9 +42,10 @@ description: Apply PJ's evidence-backed writing preferences when polishing, draf
 1. 判断任务规模：一句、小段、整节或全文。只加载当前任务需要的参考内容。
 2. 先核对目标文本中的科学对象、术语、符号、数据、引用和图号。
 3. 标出命中的“避免”模式，再按“喜欢”模式做最小充分修改。
-4. 维持原有事实和因果；需要重排时，优先调整句序和段落功能，不重写科学结论。
-5. 对整段或整节使用“问题/对象 → 证据 → 解释 → 有边界的结论”的单向逻辑。
-6. 交付润色文本，并简要列出采用的关键偏好和仍需确认的问题。用户只要净稿时，不附冗长说明。
+4. 先判断修辞功能、证据强度和上下文，再从表达库选择匹配写法；不得把候选表达当作全文机械替换表。
+5. 维持原有事实和因果；需要重排时，优先调整句序和段落功能，不重写科学结论。
+6. 对整段或整节使用“问题/对象 → 证据 → 解释 → 有边界的结论”的单向逻辑。
+7. 交付润色文本，并简要列出采用的关键偏好和仍需确认的问题。用户只要净稿时，不附冗长说明。
 
 ## 更新个人风格
 
@@ -66,11 +67,12 @@ description: Apply PJ's evidence-backed writing preferences when polishing, draf
 
 ## 更新参考语料
 
-1. 在 `references/corpus-index.md` 登记题目、DOI、来源、用途和本地文件名。
-2. 只提炼短表达、修辞功能、段落逻辑和章节组织，不复制长句或整段原文。
-3. 单篇表达可作为候选模板；跨多篇重复的模式才总结为通用写作原则。
-4. 将结果写入 `references/academic-style.md`，不得直接写入个人偏好。
-5. 只有 PJ 明确确认或历史修订支持时，才能把语料模式提升为个人规则。
+1. 按当前修辞功能选择代表性论文，不要求每次或每条表达遍历全部 `ref`。
+2. 在 `references/corpus-index.md` 登记题目、DOI、来源角色、用途和本地文件名。
+3. 只提炼短表达、修辞功能、语义条件、段落逻辑和章节组织，不复制长句或整段原文。
+4. 为每条表达记录来源 ID 和状态：单篇可作为 `candidate`；至少两个独立来源支持后可标为 `repeated`。
+5. 将结果写入 `references/academic-style.md`，并按“功能 → 选项 → 何时使用 → 来源”组织；不得直接写入个人偏好。
+6. 只有 PJ 明确确认或历史修订支持时，才能把语料模式标为 `confirmed` 并提升为个人规则。
 
 ## 交付前检查
 
