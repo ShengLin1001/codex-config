@@ -163,6 +163,8 @@
 `realm, tapestry, testament, journey, milestone, ecosystem, prowess, essence, intricacy, utilization`；
 `shed light on, deep dive, game changer, vital role, knowledge gap`。
 
+清单**按词形严格生效，不外扩到同根词**：不用的是句首的 `Additionally`（参考论文 0 次），而 `in addition`（7 次）和 `additional`（11 次）正常使用；不用的是 `accurately`（0 次），而 `accurate`、`accuracy`（共 4 次）不受限。同理只约束表中列出的那个词形。
+
 **有确切技术所指才用**：`align`、`complex`、`surpass`、`unveil`、`necessitate`、`noteworthy`、`versatile`、`deeper`、`advancement`。这些在参考论文里出现过，用于 `aligned lattice`、`complex oxide` 这类实指没问题，不用作泛化的强调。`landscape` 在 `energy landscape` 中正常使用，不受限。
 
 **标点**：优先逗号，其次句号，分号少用。

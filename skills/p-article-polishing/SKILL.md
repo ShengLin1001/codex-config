@@ -4,8 +4,9 @@ description: >-
   Build the structure of and polish English academic manuscripts, primarily in
   materials science, condensed-matter physics and computational research. Use for
   planning a paper's outline and throughline before drafting, for restructuring an
-  existing draft, and for polishing language in abstracts, introductions, methods,
-  results, discussions, conclusions and figure captions; also use when comparing
+  existing draft, for polishing language in titles, abstracts, introductions,
+  methods, results, discussions, conclusions and figure captions, and for turning
+  a Chinese draft into English prose; also use when comparing
   alternative academic phrasings, explaining why one expression fits the evidence
   better, or updating the bundled expression bank from reference papers and
   manuscript revision records. Preserves the target manuscript's data,
@@ -20,9 +21,11 @@ description: >-
 
 ## 选择入口
 
-- 写新文章、新章节、新段落，或重排已有结构 → 读 [references/structure.md](references/structure.md)，先出 outline 并交作者确认，再写正文。
+- 写新文章、新章节，或重排已有结构 → 读 [references/structure.md](references/structure.md)，先出 outline 交作者确认，再写正文。
+- 只写单个新段落 → 同样读 [references/structure.md](references/structure.md)，但只写出该段的「段功能 | 证据落点 | 段尾结论」一行，不必等确认，直接写。
 - 改已有文本的语言、比较几种表达 → 按下面四条自检改；遇到拿不准的选择（动词强度、限定词、空白类型、因果强度、连接词）再查 [references/language.md](references/language.md)。**先写句子后查表**，反过来就会为了套句式而扭曲结论。
-- 写图注 → 图注的功能顺序见 [references/structure.md](references/structure.md) 的章节骨架。
+- 写图注或题目 → 功能顺序见 [references/structure.md](references/structure.md) 的章节骨架。
+- 中文稿改写成英文 → 先按上面的入口判断这是架构任务还是语言任务，再照四条自检写英文。中文原稿的科学内容是唯一依据：不因为英文顺就增删限定语、因果或强调，也不为对齐英文习惯而调整结论强度。中文本身含义不清就问，不猜。
 - 两者都要（例如"帮我写 Discussion"）→ 先架构，再语言。
 - 新增参考论文或新的修改记录 → 读 [references/corpus.md](references/corpus.md)。
 
@@ -42,7 +45,7 @@ description: >-
 
 ### 2. 段落尺度：一段一个功能，单向不回头
 
-- 段首一句说明这段要干什么（定位某图、提出某问题、建立某对照），段中给证据，段尾给一句有边界的结论。没头没尾的孤句要补总起句。
+- 段首一句说明这段要干什么（定位某图、提出某问题、建立某对照），段中给证据，段尾给一句有边界的结论。没头没尾的孤句要补总起句。这是防止段落散掉的默认结构，不是每段都要凑齐的模板——过渡段、Methods 里纯操作性的段落、目标稿本来就短的段落，不必强套三段式，凑出来的段尾结论比没有更糟。
 - 一旦开列并列对象——材料、条件、panel、机制——就必须逐项覆盖，顺序一致。写了 `similar trends` 就补上代表性数值、条件和 panel。
 - 多个过程、机制或贡献分开编号，并说明每一步各自对应什么因素。
 - **不回头**：已判定为次要或已被排除的因素，后文不得无新证据复活成主因；后一节不推翻前一节的结论；同一结论不在引言、小节尾、Discussion 和 Conclusion 反复整段复述——收口用一句话，不重列所有数字。
@@ -58,6 +61,7 @@ description: >-
 ### 4. 边界：跟随作者，不掺机器腔
 
 - 术语、符号、连字符、单位写法、图号体例、时态、大小写：跟随目标稿的既有约定。不用通用 linter 或"看起来更学术"的直觉去覆盖作者已经统一的用法（包括作者刻意保留的悬挂连字符、方向符号、非常规单位形式）。
+- **整稿任务开工前先建清单**：通读时把术语、缩写、符号、参考态与比较基准、单位写法、时态的既有口径记成一张短清单，之后边改边对照，收尾再按「交付」核一遍。先立清单是为了不在修改过程中引入新的不一致——事后统一比一开始就统一贵得多。作者本身不一致时，清单里标出来问，不自行择一。
 - 强调词（`critical`、`crucial`、`fundamental`、`remarkable`、`universal`、`It is worth noting` 等）不是禁用词。判据是有没有数字、引用或清楚逻辑支撑：有就留，没有就改写或删，不因为"像套话"而机械删除。
 - **反向同样成立：不掺入模型腔。**不为显得学术而引入目标稿没有的模型化用词；不用破折号（`—`、`–`）插入解释，冒号尽量不用于句中引出解释，标点优先逗号和句号、分号少用。破折号不是连字符——`FCC- and HCP-`、`low-SFE` 这类构词属于上一条的作者约定，保留不动。完整词表和标点细则见 [references/language.md](references/language.md)。
 - 某个句子里的词语替换只在那个句子里成立，不升级成全文查找替换。
@@ -67,13 +71,14 @@ description: >-
 
 - 只负责语言、论证顺序、段落结构和章节组织。
 - 不改数据、机理、比较基准、限定条件、引文键、图表编号、公式、符号、数值、单位。
+- **不虚构。**数值、误差、实验条件、文献引用及其结论、机理解释，一律只能来自作者提供的材料；缺什么就列成待确认问题，不用看起来合理的内容补位。新写任务同样适用：没有证据落点的句子不写，宁可在 outline 里留空等作者填。
 - 不做 Word 修订合并或接受、格式转换、参考文献管理、Git 提交、投稿。
 
 ## 三种协作模式
 
 **默认模式 3。**作者说"模式 1/2/3"或表达等价要求时切换（"别问了，直接给净稿"就是模式 2；"先把问题列给我"就是模式 3），可以中途切换；语义不明确时不要自行猜模式，按默认走。
 
-三种模式只决定语言润色时如何收集待确认信息。架构任务（新写、重排结构）不受模式影响，一律走 outline → 作者确认 → 正文。
+三种模式只决定语言润色时如何收集待确认信息。架构任务（新写、重排结构）不受模式影响：整节或整稿一律走 outline → 作者确认 → 正文，单段按「选择入口」直接写。
 
 | | 模式 | 行为 |
 |---|---|---|
@@ -85,19 +90,11 @@ description: >-
 
 ### 提问规则
 
-用当前环境可用的提问机制；没有结构化提问工具时直接用简短文本提问，并遵守该工具的单次问题数量上限。
+**只问三类**：科学含义无法从上下文确定（不能用流畅措辞猜圆）、几种表达科学上等价但强调点不同、结构取舍（某段是否保留、结果放 Results 还是 Discussion、限制写多细）。
 
-**该问**：
+**其余直接改**，事后一行说明。四条自检或 [references/language.md](references/language.md) 已能判定的（证据强度决定的动词、缺落点、体例一致性）不算阻断问题——没有阻断问题时不要凑，直接交付润色结果。把有默认答案的问题抛给作者，是把工作退回去。
 
-1. **科学含义不清**——原文想说什么无法从上下文确定，或证据不足以支撑该句。这类必须问，不能用流畅措辞猜圆。
-2. **几种表达在科学上等价、但强调点不同**——作者偏好无法从证据推出。
-3. **结构取舍**——某段是否保留、某个结果放 Results 还是 Discussion、某个限制写多细。
-
-**不该问**：四条自检或 [references/language.md](references/language.md) 已能判定的（证据强度决定的动词、缺落点、体例一致性）。这些直接改，事后一行说明。把有默认答案的问题抛给作者，是把工作退回去。
-
-只有确实存在互斥的几种解释时才给选项，并为每个选项附一句它强调什么、代价是什么——作者答完应当拿走这条分界，而不只是做了个选择。科学含义完全不清时用开放式提问，不要硬凑成选择题。
-
-关键问题的总数不设硬上限。模式 1 每轮只问当前段落的阻断问题，不要连续审问；模式 3 通读全文后一次列出全部阻断问题，按章节和段落分组。四条自检就能定的不算阻断问题——没有阻断问题时不要凑，直接交付润色结果。
+只有存在互斥解释时才给选项，每个选项附一句它强调什么、代价是什么——作者答完应当拿走这条分界，而不只是做了个选择；含义完全不清时用开放式提问，不硬凑成选择题。用当前环境可用的提问机制并遵守其单次问题数量上限，阻断问题的总数本身不设上限。
 
 ### 偏好回写
 
@@ -111,6 +108,6 @@ description: >-
 
 ## 交付
 
-- 架构任务先交 outline，确认后再写正文；不要跳过 outline 直接产出全文。
+- 整节或整稿的架构任务先交 outline，确认后再写正文；不要跳过 outline 直接产出全文。单段不受此限。
 - 交付时说明改了哪几类问题、哪些点仍需确认。
-- 整稿任务在收尾时过一遍：语法、拼写、时态、单复数、英美拼写是否全文一致；术语、缩写、符号、单位是否全文同一口径（整稿才做，短段落不需要）。
+- 整稿任务在收尾时过一遍：语法、拼写、时态、单复数、英美拼写是否全文一致；术语、缩写、符号、单位是否与开工时那张清单同一口径（整稿才做，短段落不需要）。
