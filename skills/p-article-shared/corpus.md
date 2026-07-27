@@ -1,10 +1,10 @@
 # 语料来源与维护
 
-只在新增参考论文、加入新的修改记录，或需要说明某条规范的出处时读本文件。普通写作和润色任务不需要。
+只在新增参考论文、加入新的修改记录，或需要说明某条规范的出处时读本文件。普通写作、润色和评价任务不需要。
 
 ## 已发表论文语料
 
-[language.md](language.md) 的表达提炼自 `ref/` 下的本地 PDF：
+[expression.md](expression.md) 的表达提炼自 `../p-article-polishing/ref/` 下的本地 PDF：
 
 | 本地文件 | 论文与来源 | 主要贡献的表达类型 |
 |---|---|---|
@@ -16,11 +16,11 @@
 
 元数据已于 2026-07-25 从本地 PDF 核对。
 
-五篇集中在材料科学、凝聚态物理和第一性原理计算。SKILL.md 的四条自检是跨学科通用的论证要求，但本表达库的用词和章节习惯属于这个方向，不要当成综述、临床、方法学等稿型的依据。
+五篇集中在材料科学、凝聚态物理和第一性原理计算。`p-article-polishing/SKILL.md` 的四条自检和 `p-article-evaluated/SKILL.md` 的八个维度是跨学科通用的论证要求，但本表达库的用词和章节习惯属于这个方向，不要当成综述、临床、方法学等稿型的依据。
 
 ## 修改记录来源
 
-历史稿件路径见 `ref/历史修改文章记录.txt`。SKILL.md 的四条自检提炼自这两篇稿件的 tracked changes 与 comments：
+历史稿件路径见 `../p-article-polishing/ref/历史修改文章记录.txt`。`p-article-polishing/SKILL.md` 的四条自检提炼自这两篇稿件的 tracked changes 与 comments：
 
 - 第一篇（相变机制，已发表）：`manuscript_20250714` / `0803` / `0804` / `0818`，及 `20260106`–`0108` 净稿。
 - 第二篇（面内应变）：`manuscript_20260530`，及 `20260605_3` 净稿。
@@ -44,16 +44,22 @@
 1. 按当前缺口选代表性论文，不要求遍历全部 `ref/`。
 2. 在上表登记题目、DOI、本地文件名和用途。
 3. 只提炼短表达、修辞功能、语义条件和段落逻辑；不复制长句或整段原文。
-4. 写入 [language.md](language.md) 对应功能表，保持"功能 → 表达 → 何时使用"三列。同一功能已有等价表达时替换或合并，不并列堆放。
-5. 章节功能或论证顺序层面的发现，写入 [structure.md](structure.md)，不放进表达库。
+4. 写入 [expression.md](expression.md) 对应功能表，保持"功能 → 表达 → 何时使用"三列。同一功能已有等价表达时替换或合并，不并列堆放。
+5. 章节功能层面的发现写入 [section-skeleton.md](section-skeleton.md)；论证顺序和 outline 方法层面的发现写入 [../p-article-polishing/references/structure.md](../p-article-polishing/references/structure.md)。都不放进表达库。
 
-润色对话中作者的回答也是语料，但**不直接改 `language.md`**：先按 SKILL.md「偏好回写」追加到 `inbox.md`，由作者合并进 Git 仓库。合并时同样按上面第 4 条处理——落到对应功能表的「何时使用」列，能替换已有条目就替换，不并列堆放。分不清是稳定偏好还是一次性判断的，先不写。
+润色对话中作者的回答也是语料，但**不直接改 `expression.md`**：先按 `p-article-polishing/SKILL.md`「偏好回写」追加到 `inbox.md`，由作者合并进 Git 仓库。合并时同样按上面第 4 条处理——落到对应功能表的「何时使用」列，能替换已有条目就替换，不并列堆放。分不清是稳定偏好还是一次性判断的，先不写。
 
 新增修改记录时：
 
 1. 按作者提取 revisions 和 comments，找到后续净稿判断修改是否被保留。
 2. 判断这条修改属于哪一类问题：断言不可查、段落功能不清、主线断裂，还是越权改写。
-3. **已被现有自检覆盖的，不新增条目**；只在出现了四条自检都覆盖不到的新类别时，才扩写 SKILL.md。
+3. **已被现有自检覆盖的，不新增条目**；只在出现了四条自检都覆盖不到的新类别时，才扩写 `p-article-polishing/SKILL.md`。
 4. 新证据与旧规范冲突时，直接改现有条目，不保留两条互相矛盾的规则。
 
-保持精简：整个 skill 应停留在一份 SKILL.md 加三份 reference。新增内容前先问它能不能并进已有条目。
+保持精简，三个包各有预算：
+
+- `p-article-shared`：一份 SKILL.md 加三份 reference。
+- `p-article-polishing`：一份 SKILL.md 加一份 reference（`structure.md`）。
+- `p-article-evaluated`：一份 SKILL.md 加两份 reference（`audit.md`、`language-review.md`）。
+
+新增内容前先问它能不能并进已有条目。两个 skill 都要用的规范一律放本包，不在任何一侧复制第二份。
