@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Article Evaluated"
+  short_description: "评价 manuscript 的论证、结构、语法与非母语表达，并给出分级修改建议"
+  default_prompt: "Use $p-article-evaluated to assess this manuscript's quality, trace its claim-evidence logic, identify structural and language problems, and provide prioritized diagnoses with representative revisions rather than rewriting the full paper."
