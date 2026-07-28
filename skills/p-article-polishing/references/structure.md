@@ -44,11 +44,31 @@ outline 自检：
 
 ## 第三步：章节功能骨架
 
-各章节的功能序列见 [../../p-article-shared/section-skeleton.md](../../p-article-shared/section-skeleton.md)——Title、Abstract、Introduction、Methods、Results、Discussion、Conclusion、Figure caption 各自的顺序和分章要点都在那里。按需选用，不是填空模板。
+按需选用，不是填空模板。不凑句数，只保证证据链完整。
+
+| 章节 | 功能序列 |
+|---|---|
+| Title | 体系或对象 → 核心发现或关键手段 → 必要的限定（材料、条件、方法） |
+| Abstract | 对象与问题 → 具体空白 → 本文做了什么 → 最重要的定量结果 → 机理或独立验证 → 一句有边界的意义 |
+| Introduction | 背景与代表性证据 → 明确空白 → 本文能回答的问题 → 方法与路线 |
+| Methods | 框架或仪器 → 关键参数与近似 → 统一口径 → 可靠性验证 |
+| Results（每小节） | 图/panel 定位 → 条件与定量趋势 → 基准或对照 → 与证据强度匹配的解释 → 段尾结论 |
+| Discussion | 核心关系 → 多个结果的统一机理 → 与已有工作比较 → 候选来源及其证据强弱 → 限制与待验证部分 → 有边界的综合 |
+| Conclusion | 对象与方法 → 按正文顺序概括主结果和关键数字 → 机理或验证结论 → 一句意义 |
+| Figure caption | 首句说明整图功能 → 逐 panel 覆盖 → 解释颜色、线型、符号、箭头、插图、统计量 |
+
+分章要点：
+
+- **Title**：只包含正文真正支持的断言。描述型（`X in Y: A first-principles investigation`）和结论型（`Challenging X in Y through Z`）都可用，跟随目标期刊的常见体例；不用问句，不堆修饰词，缩写只用领域内无歧义的。题目里的冒号属于固定体例，不受正文标点规则约束。
+- **Introduction**：空白要说清缺的是哪一种——缺报道、缺知识、缺机理、缺实验验证，还是缺测量能力。文献例子要说明其对象、方法或结论与本文问题的关系，不堆作者名单。路线图段只在目标稿需要时写。
+- **Methods**：反复使用的方向、基准或条件用一句统一口径交代（`Unless otherwise specified, ...`）。可靠性要有比较量和文献结果，不能只说方法可靠。
+- **Results**：小节的组织顺序服从主线。是否给主结果编号、是否在小节末标记主发现，跟随目标稿既有体例。
+- **Discussion**：深化、统一并解释正文结果，不重复 Results 的数字。
+- **Caption**：图注描述图里有什么，机理讨论留在正文。
 
 ## 第四步：按 outline 写正文
 
-逐段写，每段写完对照该行的功能和段尾结论。偏了就改 outline 或改段落，不要让正文和 outline 悄悄分叉。语言层面同时过 SKILL.md 的四条自检，措辞选择见 [../../p-article-shared/expression.md](../../p-article-shared/expression.md)。
+逐段写，每段写完对照该行的功能和段尾结论。偏了就改 outline 或改段落，不要让正文和 outline 悄悄分叉。语言层面同时过 SKILL.md 的四条自检，措辞选择见 [language.md](language.md)。
 
 ## 重排已有文本
 

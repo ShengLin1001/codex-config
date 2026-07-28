@@ -1,6 +1,6 @@
 # 学术表达库
 
-从 [corpus.md](corpus.md) 登记的已发表论文中提炼的可复用表达。写作时用它选表达，评价时用它查表达的语义边界对不对。它回答的不是"哪个词更高级"，而是"在当前修辞功能和证据强度下，哪种说法更准确"。这些是可追溯的表达模式，不是逐字引文。
+它回答的不是"哪个词更高级"，而是"在当前修辞功能和证据强度下，哪种说法更准确"。这些是可追溯的表达模式，不是逐字引文。
 
 **这些表用来做选择，不是用来造句。**句子先按科学内容写出来，再用表核对：这个功能下我选的动词、限定词、连接词，语义边界对不对。表的价值在「何时使用」一列——近义表达之间的分界，那是模型最容易出错的地方；`X/Y/A/B` 那一列只是分界的例子，不是待填空的模板。
 
@@ -155,7 +155,7 @@
 
 以下是模型写作的识别特征，在英文正文里默认不用；目标稿原本就在用、且用得准确时才跟随。
 
-**不用的词**——LLM excess-vocabulary 清单中，在 `../p-article-polishing/ref/` 五篇论文里零出现的部分：
+**不用的词**——LLM excess-vocabulary 清单中，在 `ref/` 五篇论文里零出现的部分：
 
 `delve, underscore, showcase, leverage, harness, foster, bolster, catalyze, unearth, illuminate, navigate, scrutinize, transcend, boast, embark, grapple, juxtapose, encompass, emphasize`；
 `intricate, meticulous, pivotal, nuanced, multifaceted, groundbreaking, innovative, transformative, invaluable, commendable, renowned, exhaustive, actionable`；
