@@ -5,18 +5,19 @@ description: >-
   paper. Use for manuscript quality assessment, pre-submission diagnosis,
   argument and structure review, claim-evidence checks, logic-gap detection,
   symbol and equation audits, comparison with an explicitly specified outline,
-  figure and table narrative checks, grammar correction, and identification of
-  English that is grammatical but non-native or awkward. Returns a prioritized,
-  evidence-grounded report with representative revisions while preserving the
-  manuscript's scientific meaning, data, citations, notation, and journal
-  conventions.
+  figure and table narrative checks, grammar and idiomaticity assessment, and
+  identification of English that is grammatical but non-native or awkward.
+  Diagnosis only: it locates and explains problems but does not rewrite; all
+  rewriting and polishing belong to p-article-polishing. Returns a prioritized,
+  evidence-grounded report while preserving the manuscript's scientific meaning,
+  data, citations, notation, and journal conventions.
 ---
 
 # P Article Evaluated
 
-从审稿前自检的角度评价 manuscript：先判断作者的论证是否成立，再检查文章是否把论证组织清楚，最后检查英文是否准确、自然。默认只交付诊断报告和代表性修改示例，不直接重写整稿。优秀论文的共性不是词更"高级"，而是读者能以较小认知成本核查一条完整的论证链。
+从审稿前自检的角度评价 manuscript：先判断作者的论证是否成立，再检查文章是否把论证组织清楚，最后检查英文是否准确、自然。本 skill 是纯诊断：只定位和解释问题，不给改写，也不重写整稿，改写交给 `p-article-polishing`。优秀论文的共性不是词更"高级"，而是读者能以较小认知成本核查一条完整的论证链。
 
-评价标准和 `p-article-polishing` 的写作标准是同一套，方向相反：写作时按它选，评价时按它查。动词强度、限定词、空白类型、因果强度、连接词、意义句边界的判据见 [../p-article-shared/expression.md](../p-article-shared/expression.md)，章节和图注的功能序列见 [../p-article-shared/section-skeleton.md](../p-article-shared/section-skeleton.md)。该包不存在时按本文件的维度照常评价，并提示用户安装 `p-article-shared`。
+动词强度、限定词、空白类型、因果强度、连接词、意义句边界的判据见 [../p-article-shared/expression.md](../p-article-shared/expression.md)，章节和图注的功能序列见 [../p-article-shared/section-skeleton.md](../p-article-shared/section-skeleton.md)。该包不存在时按本文件的维度照常评价，并提示用户安装 `p-article-shared`。
 
 默认审美提炼自优秀材料科学、凝聚态物理和计算研究论文，但评价维度是跨学科的：目标期刊体例、稿件类型和作者明确约定高于这里的默认规则，不能因为参考论文采用某种标题、章节或句式就要求目标稿照搬。
 
@@ -32,17 +33,20 @@ description: >-
 
 ## 评价流程
 
-四步主流程，两个按需入口：
+先按请求路由再决定做哪几步。请求范围和材料范围是两件事：材料是整稿还是片段，不改变用户要的是什么。
 
-- 整稿任务、稿件含公式，或用户明确指定了 outline → 读 [references/audit.md](references/audit.md)。
-- 任务包含语言评价 → 读 [references/language-review.md](references/language-review.md)。
+- 用户点名维度（只看语法、只审公式与符号、只看图注、这段是否偏离 outline 等）：只执行这些维度对应的步骤和交付项，其余步骤不做，也不在报告里出现，不用 `Not assessable` 占位。判断被点名维度所必需的上游事实就地取用（如判断断言强度需要主结论和证据落点），不铺开整张事实表。
+- 用户泛化要求评价（"评价这篇/这段"、"审一下"、"投稿前自检"）：执行下面四步。材料是片段时流程不变，把材料不足以判断的维度记为 `Not assessable`，不因此跳过检查。
+- outline 对照始终是独立条件项：用户没有明确指定 outline 文件就不执行；指定了就执行，片段只对照它覆盖的 outline 节点，范围规则见 [references/audit.md](references/audit.md)。
+
+全程配合两个参考文件：符号与公式审计见 [references/audit.md](references/audit.md)，语言与行文审查见 [references/language-review.md](references/language-review.md)。
 
 ### 1. 建立稿件事实表
 
 从稿件中提取，不猜：
 
 - 一句话主结论：作者最终希望读者接受什么。
-- 具体空白：归入 `expression.md`「指出研究空白」表的七类之一——已知—未知对照、文献中尚无报道、领域基本未触及、机理研究不足、缺少实验证明、具体问题待答、测量本身困难。归不进任何一类就写"空白类型无法归类"，这本身是问题，不替作者选一类。
+- 具体空白：对照 `expression.md`「指出研究空白」表判断类型——已知—未知对照、文献中尚无报道、领域基本未触及、机理研究不足、缺少实验证明、具体问题待答、测量本身困难。该表是常见类型，不是穷举：归不进任何一类就照录作者实际的空白表述，只有当空白本身不具体时才报告为问题，不替作者选一类。
 - 新贡献：本文相对已有工作的新增内容。
 - 证据表：每个关键主张对应哪个图、表、公式、实验、计算、分析或引用。
 - 比较口径：对象、参考态、条件、变量、单位和术语约定。
@@ -63,7 +67,7 @@ description: >-
 - 每段是否只有一个主要功能；是否存在不推进主线的背景、重复结果或提前讨论。
 - 后一段是否依赖前一段尚未建立的前提；已排除或判定为次要的解释，是否在后文无新证据地重新成为主因。
 - Results、Discussion、Abstract 和 Conclusion 是否对同一结果保持一致的范围和强度。
-- 按 `section-skeleton.md` 反查各章节缺哪一环。Abstract 尤其核查功能序列是否完整，以及意义句是否**只有一句**。
+- 按 `section-skeleton.md` 反查各章节缺哪一环。该表是功能骨架不是模板，稿型或目标期刊另有体例时以后者为准；缺环只在确实断了证据链时报告。Abstract 尤其核查功能序列是否完整，以及意义句是否超出通常的一句。
 
 短片段不强行生成全文 outline，只重建该片段可见的局部逻辑。
 
@@ -126,6 +130,10 @@ description: >-
 
 同一根因只建一个问题，并列出其多个表现位置；不要用大量局部条目掩盖一个结构性问题。
 
+一致性问题按对象分工，不重复报告：数学符号、变量定义、单位和量纲归 audit.md 的符号账本，进「优先问题」；术语、缩写、拼写和排版体例归 language-review.md 的语言账本。
+
+语言问题（语法、搭配、衔接、体例）只记入 language-review.md 的语言账本，不在「优先问题」里另立条目。只有升级为断言边界或科学问题的才在这里出现——例如用 `demonstrate`、`confirm` 承载单一间接结果——且只引用语言账本的 ID 和一句摘要，不复述原文和建议。
+
 每个实质问题使用以下字段：
 
 ```text
@@ -138,26 +146,29 @@ Diagnosis:
 Why it matters:
 Resolution test:
 Fix route:
-Representative revision: 仅在不需要新增科学事实时提供
 ```
 
-`Fix route` 是本报告交给下一步润色的接口，必须具体到条目：`p-article-polishing 自检 1 强度匹配证据`、`expression.md 指出研究空白表·机理研究不足行`、`section-skeleton.md Abstract 行`。纯语法和拼写问题写 `直接改`。
+`Fix route` 是本报告交给下一步的接口，必须具体到可执行动作，并先判断这是文本问题还是科学问题：
+
+- 文本问题（表达、结构、章节组织）具体到条目：`p-article-polishing 自检 1 强度匹配证据`、`expression.md 指出研究空白表·机理研究不足行`、`section-skeleton.md Abstract 行`。纯语法和拼写问题写 `直接改`。
+- 科学问题（证据不足、缺对照、缺验证、缺引用）写作者侧动作：`补实验`、`补计算`、`补分析`、`补引用`、`作者科学决策`。这类问题不能路由给 `p-article-polishing`——它明确不改数据、机理和限定条件，改写句子只会掩盖缺口。
+- 断言过强分两种：现有证据足以支持一个更弱的结论时是文本问题，写 `p-article-polishing 自检 1 强度匹配证据`；必须保住原结论时是科学问题，写 `补证据` 或 `作者科学决策`。
 
 位置必须来自实际稿件。无法验证页码、行号或图号时写章节名、段落开头，或 `location not provided`，不得编造精确位置。
 
 ## 默认交付
 
-按下列顺序出报告。各表用对应步骤已定义的 schema，此处不重复定义。
+下面是泛化请求的默认交付。用户点名维度时只出对应项，保持原顺序，未被请求的项整项省略，不写"未评价"。各表用对应步骤已定义的 schema，此处不重复定义。
 
 1. **评价范围** — 已读取内容、评价边界、缺失材料（为空写"无"）、一句话主结论、空白类型、可见证据。
 2. **总体判断** — 当前最强之处、当前主要瓶颈，各一句。
 3. **维度评级** — `| 维度 | 等级 | 稿件证据 | 首要提升方向 |`
-4. **优先问题** — 按 Critical → Major → Minor，每项用「问题分级」的字段。
-5. **符号与公式审计 / Outline 对照** — audit.md 的三张表。未触发该入口写"本次未执行"，未指定 outline 写"未指定，不执行 outline 对照"。
+4. **优先问题** — 按 Critical → Major → Minor，每项用「问题分级」的字段。语言问题见第 7 项，此处不重复。
+5. **符号与公式审计 / Outline 对照** — audit.md 的三张表。未指定 outline 写"未指定，不执行 outline 对照"。
 6. **图表与主线** — 第 2 步的图表表。
-7. **语言评价** — language-review.md 的分项判断表和问题账本。未触发该入口写"本次未执行"。
+7. **语言评价** — language-review.md 的分项判断表和问题账本。
 8. **值得保留** — 只列有稿件证据的具体优点。
-9. **修改顺序** — 逻辑和证据 → 符号公式图表 outline → 章节段落重排 → 语法与体例。执行交给 `p-article-polishing`：架构问题走它的 structure.md，语言问题按四条自检和 expression.md 改。
+9. **修改顺序** — 逻辑和证据 → 符号公式图表 outline → 章节段落重排 → 语法与体例。证据缺口由作者按 `Fix route` 解决；文本执行交给 `p-article-polishing`：架构问题走它的 structure.md，语言问题按四条自检和 expression.md 改。
 
 没有某一级问题或没有语言问题时明确写"未发现"，不要凑数。
 
