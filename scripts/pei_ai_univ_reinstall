@@ -3,21 +3,42 @@ set -euo pipefail
 
 usage() {
   cat <<'EOF'
-Usage: bash scripts/reinstall-skills.sh [-full|-normal|-small|-part_myskill]
+Usage: pei_ai_univ_reinstall [-full|-normal|-small] [-part_myskill]
 
   -full           Install all configured repositories (default).
   -normal         Skip vercel-labs/agent-skills.
   -small          Install all skills from ShengLin1001/codex-config only.
-  -part_myskill   Install ShengLin1001/codex-config except selected management skills.
+  -part_myskill   Exclude selected skills from ShengLin1001/codex-config.
   -h, --help      Show this help.
 EOF
 }
 
-mode="${1:--full}"
-if [ "$#" -gt 1 ]; then
-  usage >&2
-  exit 2
-fi
+mode=""
+part_myskill=false
+for arg in "$@"; do
+  case "$arg" in
+    -full|-normal|-small)
+      if [ -n "$mode" ]; then
+        echo "Choose only one base strategy: -full, -normal, or -small." >&2
+        exit 2
+      fi
+      mode="$arg"
+      ;;
+    -part_myskill)
+      part_myskill=true
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown installation strategy: $arg" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+mode="${mode:--full}"
 
 repo_myskill="https://github.com/ShengLin1001/codex-config.git"
 lnormal_repos=(
@@ -34,22 +55,13 @@ case "$mode" in
   -normal)
     lrepos=("${lnormal_repos[@]}")
     ;;
-  -small|-part_myskill)
+  -small)
     lrepos=("$repo_myskill")
-    ;;
-  -h|--help)
-    usage
-    exit 0
-    ;;
-  *)
-    echo "Unknown installation strategy: $mode" >&2
-    usage >&2
-    exit 2
     ;;
 esac
 
 lselected_skills=('*')
-if [ "$mode" = "-part_myskill" ]; then
+if [ "$part_myskill" = true ]; then
   path_script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
   path_repo_root="$(cd -- "$path_script_dir/.." && pwd)"
   lexcluded_skills=(
@@ -79,9 +91,9 @@ fi
 
 # Agents to install skills into (space-separated).
 # Defaults to both Codex and Claude Code. Override examples:
-#   AGENTS="claude-code" bash scripts/reinstall-skills.sh   # only Claude Code
-#   AGENTS="codex"       bash scripts/reinstall-skills.sh   # only Codex
-#   AGENTS="*"           bash scripts/reinstall-skills.sh   # all detected agents
+#   AGENTS="claude-code" pei_ai_univ_reinstall   # only Claude Code
+#   AGENTS="codex"       pei_ai_univ_reinstall   # only Codex
+#   AGENTS="*"           pei_ai_univ_reinstall   # all detected agents
 # Backward compat: the old single-agent AGENT variable is still honored.
 AGENTS="${AGENTS:-${AGENT:-codex claude-code}}"
 GLOBAL_FLAG="${GLOBAL_FLAG:--g}"
@@ -106,7 +118,11 @@ npx --yes skills remove --all "$GLOBAL_FLAG"
 
 for repo in "${lrepos[@]}"; do
   # Install once per repo; the CLI links the same global skill set to both agents.
-  npx --yes skills add "$repo" "$GLOBAL_FLAG" --agent "${AGENT_LIST[@]}" --skill "${lselected_skills[@]}" --yes
+  lrepo_skills=('*')
+  if [ "$part_myskill" = true ] && [ "$repo" = "$repo_myskill" ]; then
+    lrepo_skills=("${lselected_skills[@]}")
+  fi
+  npx --yes skills add "$repo" "$GLOBAL_FLAG" --agent "${AGENT_LIST[@]}" --skill "${lrepo_skills[@]}" --yes
 done
 
 for agent in "${AGENT_LIST[@]}"; do
