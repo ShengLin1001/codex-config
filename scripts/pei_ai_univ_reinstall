@@ -42,7 +42,7 @@ mode="${mode:--full}"
 
 repo_myskill="https://github.com/ShengLin1001/codex-config.git"
 lnormal_repos=(
-  "vercel-labs/skills"
+  "https://github.com/vercel-labs/skills.git"
   "$repo_myskill"
   "https://github.com/Imbad0202/academic-research-skills-codex.git"
   "https://github.com/Yuan1z0825/nature-skills.git"
