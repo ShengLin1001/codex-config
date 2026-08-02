@@ -95,7 +95,7 @@ fi
 #   AGENTS="codex"       pei_ai_univ_reinstall   # only Codex
 #   AGENTS="*"           pei_ai_univ_reinstall   # all detected agents
 # Backward compat: the old single-agent AGENT variable is still honored.
-AGENTS="${AGENTS:-${AGENT:-codex claude-code openclaw}}"
+AGENTS="${AGENTS:-${AGENT:-codex claude-code openclaw hermes-agent}}"
 GLOBAL_FLAG="${GLOBAL_FLAG:--g}"
 read -r -a AGENT_LIST <<< "$AGENTS"
 
