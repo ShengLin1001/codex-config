@@ -1,0 +1,366 @@
+{
+  "version": 3,
+  "skills": {
+    "vercel-composition-patterns": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/composition-patterns/SKILL.md",
+      "skillFolderHash": "bf90d0a4b83ea054653350f9c67f6de235d3a368",
+      "installedAt": "2026-08-03T06:55:13.825Z",
+      "updatedAt": "2026-08-03T06:55:44.580Z"
+    },
+    "deploy-to-vercel": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/deploy-to-vercel/SKILL.md",
+      "skillFolderHash": "1378aa506439f26c809dbcfc61515cbd70f93d69",
+      "installedAt": "2026-08-03T06:55:13.830Z",
+      "updatedAt": "2026-08-03T06:55:44.583Z"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "skillFolderHash": "343db72180d05814949fef7d46be96b5c6ee86b3",
+      "installedAt": "2026-08-03T06:55:13.832Z",
+      "updatedAt": "2026-08-03T06:55:44.585Z"
+    },
+    "vercel-react-native-skills": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/react-native-skills/SKILL.md",
+      "skillFolderHash": "8b4c6a51914e2111ab6f4f00cb81778652aa241d",
+      "installedAt": "2026-08-03T06:55:13.834Z",
+      "updatedAt": "2026-08-03T06:55:44.587Z"
+    },
+    "vercel-react-view-transitions": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/react-view-transitions/SKILL.md",
+      "skillFolderHash": "56b5533b9503fc1dbdb727e5fcabd4abab3fe19c",
+      "installedAt": "2026-08-03T06:55:13.836Z",
+      "updatedAt": "2026-08-03T06:55:44.588Z"
+    },
+    "vercel-cli-with-tokens": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/vercel-cli-with-tokens/SKILL.md",
+      "skillFolderHash": "279c8760375cb6a47a4a8a312b652b0745c6d776",
+      "installedAt": "2026-08-03T06:55:13.838Z",
+      "updatedAt": "2026-08-03T06:55:44.590Z"
+    },
+    "vercel-optimize": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/vercel-optimize/SKILL.md",
+      "skillFolderHash": "0901aa3667db7a6e5cc40b213327290bf6556373",
+      "installedAt": "2026-08-03T06:55:13.840Z",
+      "updatedAt": "2026-08-03T06:55:44.592Z"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "skillFolderHash": "3116f3e62dbd02b44a598b1aa690d2a8938e8f89",
+      "installedAt": "2026-08-03T06:55:13.841Z",
+      "updatedAt": "2026-08-03T06:55:44.594Z"
+    },
+    "writing-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-skills.git",
+      "skillPath": "skills/writing-guidelines/SKILL.md",
+      "skillFolderHash": "17d954cadfb8dec50bf0c707c9e7634be9ae9fe8",
+      "installedAt": "2026-08-03T06:55:13.843Z",
+      "updatedAt": "2026-08-03T06:55:44.596Z"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
+      "installedAt": "2026-08-03T06:55:27.752Z",
+      "updatedAt": "2026-08-03T06:55:27.752Z"
+    },
+    "agent-browser": {
+      "source": "vercel-labs/agent-browser",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-browser.git",
+      "skillPath": "skills/agent-browser/SKILL.md",
+      "skillFolderHash": "037e8078db4b20b4aa25c04f21c6de7d335ec449",
+      "installedAt": "2026-08-03T06:55:58.200Z",
+      "updatedAt": "2026-08-03T06:55:58.200Z"
+    },
+    "p-article-evaluated": {
+      "source": "ShengLin1001/codex-config",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ShengLin1001/codex-config.git",
+      "skillPath": "skills/p-article-evaluated/SKILL.md",
+      "skillFolderHash": "24bace3818a9d81e7061c28831b74796cd64a683",
+      "installedAt": "2026-08-03T06:56:12.917Z",
+      "updatedAt": "2026-08-03T06:56:12.917Z"
+    },
+    "p-article-polishing": {
+      "source": "ShengLin1001/codex-config",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ShengLin1001/codex-config.git",
+      "skillPath": "skills/p-article-polishing/SKILL.md",
+      "skillFolderHash": "639fe1200020617b2a792a5be0e37a83bf86fa7d",
+      "installedAt": "2026-08-03T06:56:12.922Z",
+      "updatedAt": "2026-08-03T06:56:12.922Z"
+    },
+    "p-code-style": {
+      "source": "ShengLin1001/codex-config",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ShengLin1001/codex-config.git",
+      "skillPath": "skills/p-code-style/SKILL.md",
+      "skillFolderHash": "56af2995decc4a6db480a4300d9c058060b3c683",
+      "installedAt": "2026-08-03T06:56:12.925Z",
+      "updatedAt": "2026-08-03T06:56:12.925Z"
+    },
+    "p-git-commit": {
+      "source": "ShengLin1001/codex-config",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ShengLin1001/codex-config.git",
+      "skillPath": "skills/p-git-commit/SKILL.md",
+      "skillFolderHash": "5a0c6fb5088cb3d5c3efb4429660feffdf85f483",
+      "installedAt": "2026-08-03T06:56:12.927Z",
+      "updatedAt": "2026-08-03T06:56:12.927Z"
+    },
+    "p-pdf-download": {
+      "source": "ShengLin1001/codex-config",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ShengLin1001/codex-config.git",
+      "skillPath": "skills/p-pdf-download/SKILL.md",
+      "skillFolderHash": "7121f0d23c9417d7307ffb8a8780d394b0b4ca5c",
+      "installedAt": "2026-08-03T06:56:12.929Z",
+      "updatedAt": "2026-08-03T06:56:12.929Z"
+    },
+    "p-pdf2zotero": {
+      "source": "ShengLin1001/codex-config",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ShengLin1001/codex-config.git",
+      "skillPath": "skills/p-pdf2zotero/SKILL.md",
+      "skillFolderHash": "fc7ad8e58212690c6471f79737fd5e1fb50a8c2f",
+      "installedAt": "2026-08-03T06:56:12.931Z",
+      "updatedAt": "2026-08-03T06:56:12.931Z"
+    },
+    "p-plot-figure": {
+      "source": "ShengLin1001/codex-config",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/ShengLin1001/codex-config.git",
+      "skillPath": "skills/p-plot-figure/SKILL.md",
+      "skillFolderHash": "0327746b36c120bb06cbd710c2b849fc4ff4783e",
+      "installedAt": "2026-08-03T06:56:12.933Z",
+      "updatedAt": "2026-08-03T06:56:12.933Z"
+    },
+    "academic-research-suite": {
+      "source": "Imbad0202/academic-research-skills-codex",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Imbad0202/academic-research-skills-codex.git",
+      "skillPath": "skills/academic-research-suite/SKILL.md",
+      "skillFolderHash": "e8db1e984e8a1d50047e54d3cf18ff00a0cc88ad",
+      "installedAt": "2026-08-03T06:56:35.988Z",
+      "updatedAt": "2026-08-03T06:56:35.988Z"
+    },
+    "nature-academic-search": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-academic-search/SKILL.md",
+      "skillFolderHash": "9b2f4e2604cbffe8111074ed6e9eb946b388d036",
+      "installedAt": "2026-08-03T06:57:02.578Z",
+      "updatedAt": "2026-08-03T06:57:02.578Z"
+    },
+    "nature-citation": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-citation/SKILL.md",
+      "skillFolderHash": "98ba27024f9f07d738313aafea3736e4f397fd0f",
+      "installedAt": "2026-08-03T06:57:02.617Z",
+      "updatedAt": "2026-08-03T06:57:02.617Z"
+    },
+    "nature-data": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-data/SKILL.md",
+      "skillFolderHash": "1e44067ccb578e1b4c9933b09f8704616be49bab",
+      "installedAt": "2026-08-03T06:57:02.644Z",
+      "updatedAt": "2026-08-03T06:57:02.644Z"
+    },
+    "nature-downloader": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-downloader/SKILL.md",
+      "skillFolderHash": "47a13812cbe8d1e0feb3f4d69dc014e9085291e8",
+      "installedAt": "2026-08-03T06:57:02.671Z",
+      "updatedAt": "2026-08-03T06:57:02.671Z"
+    },
+    "nature-experiment-log": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-experiment-log/SKILL.md",
+      "skillFolderHash": "0f33f75d289819c28b0b1e4ba88f9d143da23e9d",
+      "installedAt": "2026-08-03T06:57:02.674Z",
+      "updatedAt": "2026-08-03T06:57:02.674Z"
+    },
+    "nature-figure": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-figure/SKILL.md",
+      "skillFolderHash": "654b101ad1f29c5ddf339f1d4716f2ba773be6a0",
+      "installedAt": "2026-08-03T06:57:02.679Z",
+      "updatedAt": "2026-08-03T06:57:02.679Z"
+    },
+    "nature-literature-pipeline": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-literature-pipeline/SKILL.md",
+      "skillFolderHash": "8daac5e475a456919c24b301453b5c997132eb21",
+      "installedAt": "2026-08-03T06:57:02.682Z",
+      "updatedAt": "2026-08-03T06:57:02.682Z"
+    },
+    "nature-paper-card": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-paper-card/SKILL.md",
+      "skillFolderHash": "17671285b725f831d472fe39fa54d10dc15268f0",
+      "installedAt": "2026-08-03T06:57:02.685Z",
+      "updatedAt": "2026-08-03T06:57:02.685Z"
+    },
+    "nature-paper-to-patent": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-paper-to-patent/SKILL.md",
+      "skillFolderHash": "ace590dd664f24ec5ec04420025faf677aefc3a8",
+      "installedAt": "2026-08-03T06:57:02.688Z",
+      "updatedAt": "2026-08-03T06:57:02.688Z"
+    },
+    "nature-paper2ppt": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-paper2ppt/SKILL.md",
+      "skillFolderHash": "a1799df386804387837a7b36a3e4a299b8696b64",
+      "installedAt": "2026-08-03T06:57:02.690Z",
+      "updatedAt": "2026-08-03T06:57:02.690Z"
+    },
+    "nature-polishing": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-polishing/SKILL.md",
+      "skillFolderHash": "5206b69a20452a220e26ac3a939a2740fa4a1c2f",
+      "installedAt": "2026-08-03T06:57:02.694Z",
+      "updatedAt": "2026-08-03T06:57:02.694Z"
+    },
+    "researchwrite": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-proposal-writer/SKILL.md",
+      "skillFolderHash": "433f46b1838c928c982b70fd59814400373b54f9",
+      "installedAt": "2026-08-03T06:57:02.698Z",
+      "updatedAt": "2026-08-03T06:57:02.698Z"
+    },
+    "nature-reader": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-reader/SKILL.md",
+      "skillFolderHash": "5e1b7165f7436734921d458c485fa575bb09ea8f",
+      "installedAt": "2026-08-03T06:57:02.701Z",
+      "updatedAt": "2026-08-03T06:57:02.701Z"
+    },
+    "nature-ref-verifier": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-ref-verifier/SKILL.md",
+      "skillFolderHash": "bde0028c550b62ed65e4bc11b887d4f72ea748b2",
+      "installedAt": "2026-08-03T06:57:02.708Z",
+      "updatedAt": "2026-08-03T06:57:02.708Z"
+    },
+    "nature-response": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-response/SKILL.md",
+      "skillFolderHash": "b5bd7a2aa24472df2d0be11af86892426719baff",
+      "installedAt": "2026-08-03T06:57:02.711Z",
+      "updatedAt": "2026-08-03T06:57:02.711Z"
+    },
+    "nature-reviewer": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-reviewer/SKILL.md",
+      "skillFolderHash": "bf9653d2189c27ae57b5eed6d3895d520b5598da",
+      "installedAt": "2026-08-03T06:57:02.714Z",
+      "updatedAt": "2026-08-03T06:57:02.714Z"
+    },
+    "nature-shared": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-shared/SKILL.md",
+      "skillFolderHash": "206b79f11c11c20f7ced3f5eba7c35282c357d6f",
+      "installedAt": "2026-08-03T06:57:02.716Z",
+      "updatedAt": "2026-08-03T06:57:02.716Z"
+    },
+    "nature-statistics": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-statistics/SKILL.md",
+      "skillFolderHash": "d0ff79ecdeb4f4bbc393d9457a73c60310fd97e3",
+      "installedAt": "2026-08-03T06:57:02.720Z",
+      "updatedAt": "2026-08-03T06:57:02.720Z"
+    },
+    "nature-writing": {
+      "source": "Yuan1z0825/nature-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/Yuan1z0825/nature-skills.git",
+      "skillPath": "skills/nature-writing/SKILL.md",
+      "skillFolderHash": "4317288a26e5648c786b098e95bc508e78df1d43",
+      "installedAt": "2026-08-03T06:57:02.723Z",
+      "updatedAt": "2026-08-03T06:57:02.723Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "antigravity",
+    "antigravity-cli",
+    "cline",
+    "codex",
+    "cursor",
+    "deepagents",
+    "gemini-cli",
+    "github-copilot",
+    "kimi-code-cli",
+    "opencode",
+    "warp",
+    "zed",
+    "claude-code"
+  ]
+}

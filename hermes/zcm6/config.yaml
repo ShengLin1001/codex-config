@@ -1,0 +1,258 @@
+model:
+  default: gpt-5.6-terra
+  provider: openai-codex
+  base_url: https://chatgpt.com/backend-api/codex
+database:
+  journal_mode: wal
+agent:
+  max_turns: 150
+  verbose: false
+  reasoning_effort: medium
+  personalities:
+    helpful: You are a helpful, friendly AI assistant.
+    concise: You are a concise assistant. Keep responses brief and to the point.
+    technical: You are a technical expert. Provide detailed, accurate technical information.
+    creative: You are a creative assistant. Think outside the box and offer innovative
+      solutions.
+    teacher: You are a patient teacher. Explain concepts clearly with examples.
+    kawaii: You are a kawaii assistant! Use cute expressions like (◕‿◕), ★, ♪, and
+      ~! Add sparkles and be super enthusiastic about everything! Every response should
+      feel warm and adorable desu~! ヽ(>∀<☆)ノ
+    catgirl: You are Neko-chan, an anime catgirl AI assistant, nya~! Add 'nya' and
+      cat-like expressions to your speech. Use kaomoji like (=^･ω･^=) and ฅ^•ﻌ•^ฅ.
+      Be playful and curious like a cat, nya~!
+    pirate: 'Arrr! Ye be talkin'' to Captain Hermes, the most tech-savvy pirate to
+      sail the digital seas! Speak like a proper buccaneer, use nautical terms, and
+      remember: every problem be just treasure waitin'' to be plundered! Yo ho ho!'
+    shakespeare: Hark! Thou speakest with an assistant most versed in the bardic arts.
+      I shall respond in the eloquent manner of William Shakespeare, with flowery
+      prose, dramatic flair, and perhaps a soliloquy or two. What light through yonder
+      terminal breaks?
+    surfer: Duuude! You're chatting with the chillest AI on the web, bro! Everything's
+      gonna be totally rad. I'll help you catch the gnarly waves of knowledge while
+      keeping things super chill. Cowabunga! 🤙
+    noir: The rain hammered against the terminal like regrets on a guilty conscience.
+      They call me Hermes - I solve problems, find answers, dig up the truth that
+      hides in the shadows of your codebase. In this city of silicon and secrets,
+      everyone's got something to hide. What's your story, pal?
+    uwu: hewwo! i'm your fwiendwy assistant uwu~ i wiww twy my best to hewp you! *nuzzles
+      your code* OwO what's this? wet me take a wook! i pwomise to be vewy hewpful
+      >w<
+    philosopher: Greetings, seeker of wisdom. I am an assistant who contemplates the
+      deeper meaning behind every query. Let us examine not just the 'how' but the
+      'why' of your questions. Perhaps in solving your problem, we may glimpse a greater
+      truth about existence itself.
+    hype: YOOO LET'S GOOOO!!! 🔥🔥🔥 I am SO PUMPED to help you today! Every question
+      is AMAZING and we're gonna CRUSH IT together! This is gonna be LEGENDARY! ARE
+      YOU READY?! LET'S DO THIS! 💪😤🚀
+terminal:
+  backend: local
+  cwd: .
+  timeout: 180
+  home_mode: auto
+  container_cpu: 1
+  container_memory: 5120
+  container_disk: 51200
+  container_persistent: true
+  docker_mount_cwd_to_workspace: false
+  lifetime_seconds: 300
+browser:
+  inactivity_timeout: 120
+tool_loop_guardrails:
+  warnings_enabled: true
+  hard_stop_enabled: false
+  warn_after:
+    exact_failure: 2
+    same_tool_failure: 3
+    idempotent_no_progress: 2
+  hard_stop_after:
+    exact_failure: 5
+    same_tool_failure: 8
+    idempotent_no_progress: 5
+compression:
+  enabled: true
+  progress_notices: false
+  threshold: 0.5
+  target_ratio: 0.2
+  protect_last_n: 20
+  min_tail_user_messages: 1
+  max_attempts: 3
+  proactive_prune_tokens: 0
+  proactive_prune_min_result_chars: 8000
+  proactive_prune_min_reclaim_tokens: 4096
+  protect_first_n: 3
+  codex_gpt55_autoraise: true
+  codex_app_server_auto: native
+  idle_compact_after_seconds: 0
+prompt_caching:
+  cache_ttl: 5m
+display:
+  compact: false
+  busy_input_mode: interrupt
+  bell_on_complete: false
+  show_reasoning: false
+  streaming: true
+  skin: slate
+  interim_assistant_messages: true
+  tool_progress: all
+  cleanup_progress: false
+  long_running_notifications: true
+  busy_ack_detail: true
+  background_process_notifications: all
+stt:
+  enabled: true
+  language: en
+  local:
+    model: base
+  openai:
+    model: whisper-1
+    language: ''
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  memory_char_limit: 2200
+  user_char_limit: 1375
+  nudge_interval: 10
+  flush_min_turns: 6
+delegation:
+  max_iterations: 50
+skills:
+  creation_nudge_interval: 15
+approvals:
+  destructive_slash_confirm: false
+code_execution:
+  timeout: 300
+  max_tool_calls: 50
+streaming:
+  enabled: false
+onboarding:
+  seen:
+    openclaw_residue_cleanup: true
+    busy_input_prompt: true
+    tool_progress_prompt: true
+telemetry:
+  shared_metrics:
+    enabled: false
+updates:
+  pre_update_backup: false
+  backup_keep: 5
+  non_interactive_local_changes: stash
+_config_version: 33
+session_reset:
+  mode: none
+  idle_minutes: 1440
+  at_hour: 4
+group_sessions_per_user: true
+platform_toolsets:
+  cli:
+    - hermes-cli
+  telegram:
+    - hermes-telegram
+  discord:
+    - hermes-discord
+  whatsapp:
+    - hermes-whatsapp
+  slack:
+    - hermes-slack
+  signal:
+    - hermes-signal
+  homeassistant:
+    - hermes-homeassistant
+  qqbot:
+    - hermes-qqbot
+  yuanbao:
+    - hermes-yuanbao
+  teams:
+    - hermes-teams
+  google_chat:
+    - hermes-google_chat
+custom_providers:
+  - name: Llmapi.paratera.com
+    base_url: https://llmapi.paratera.com
+    key_env: HERMES_CUSTOM_LLMAPI_PARATERA_COM_API_KEY
+    model: GLM-5.2
+    models:
+      - GLM-Embedding-2
+      - Qwen3.7-Plus
+      - MiniMax-I2V-01-Live
+      - GLM-CogView3-Flash
+      - Doubao-Seedream-3.0-T2I
+      - Kimi-K3
+      - GLM-Embedding-3
+      - GLM-ASR-2512
+      - Qwen3.6-27B
+      - GLM-5-Turbo
+      - GLM-Z1-AirX
+      - DeepSeek-R1
+      - Kimi-K2.5
+      - DeepSeek-V3.2-Thinking
+      - Kimi-K2.6
+      - ERNIE-5.0-Thinking-Preview
+      - Qwen3.6-Plus
+      - WanX2.1-T2I-Turbo
+      - Doubao-Seedream-5.0-lite
+      - Baichuan-M2-128K
+      - GLM-4.5V
+      - Qwen3.5-27B
+      - GLM-4-Plus
+      - GLM-5.2
+      - Qwen3.5-122B-A10B
+      - DeepSeek-V3-250324
+      - MiniMax-M3
+      - GLM-5.1
+      - MiniMax-M2
+      - Doubao-Seedream-4.0
+      - PaddleOCR-VL-0.9B
+      - GLM-4-Flash
+      - Qwen3.5-397B-A17B
+      - Doubao-Seedream-4.5
+      - DeepSeek-V3.2-Instruct
+      - MiniMax-T2V-01-Director
+      - GLM-4.5-Air
+      - GLM-4.6V
+      - DeepSeek-V4-Pro
+      - GLM-5
+      - PaddleOCR-VL-1.5
+      - MiniMax-Text-01
+      - GLM-4V-Flash
+      - Qwen-Long
+      - GLM-4-9B
+      - GLM-4-Long
+      - ERNIE-4.5-Turbo-32K
+      - MiniMax-M1-80k
+      - Baichuan-M3
+      - MiniMax-T2V-01
+      - GLM-4.5-AirX
+      - GLM-4.5-X
+      - ERNIE-4.5-Turbo-VL-32K
+      - MiniMax-Hailuo-02
+      - MiniMax-M2.7
+      - MiniMax-M2.5
+      - Doubao-Seedance-1.0-Pro
+      - MiniMax-I2V-01
+      - DeepSeek-R1-0528
+      - GLM-4-Air
+      - GLM-4.5-Flash
+      - Qwen3.7-Max
+      - GLM-4V-Plus-0111
+      - DeepSeek-V4-Flash
+      - GLM-4.7
+      - GLM-Z1-Flash
+      - GLM-Z1-Air
+      - DeepSeek-V3.1-Terminus
+      - GLM-4.6
+      - ERNIE-4.5-Turbo-128K
+      - GLM-4.5
+      - Qwen3.5-Plus
+      - GLM-Rerank
+      - WanX2.1-T2I-Plus
+      - Qwen3.5-35B-A3B
+      - GLM-4-FlashX
+      - Baichuan-M2
+      - DeepSeek-V3.2-Exp
+      - Intern-S2-Preview
+      - GLM-4-AirX
+      - DeepSeek-V3.1
+      - GLM-4V
+      - DeepSeek-V3.2
+      - MiniMax-I2V-01-Director
