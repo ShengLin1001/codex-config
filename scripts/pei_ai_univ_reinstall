@@ -40,6 +40,7 @@ for arg in "$@"; do
 done
 mode="${mode:--full}"
 
+# https://github.com/mattpocock/skills
 repo_myskill="https://github.com/ShengLin1001/codex-config.git"
 lnormal_repos=(
   "https://github.com/vercel-labs/skills.git"
