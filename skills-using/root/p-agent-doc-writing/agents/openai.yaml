@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Agent Doc Writing"
+  short_description: "精简编写和维护供 agent 使用的指令文件"
+  default_prompt: "使用 $p-agent-doc-writing 精简并校准这个 agent 指令文件。"

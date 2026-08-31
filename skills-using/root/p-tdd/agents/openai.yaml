@@ -1,0 +1,4 @@
+interface:
+  display_name: "P TDD"
+  short_description: "按红绿重构循环和纵向切片进行测试驱动开发"
+  default_prompt: "使用 $p-tdd 以一个失败测试开始，按纵向切片完成这项改动。"

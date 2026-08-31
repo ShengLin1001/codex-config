@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Diagnosing Bugs"
+  short_description: "用可复现反馈循环定位复杂缺陷和性能回归"
+  default_prompt: "使用 $p-diagnosing-bugs 为这个复杂问题建立复现并定位根因。"

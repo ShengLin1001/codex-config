@@ -1,0 +1,7 @@
+interface:
+  display_name: "P Handoff"
+  short_description: "将当前工作压缩成可由另一 agent 接续的交接文档"
+  default_prompt: "使用 $p-handoff 为下一次会话生成一份精简、可执行的交接文档。"
+
+policy:
+  allow_implicit_invocation: false

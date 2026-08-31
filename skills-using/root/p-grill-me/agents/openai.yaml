@@ -1,0 +1,7 @@
+interface:
+  display_name: "P Grill Me"
+  short_description: "分轮追问并压力测试计划、设计或关键决策"
+  default_prompt: "使用 $p-grill-me 追问并完善这个方案，在我确认前不要实施。"
+
+policy:
+  allow_implicit_invocation: false

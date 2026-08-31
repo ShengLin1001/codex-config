@@ -1,0 +1,7 @@
+interface:
+  display_name: "P Research"
+  short_description: "基于一手来源调查问题并形成可核验的引用结论"
+  default_prompt: "使用 $p-research 调查这个问题，优先采用一手来源并标明证据边界。"
+
+policy:
+  allow_implicit_invocation: false

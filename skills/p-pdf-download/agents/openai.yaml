@@ -1,4 +1,0 @@
-interface:
-  display_name: "P PDF Download"
-  short_description: "Batch-download PDFs from a dois.txt"
-  default_prompt: "Use $p-pdf-download to batch-download the PDFs listed in dois.txt (one DOI per line) into the current directory via the bundled pdf_download.py."
