@@ -8,11 +8,32 @@
 - `codex/config.toml`：`~/.codex/config.toml` 的仓库副本。
 - `codex/AGENTS.md`：`~/.codex/AGENTS.md` 的仓库副本，用于保存 Codex 全局说明。
 - `skills/`：本仓库维护的自定义 Codex skills。
+- `skills-using/root/`：跨项目通用、适合用户级安装的 skill 源码；保存在这里不等于已经安装。
+- `skills-using/project/*/explicit/`：只通过 `$skill-name` 显式调用的项目级 skills。
+- `skills-using/project/*/implicit/`：可按任务语义自动匹配的项目级 skills。
 - `scripts/copy-codex-files.sh`：将 `~/.codex` 中的 `AGENTS.md` 和 `config.toml` 复制到本仓库的 `codex/` 目录。
 - `scripts/restore-codex-files.sh`：从本仓库将 Codex 配置恢复到 `~/.codex`。
-- `scripts/reinstall-skills.sh`：通过 `npx skills` 重新安装外部 skill 仓库。
+- `scripts/pei_ai_univ_reinstall`：逐个移除 npm 管理的用户级 skills，再为 Codex、Claude Code 和 Hermes 安装 3 个允许项。
+- `scripts/sync-hermes-generated-skills.sh`：将明确指定的 Hermes 自生成 skill 归档到仓库，不提供反向安装。
 
 ## 常用工作流
+
+### Skill 调用策略
+
+安装层级由 `skills-using/root/` 与 `skills-using/project/` 区分；是否允许自动匹配由各 skill 的 `agents/openai.yaml` 决定。显式 skill 只有用户明确点名时才加载，例如：
+
+~~~text
+$p-article-evaluated 检查这篇论文，只诊断不改写
+$p-article-polishing 润色这段英文论文
+$p-code-review 审查当前代码变更，只报告问题
+~~~
+
+每个显式 skill 的 `agents/openai.yaml` 都必须设置：
+
+~~~yaml
+policy:
+  allow_implicit_invocation: false
+~~~
 
 ### 从当前 Codex 环境同步
 
@@ -34,17 +55,53 @@
 
 这会将仓库中的 Codex 配置副本恢复到 `~/.codex`。
 
-### 重新安装外部 Skills
+### 重新安装用户级 Skills
 
 从仓库根目录运行：
 
 ~~~bash
-./scripts/reinstall-skills.sh
+./scripts/pei_ai_univ_reinstall
 ~~~
 
-该脚本会读取 `scripts/reinstall-skills.sh` 中的 `repos` 数组，并通过 `npx skills add` 安装这些 skill 仓库。
+脚本先列出并逐个移除 npm 管理的用户级 skills，再只安装：
 
-安装新的 skill 仓库后，将其仓库地址添加到 `scripts/reinstall-skills.sh` 中的 `repos` 数组里。如果该仓库已经列出，则不要重复添加。
+- `p-code-style`
+- `p-plot-figure`
+- `p-git-commit`
+
+默认目标是 Codex、Claude Code 和 Hermes Agent；用 `AGENTS` 可缩小目标范围：
+
+~~~bash
+AGENTS="hermes-agent" ./scripts/pei_ai_univ_reinstall
+AGENTS="codex claude-code" ./scripts/pei_ai_univ_reinstall
+~~~
+
+该脚本不修改 Claude plugins、Codex plugins 或 Hermes 原生 skills。Codex 本地的 Ponytail 属于 Codex plugin，与 npm 用户级 skill 清理相互独立。
+
+### 同步 Hermes 生成的自定义 Skills
+
+Hermes 原生的 `skill_manage` 会把新 skill 写入 Hermes 自己的 skills 根目录；实际位置以 `hermes config path` 为准。这些技能不是 `npx skills` 的锁文件内容，自定义内容应版本化到本仓库。
+
+`skills/hermes-generated/` 只作为本地与 zcm6 历史自生成 skills 的归档。skill 按主题分目录，名称统一为 `p-*`；只保留触发条件、核心流程、必要命令和易踩点，不保存工作日志、机器快照或一次性修复记录，也不重新安装到 Hermes。
+
+在产生或修改一个值得保留的 Hermes skill 后，明确导出该 skill 的相对路径（路径相对 Hermes 的 `skills/` 根目录）：
+
+~~~bash
+./scripts/sync-hermes-generated-skills.sh export research/my-new-skill
+git add skills/hermes-generated/research/my-new-skill
+git commit -m "feat(skills): 同步 my-new-skill"
+git push
+~~~
+
+关闭 Hermes 自动创建和维护 skill：
+
+~~~bash
+hermes config set skills.creation_nudge_interval 0 --force
+hermes config set skills.write_approval true
+hermes config set curator.enabled false
+~~~
+
+`creation_nudge_interval=0` 关闭自动 skill review 触发，`curator.enabled=false` 关闭自动整理，`write_approval=true` 阻止 Hermes 静默写入。同步脚本默认拒绝覆盖仓库已有目录；确认新归档应替换旧版本时才追加 `--force`，旧副本会移动到 `.archive/`，不会递归删除。
 
 ### 使用 npx 管理 Skills
 
@@ -62,18 +119,17 @@ NODE_OPTIONS=--use-env-proxy
 export NODE_OPTIONS="--use-env-proxy"
 ~~~
 
-安装或刷新某个 skill 仓库：
+安装或刷新允许的 skill：
 
 ~~~bash
-NODE_OPTIONS=--use-env-proxy npx --yes skills add ShengLin1001/codex-config -g --agent codex --skill '*' --yes
-NODE_OPTIONS=--use-env-proxy npx --yes skills add owner/repo -g --agent codex --skill '*' --yes
+NODE_OPTIONS=--use-env-proxy npx --yes skills add ShengLin1001/codex-config -g --agent codex --skill p-code-style p-plot-figure p-git-commit --yes
 ~~~
 
 更新已经由 CLI lock 跟踪的 skills：
 
 ~~~bash
 NODE_OPTIONS=--use-env-proxy npx --yes skills update -g -y
-NODE_OPTIONS=--use-env-proxy npx --yes skills update p-skill-installer -g -y
+NODE_OPTIONS=--use-env-proxy npx --yes skills update p-code-style -g -y
 ~~~
 
 查看已安装 skills：
@@ -85,7 +141,7 @@ npx --yes skills list -g -a codex
 移除指定 skill：
 
 ~~~bash
-npx --yes skills remove p-skill-installer -g -y
+npx --yes skills remove p-code-style -g -y
 ~~~
 
 不要随意运行 `npx skills remove --all -g`；该命令会移除所有全局 skills。需要批量清理时先确认列表，再逐个指定 skill 名称。
