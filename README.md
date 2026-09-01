@@ -9,6 +9,8 @@
 - `codex/AGENTS.md`：`~/.codex/AGENTS.md` 的仓库副本，用于保存 Codex 全局说明。
 - `skills/`：本仓库维护的自定义 Codex skills。
 - `skills-using/root/`：跨项目通用、适合用户级安装的 skill 源码；保存在这里不等于已经安装。
+  **用户级 skill 只从这里安装**，不从其他仓库装。其中 `p-literature-download` 由
+  git subtree 从上游 `ShengLin1001/download_pdf` 同步，维护方式见 `AGENTS.md`。
 - `skills-using/project/*/explicit/`：只通过 `$skill-name` 显式调用的项目级 skills。
 - `skills-using/project/*/implicit/`：可按任务语义自动匹配的项目级 skills。
 - `scripts/copy-codex-files.sh`：将 `~/.codex` 中的 `AGENTS.md` 和 `config.toml` 复制到本仓库的 `codex/` 目录。
