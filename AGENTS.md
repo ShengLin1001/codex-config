@@ -71,4 +71,43 @@ git subtree push --prefix=skills-using/root/p-literature-download \
 装出来什么都没有。subtree 把文件真实落进本仓库，所以和其他 skill 走完全同一条安装路径。
 
 代价：`git subtree pull` 前工作区必须干净，且会产生一个合并提交。
+## Hermes 配置同步
+
+`hermes/<device>/` 下按设备管理各台机器的 Hermes Agent 配置文件，直接用 git 版本控制。当前已落地设备：`zcm6`。
+
+### 同步工作流
+
+```bash
+# 本机 → 仓库（安全方向，默认）
+bash scripts/sync-hermes-device.sh pull zcm6
+
+# 预览（不实际复制）
+bash scripts/sync-hermes-device.sh pull zcm6 --dry
+
+# 仓库 → 本机（恢复/迁移，需确认）
+bash scripts/sync-hermes-device.sh push zcm6
+
+# 比较差异
+bash scripts/sync-hermes-device.sh status zcm6
+```
+
+### Skills 分类
+
+- **自建 skill**（真实目录，非 symlink）：直接同步到 `hermes/<device>/skills/`
+- **bundled skill 被修改**（如 `ocr-and-documents`）：直接同步，作为 fork 分支管理
+- **git 安装的 skill**（symlink → `~/.agents/skills/`）：仅记录到 `.skill-lock.json` 索引，不复制内容
+
+### 安全规则
+
+- 不收录 `.env`、`auth.json`、`*.db`、`*.lock`、`*.bak`、`sessions/`、`state.db`、`cache/`、`logs/`
+- `config.yaml` 中密钥通过 `key_env` 引用环境变量，无明文密钥
+- 同步前确认无敏感信息泄露
+
+### 新增设备
+
+1. 在 `hermes/` 下创建 `<device>/` 目录
+2. 运行 `bash scripts/sync-hermes-device.sh pull <device>`
+3. 提交并 push
+
+## 其他说明
 
