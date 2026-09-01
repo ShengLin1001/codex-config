@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
-# 重装用户级 skills。唯一来源是本仓库的 skills-using/，不从别的仓库装。
+# 重装 skills。唯一来源是本仓库的 skills-using/，不从别的仓库装。
+# 默认装进当前目录这个项目，加 -global 才装成用户级。
 #
 #   skills-using/root/              跨项目通用，-root 安装这一层
 #   skills-using/project/<域>/      按项目类型加载，-project <域>... 安装
@@ -21,22 +22,33 @@ dir_project="skills-using/project"
 
 usage() {
   cat <<EOF
-Usage: pei_ai_univ_reinstall [-root] [-project <域>...] [-clean] [-list] [-n]
+Usage: pei_ai_univ_reinstall [-global] [-root] [-project <域>...] [-clean] [-list] [-dry_run]
 
-  -root              安装 $dir_root/ 下的全部 skill（用户级通用）
+选装哪些 skill：
+  -root              安装 $dir_root/ 下的全部 skill
   -project <域>...   安装 $dir_project/<域>/ 下的全部 skill，可给多个域
-  -clean             安装前先移除所有已安装的用户级 skill
+
+装到哪里：
+  -global            装成用户级（~/.agents/skills，所有项目可见）
+  （不给 -global）    装进当前目录这个项目（./.claude/skills 等），只对它生效
+
+其他：
+  -clean             安装前先移除该范围内已装的 skill
   -list              只列出会安装什么，不执行
-  -n, --dry-run      打印将要执行的 npx 命令，不执行
+  -dry_run           打印将要执行的 npx 命令，不执行
   -h, --help         显示本帮助
 
 可用的项目域：$(ls "$path_repo_root/$dir_project" 2>/dev/null | tr '\n' ' ')
 
 示例：
-  pei_ai_univ_reinstall -root
-  pei_ai_univ_reinstall -root -project academic python
-  pei_ai_univ_reinstall -clean -root -project academic
-  AGENTS="codex" pei_ai_univ_reinstall -root
+  pei_ai_univ_reinstall -global -root                    # 用户级装通用 skill
+  pei_ai_univ_reinstall -global -root -project academic python
+  cd <项目根> && pei_ai_univ_reinstall -root -project python   # 只装进这个项目
+  cd <项目根> && pei_ai_univ_reinstall -clean -root
+  AGENTS="codex" pei_ai_univ_reinstall -global -root
+
+注意 -project 和 -global 是两个不相干的维度：-project 选"装哪些"，
+-global 选"装到哪"。项目级安装认的是**当前工作目录**，不是 -project 后面那个域名。
 
 环境变量：
   AGENTS   目标 agent，空格分隔（默认 "codex claude-code openclaw hermes-agent"）
@@ -45,6 +57,7 @@ EOF
 
 # --- 参数 ---------------------------------------------------------------
 want_root=false
+want_global=false
 clean=false
 list_only=false
 dry_run=false
@@ -55,9 +68,10 @@ for arg in "$@"; do
   case "$arg" in
     -root)            want_root=true; mode="" ;;
     -project)         mode="project" ;;
+    -global)          want_global=true; mode="" ;;
     -clean)           clean=true; mode="" ;;
     -list)            list_only=true; mode="" ;;
-    -n|--dry-run)     dry_run=true; mode="" ;;
+    -dry_run)         dry_run=true; mode="" ;;
     -h|--help)        usage; exit 0 ;;
     -*)               echo "未知参数: $arg" >&2; usage >&2; exit 2 ;;
     *)
@@ -113,8 +127,16 @@ printf '  %s\n' "${lskill[@]}"
 
 # --- 环境 ---------------------------------------------------------------
 AGENTS="${AGENTS:-codex claude-code openclaw hermes-agent}"
-GLOBAL_FLAG="${GLOBAL_FLAG:--g}"
 read -r -a lagent <<< "$AGENTS"
+
+# -g / -p 是 npx skills 自己的开关，属于外部命名空间，原样用。
+if [ "$want_global" = true ]; then
+  scope_flag="-g"
+  echo "装到：用户级（所有项目可见）"
+else
+  scope_flag="-p"
+  echo "装到：当前项目 $(pwd)（要装成用户级请加 -global）"
+fi
 
 # 走 GitHub API 时匿名只有 60 次/小时，用完会报 "Failed to update"。
 if [ -z "${GITHUB_TOKEN:-}" ] && command -v gh >/dev/null 2>&1; then
@@ -137,14 +159,14 @@ run() {
 
 # --- 执行 ---------------------------------------------------------------
 if [ "$clean" = true ]; then
-  echo "移除所有已安装的用户级 skill…"
-  run npx --yes skills remove --all "$GLOBAL_FLAG"
+  echo "先移除该范围内已装的 skill…"
+  run npx --yes skills remove --all "$scope_flag"
 fi
 
 echo "从 $repo 安装…"
-run npx --yes skills add "$repo" "$GLOBAL_FLAG" \
+run npx --yes skills add "$repo" "$scope_flag" \
     --agent "${lagent[@]}" --skill "${lskill[@]}" --yes
 
 for agent in "${lagent[@]}"; do
-  run npx --yes skills list "$GLOBAL_FLAG" --agent "$agent"
+  run npx --yes skills list "$scope_flag" --agent "$agent"
 done

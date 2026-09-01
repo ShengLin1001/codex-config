@@ -10,12 +10,12 @@
 - `skills/`：本仓库维护的自定义 Codex skills。
 - `skills-using/root/`：跨项目通用、适合用户级安装的 skill 源码；保存在这里不等于已经安装。
   **用户级 skill 只从这里安装**，不从其他仓库装。其中 `p-literature-download` 由
-  git subtree 从上游 `ShengLin1001/download_pdf` 同步，维护方式见 `AGENTS.md`。
+  git subtree 从上游 `ShengLin1001/p-literature-download` 同步，维护方式见 `AGENTS.md`。
 - `skills-using/project/*/explicit/`：只通过 `$skill-name` 显式调用的项目级 skills。
 - `skills-using/project/*/implicit/`：可按任务语义自动匹配的项目级 skills。
 - `scripts/copy-codex-files.sh`：将 `~/.codex` 中的 `AGENTS.md` 和 `config.toml` 复制到本仓库的 `codex/` 目录。
 - `scripts/restore-codex-files.sh`：从本仓库将 Codex 配置恢复到 `~/.codex`。
-- `scripts/pei_ai_univ_reinstall`：从本仓库的 `skills-using/` 安装用户级 skills。`-root` 装 `skills-using/root/`，`-project <域>...` 装 `skills-using/project/<域>/`，`-clean` 先清空，`-list` 只列不装。
+- `scripts/pei_ai_univ_reinstall`：从本仓库的 `skills-using/` 安装 skills。`-root` 装 `skills-using/root/`，`-project <域>...` 装 `skills-using/project/<域>/`，`-global` 装成用户级（不给则装进当前项目），`-clean` 先清空，`-list` 只列不装。
 - `scripts/sync-hermes-generated-skills.sh`：将明确指定的 Hermes 自生成 skill 归档到仓库，不提供反向安装。
 
 ## 常用工作流
@@ -62,21 +62,33 @@ policy:
 用户级 skill 的唯一来源是本仓库的 `skills-using/`。从仓库根目录运行：
 
 ~~~bash
-./scripts/pei_ai_univ_reinstall -root                            # skills-using/root/ 全部
-./scripts/pei_ai_univ_reinstall -root -project academic python   # 再带上两个项目域
-./scripts/pei_ai_univ_reinstall -clean -root                     # 先移除已装的再装
-./scripts/pei_ai_univ_reinstall -root -list                      # 只列出会装什么
+./scripts/pei_ai_univ_reinstall -global -root                            # skills-using/root/ 全部
+./scripts/pei_ai_univ_reinstall -global -root -project academic python   # 再带上两个项目域
+./scripts/pei_ai_univ_reinstall -global -clean -root                     # 先移除已装的再装
+./scripts/pei_ai_univ_reinstall -root -list                              # 只列出会装什么
 ~~~
 
 `-project` 后跟一个或多个域名，对应 `skills-using/project/<域>/`。skill 名是按目录里的
 `SKILL.md` 现找的，新增 skill 不用改脚本。`skills/`、`skills-generating/`、
 `skills-bak/` 是归档目录，脚本不会碰。
 
+### 只装进某一个项目
+
+不给 `-global` 就是项目级安装，落点是**当前工作目录**（`./.claude/skills` 等），
+只对这个项目生效，不污染别的项目：
+
+~~~bash
+cd <项目根>
+/path/to/codex-config/scripts/pei_ai_univ_reinstall -root -project python
+~~~
+
+`-project` 选的是「装哪些」，`-global` 选的是「装到哪」，两个维度互不相干。
+
 默认目标是 Codex、Claude Code、OpenClaw 和 Hermes Agent；用 `AGENTS` 缩小范围：
 
 ~~~bash
-AGENTS="hermes-agent" ./scripts/pei_ai_univ_reinstall -root
-AGENTS="codex claude-code" ./scripts/pei_ai_univ_reinstall -root -project academic
+AGENTS="hermes-agent" ./scripts/pei_ai_univ_reinstall -global -root
+AGENTS="codex claude-code" ./scripts/pei_ai_univ_reinstall -global -root -project academic
 ~~~
 
 该脚本不修改 Claude plugins、Codex plugins 或 Hermes 原生 skills。Codex 本地的 Ponytail 属于 Codex plugin，与 npm 用户级 skill 清理相互独立。

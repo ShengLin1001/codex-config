@@ -12,15 +12,18 @@
 `skills/`、`skills-generating/`、`skills-bak/` 只是归档，一律不装。
 
 ```bash
-./scripts/pei_ai_univ_reinstall -root                            # 只装 skills-using/root/
-./scripts/pei_ai_univ_reinstall -root -project academic python   # 再带上两个项目域
-./scripts/pei_ai_univ_reinstall -clean -root                     # 先清空已装的再装
-./scripts/pei_ai_univ_reinstall -root -list                      # 只看会装什么
+./scripts/pei_ai_univ_reinstall -global -root                            # 用户级装 skills-using/root/
+./scripts/pei_ai_univ_reinstall -global -root -project academic python   # 再带上两个项目域
+./scripts/pei_ai_univ_reinstall -global -clean -root                     # 先清空已装的再装
+./scripts/pei_ai_univ_reinstall -root -list                              # 只看会装什么
 ```
 
 `-project` 后面跟一个或多个域名，对应 `skills-using/project/<域>/`（当前有
 `academic`、`python`）。skill 名按目录里的 `SKILL.md` 现找，所以新增 skill
 不需要改脚本。`AGENTS=` 可缩小目标 agent 范围。
+
+`-global` 决定的是**装到哪**，跟 `-project` 无关：给了就装成用户级，不给就装进
+**当前工作目录**那个项目（`./.claude/skills` 等），只对那个项目生效。
 
 新增 skill 就是在 `skills-using/root/` 或 `skills-using/project/<域>/<explicit|implicit>/`
 下建目录，不要再往任何仓库地址列表里登记。
@@ -51,16 +54,16 @@ policy:
 ## 从上游仓库同步的 skill（git subtree）
 
 `skills-using/root/p-literature-download` 用 **git subtree** 从上游
-`ShengLin1001/download_pdf` 拉取（那个仓库的根目录就是 skill 本体）。
+`ShengLin1001/p-literature-download` 拉取（那个仓库的根目录就是 skill 本体）。
 
 ```bash
 # 拉上游更新
 git subtree pull --prefix=skills-using/root/p-literature-download \
-    git@github.com:ShengLin1001/download_pdf.git main --squash
+    git@github.com:ShengLin1001/p-literature-download.git main --squash
 
 # 把在本仓库里做的改动推回上游（少用；优先直接在上游仓库改）
 git subtree push --prefix=skills-using/root/p-literature-download \
-    git@github.com:ShengLin1001/download_pdf.git main
+    git@github.com:ShengLin1001/p-literature-download.git main
 ```
 
 用 subtree 而不是 submodule，原因只有一个：**submodule 存的是指针，不是文件**。
