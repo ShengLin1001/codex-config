@@ -15,7 +15,7 @@
 - `skills-using/project/*/implicit/`：可按任务语义自动匹配的项目级 skills。
 - `scripts/copy-codex-files.sh`：将 `~/.codex` 中的 `AGENTS.md` 和 `config.toml` 复制到本仓库的 `codex/` 目录。
 - `scripts/restore-codex-files.sh`：从本仓库将 Codex 配置恢复到 `~/.codex`。
-- `scripts/pei_ai_univ_reinstall`：逐个移除 npm 管理的用户级 skills，再为 Codex、Claude Code 和 Hermes 安装 3 个允许项。
+- `scripts/pei_ai_univ_reinstall`：从本仓库的 `skills-using/` 安装用户级 skills。`-root` 装 `skills-using/root/`，`-project <域>...` 装 `skills-using/project/<域>/`，`-clean` 先清空，`-list` 只列不装。
 - `scripts/sync-hermes-generated-skills.sh`：将明确指定的 Hermes 自生成 skill 归档到仓库，不提供反向安装。
 
 ## 常用工作流
@@ -59,23 +59,24 @@ policy:
 
 ### 重新安装用户级 Skills
 
-从仓库根目录运行：
+用户级 skill 的唯一来源是本仓库的 `skills-using/`。从仓库根目录运行：
 
 ~~~bash
-./scripts/pei_ai_univ_reinstall
+./scripts/pei_ai_univ_reinstall -root                            # skills-using/root/ 全部
+./scripts/pei_ai_univ_reinstall -root -project academic python   # 再带上两个项目域
+./scripts/pei_ai_univ_reinstall -clean -root                     # 先移除已装的再装
+./scripts/pei_ai_univ_reinstall -root -list                      # 只列出会装什么
 ~~~
 
-脚本先列出并逐个移除 npm 管理的用户级 skills，再只安装：
+`-project` 后跟一个或多个域名，对应 `skills-using/project/<域>/`。skill 名是按目录里的
+`SKILL.md` 现找的，新增 skill 不用改脚本。`skills/`、`skills-generating/`、
+`skills-bak/` 是归档目录，脚本不会碰。
 
-- `p-code-style`
-- `p-plot-figure`
-- `p-git-commit`
-
-默认目标是 Codex、Claude Code 和 Hermes Agent；用 `AGENTS` 可缩小目标范围：
+默认目标是 Codex、Claude Code、OpenClaw 和 Hermes Agent；用 `AGENTS` 缩小范围：
 
 ~~~bash
-AGENTS="hermes-agent" ./scripts/pei_ai_univ_reinstall
-AGENTS="codex claude-code" ./scripts/pei_ai_univ_reinstall
+AGENTS="hermes-agent" ./scripts/pei_ai_univ_reinstall -root
+AGENTS="codex claude-code" ./scripts/pei_ai_univ_reinstall -root -project academic
 ~~~
 
 该脚本不修改 Claude plugins、Codex plugins 或 Hermes 原生 skills。Codex 本地的 Ponytail 属于 Codex plugin，与 npm 用户级 skill 清理相互独立。

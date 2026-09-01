@@ -8,15 +8,22 @@
 
 ## 用户级 skill 的唯一来源
 
-用户级（全局）skill **只安装 `skills-using/root/` 下的这些 skill**，装法是：
+用户级 skill **只从本仓库的 `skills-using/` 装**，不从任何别的仓库装。
+`skills/`、`skills-generating/`、`skills-bak/` 只是归档，一律不装。
 
 ```bash
-npx --yes skills add ShengLin1001/codex-config -g --agent codex claude-code \
-    --skill <skill-1> <skill-2> --yes
+./scripts/pei_ai_univ_reinstall -root                            # 只装 skills-using/root/
+./scripts/pei_ai_univ_reinstall -root -project academic python   # 再带上两个项目域
+./scripts/pei_ai_univ_reinstall -clean -root                     # 先清空已装的再装
+./scripts/pei_ai_univ_reinstall -root -list                      # 只看会装什么
 ```
 
-不要从别的仓库装用户级 skill。`scripts/pei_ai_univ_reinstall` 是历史脚本，
-里面的 `lnormal_repos` 多仓库列表已不代表当前做法，不要再往里加条目。
+`-project` 后面跟一个或多个域名，对应 `skills-using/project/<域>/`（当前有
+`academic`、`python`）。skill 名按目录里的 `SKILL.md` 现找，所以新增 skill
+不需要改脚本。`AGENTS=` 可缩小目标 agent 范围。
+
+新增 skill 就是在 `skills-using/root/` 或 `skills-using/project/<域>/<explicit|implicit>/`
+下建目录，不要再往任何仓库地址列表里登记。
 
 ### skill 目录布局是硬约束
 

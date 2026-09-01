@@ -1,141 +1,150 @@
 #!/usr/bin/env bash
+#
+# 重装用户级 skills。唯一来源是本仓库的 skills-using/，不从别的仓库装。
+#
+#   skills-using/root/              跨项目通用，-root 安装这一层
+#   skills-using/project/<域>/      按项目类型加载，-project <域>... 安装
+#
+# 仓库里其他目录（skills/、skills-generating/、skills-bak/）一律不装。
+#
+# 布局是硬约束：npx skills add 只对「skill 位于仓库子目录」的布局拷贝完整目录。
+# 仓库根目录直接放 SKILL.md 的话，它只装走 SKILL.md，scripts/ 一个不带。
+#
 set -euo pipefail
 
-usage() {
-  cat <<'EOF'
-Usage: pei_ai_univ_reinstall [-full|-normal|-small] [-part_myskill]
+path_script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+path_repo_root="$(cd -- "$path_script_dir/.." && pwd)"
 
-  -full           Install all configured repositories (default).
-  -normal         Skip vercel-labs/agent-skills.
-  -small          Install all skills from ShengLin1001/codex-config only.
-  -part_myskill   Exclude selected skills from ShengLin1001/codex-config.
-  -h, --help      Show this help.
+repo="ShengLin1001/codex-config"
+dir_root="skills-using/root"
+dir_project="skills-using/project"
+
+usage() {
+  cat <<EOF
+Usage: pei_ai_univ_reinstall [-root] [-project <域>...] [-clean] [-list] [-n]
+
+  -root              安装 $dir_root/ 下的全部 skill（用户级通用）
+  -project <域>...   安装 $dir_project/<域>/ 下的全部 skill，可给多个域
+  -clean             安装前先移除所有已安装的用户级 skill
+  -list              只列出会安装什么，不执行
+  -n, --dry-run      打印将要执行的 npx 命令，不执行
+  -h, --help         显示本帮助
+
+可用的项目域：$(ls "$path_repo_root/$dir_project" 2>/dev/null | tr '\n' ' ')
+
+示例：
+  pei_ai_univ_reinstall -root
+  pei_ai_univ_reinstall -root -project academic python
+  pei_ai_univ_reinstall -clean -root -project academic
+  AGENTS="codex" pei_ai_univ_reinstall -root
+
+环境变量：
+  AGENTS   目标 agent，空格分隔（默认 "codex claude-code openclaw hermes-agent"）
 EOF
 }
 
-mode=""
-part_myskill=false
+# --- 参数 ---------------------------------------------------------------
+want_root=false
+clean=false
+list_only=false
+dry_run=false
+lproject=()
+mode=""          # 读到 -project 后，后续裸参数都归给它
+
 for arg in "$@"; do
   case "$arg" in
-    -full|-normal|-small)
-      if [ -n "$mode" ]; then
-        echo "Choose only one base strategy: -full, -normal, or -small." >&2
+    -root)            want_root=true; mode="" ;;
+    -project)         mode="project" ;;
+    -clean)           clean=true; mode="" ;;
+    -list)            list_only=true; mode="" ;;
+    -n|--dry-run)     dry_run=true; mode="" ;;
+    -h|--help)        usage; exit 0 ;;
+    -*)               echo "未知参数: $arg" >&2; usage >&2; exit 2 ;;
+    *)
+      if [ "$mode" = "project" ]; then
+        lproject+=("$arg")
+      else
+        echo "多余的参数: $arg（项目域要跟在 -project 后面）" >&2
         exit 2
       fi
-      mode="$arg"
-      ;;
-    -part_myskill)
-      part_myskill=true
-      ;;
-    -h|--help)
-      usage
-      exit 0
-      ;;
-    *)
-      echo "Unknown installation strategy: $arg" >&2
-      usage >&2
-      exit 2
       ;;
   esac
 done
-mode="${mode:--full}"
 
-# https://github.com/mattpocock/skills
-repo_myskill="https://github.com/ShengLin1001/codex-config.git"
-lnormal_repos=(
-  "https://github.com/vercel-labs/skills.git"
-  "https://github.com/vercel-labs/agent-skills.git"
-  "https://github.com/vercel-labs/agent-browser.git"
-  "$repo_myskill"
-  "https://github.com/Imbad0202/academic-research-skills-codex.git"
-  "https://github.com/Yuan1z0825/nature-skills.git"
-)
-
-case "$mode" in
-  -full)
-    lrepos=("vercel-labs/agent-skills" "${lnormal_repos[@]}")
-    ;;
-  -normal)
-    lrepos=("${lnormal_repos[@]}")
-    ;;
-  -small)
-    lrepos=("$repo_myskill")
-    ;;
-esac
-
-lselected_skills=('*')
-if [ "$part_myskill" = true ]; then
-  path_script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-  path_repo_root="$(cd -- "$path_script_dir/.." && pwd)"
-  lexcluded_skills=(
-    "p-skill-installer"
-    "p-skill-creator"
-    "p-plugin-installer"
-    "p-pdf2zotero"
-    "p-pdf-download"
-    "p-page-creator"
-  )
-  lselected_skills=()
-
-  for path_skill in "$path_repo_root"/skills/*; do
-    [ -f "$path_skill/SKILL.md" ] || continue
-    skill="${path_skill##*/}"
-    case " ${lexcluded_skills[*]} " in
-      *" $skill "*) ;;
-      *) lselected_skills+=("$skill") ;;
-    esac
-  done
-
-  if [ "${#lselected_skills[@]}" -eq 0 ]; then
-    echo "No skills remain after applying -part_myskill exclusions." >&2
-    exit 1
-  fi
+if [ "$want_root" = false ] && [ "${#lproject[@]}" -eq 0 ]; then
+  echo "什么都没选。至少给一个 -root 或 -project <域>。" >&2
+  usage >&2
+  exit 2
 fi
 
-# Agents to install skills into (space-separated).
-# Defaults to both Codex and Claude Code. Override examples:
-#   AGENTS="claude-code" pei_ai_univ_reinstall   # only Claude Code
-#   AGENTS="codex"       pei_ai_univ_reinstall   # only Codex
-#   AGENTS="*"           pei_ai_univ_reinstall   # all detected agents
-# Backward compat: the old single-agent AGENT variable is still honored.
-AGENTS="${AGENTS:-${AGENT:-codex claude-code openclaw hermes-agent}}"
-GLOBAL_FLAG="${GLOBAL_FLAG:--g}"
-read -r -a AGENT_LIST <<< "$AGENTS"
+# --- 收集 skill 名 ------------------------------------------------------
+# 名字取自含 SKILL.md 的目录名。project 下还有 explicit/ implicit/ 一层，
+# 所以按 SKILL.md 找而不是按固定深度猜。
+collect() {   # collect <相对仓库根的目录>
+  local path_base="$path_repo_root/$1"
+  [ -d "$path_base" ] || { echo "找不到 $1" >&2; return 1; }
+  find "$path_base" -name SKILL.md -print | while read -r path_skill_md; do
+    basename "$(dirname "$path_skill_md")"
+  done | sort -u
+}
 
-# Avoid GitHub's 60 req/hr anonymous API rate limit (causes "Failed to update"):
-# reuse the gh login token when GITHUB_TOKEN isn't already set.
+lskill=()
+if [ "$want_root" = true ]; then
+  while read -r skill; do [ -n "$skill" ] && lskill+=("$skill"); done < <(collect "$dir_root")
+fi
+for domain in "${lproject[@]:-}"; do
+  [ -n "$domain" ] || continue
+  if [ ! -d "$path_repo_root/$dir_project/$domain" ]; then
+    echo "没有这个项目域: $domain" >&2
+    echo "可用: $(ls "$path_repo_root/$dir_project" | tr '\n' ' ')" >&2
+    exit 2
+  fi
+  while read -r skill; do [ -n "$skill" ] && lskill+=("$skill"); done < <(collect "$dir_project/$domain")
+done
+
+if [ "${#lskill[@]}" -eq 0 ]; then
+  echo "选中的目录里没有找到任何 SKILL.md。" >&2
+  exit 1
+fi
+
+echo "将安装 ${#lskill[@]} 个 skill:"
+printf '  %s\n' "${lskill[@]}"
+[ "$list_only" = true ] && exit 0
+
+# --- 环境 ---------------------------------------------------------------
+AGENTS="${AGENTS:-codex claude-code openclaw hermes-agent}"
+GLOBAL_FLAG="${GLOBAL_FLAG:--g}"
+read -r -a lagent <<< "$AGENTS"
+
+# 走 GitHub API 时匿名只有 60 次/小时，用完会报 "Failed to update"。
 if [ -z "${GITHUB_TOKEN:-}" ] && command -v gh >/dev/null 2>&1; then
   GITHUB_TOKEN="$(gh auth token 2>/dev/null || true)"
   export GITHUB_TOKEN
 fi
+# 当前 Node 需要显式读代理环境变量，否则访问 GitHub 会卡住。
+export NODE_OPTIONS="${NODE_OPTIONS:---use-env-proxy}"
 
 if ! command -v npx >/dev/null 2>&1; then
-  if command -v module >/dev/null 2>&1; then
-    module avail node 2>&1 || true
-  fi
-  echo "npx was not found. Load or install Node.js/npm first, then rerun." >&2
+  command -v module >/dev/null 2>&1 && module avail node 2>&1 || true
+  echo "找不到 npx。先装好 Node.js/npm 再跑。" >&2
   exit 127
 fi
 
-npx --yes skills remove --all "$GLOBAL_FLAG"
+run() {
+  if [ "$dry_run" = true ]; then printf '  [dry-run] %q' "$1"; shift; printf ' %q' "$@"; printf '\n'
+  else "$@"; fi
+}
 
-for repo in "${lrepos[@]}"; do
-  # Install once per repo; the CLI links the same global skill set to both agents.
-  lrepo_skills=('*')
-  if [ "$part_myskill" = true ] && [ "$repo" = "$repo_myskill" ]; then
-    lrepo_skills=("${lselected_skills[@]}")
-  fi
-  npx --yes skills add "$repo" "$GLOBAL_FLAG" --agent "${AGENT_LIST[@]}" --skill "${lrepo_skills[@]}" --yes
+# --- 执行 ---------------------------------------------------------------
+if [ "$clean" = true ]; then
+  echo "移除所有已安装的用户级 skill…"
+  run npx --yes skills remove --all "$GLOBAL_FLAG"
+fi
+
+echo "从 $repo 安装…"
+run npx --yes skills add "$repo" "$GLOBAL_FLAG" \
+    --agent "${lagent[@]}" --skill "${lskill[@]}" --yes
+
+for agent in "${lagent[@]}"; do
+  run npx --yes skills list "$GLOBAL_FLAG" --agent "$agent"
 done
-
-for agent in "${AGENT_LIST[@]}"; do
-  npx --yes skills list "$GLOBAL_FLAG" --agent "$agent"
-done
-
-# Update existing skills to their latest versions (needs node > 18):
-# npx --yes skills update -g -y
-
-# Remove all global skills:
-# npx --yes skills remove --all -g
-
-# npx skills add Yuan1z0825/nature-skills --global --agent codex claude-code
