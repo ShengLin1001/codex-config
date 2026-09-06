@@ -286,7 +286,9 @@ Codex / Hermes 侧仍只有 description 层，这就是把 description 放第一
 | `/usr/bin/python3` 是 3.6.8，跑不了 `sys.stderr.reconfigure` | `export PYTHON_CLAUDE=/public3/home/scg6928/mysoft/env/pyenv/codex/bin/python`（3.10.15），installer 会把它固化进 settings.json |
 
 另：安装当天 lustre 配额 967.9G/962G 已过软限且 grace 用尽，超过 ~3MB 的写入直接失败，
-第一次 `git pull` 因此报 `Disk quota exceeded`。配额没清理干净的话下次还会撞上。
+第一次 `git pull` 因此报 `Disk quota exceeded`。**已由 PJ 扩容解决**（现 1.037T 软限 / 1.086T 硬限，
+20MB 写入正常）。记在这里是为了留下判据：`lfs quota` 的 used 后面带 `*` 且 grace 为 `none`，
+就是这个故障，报错信息本身（`fatal: write error`）不会告诉你是配额。
 
 ---
 
