@@ -19,18 +19,29 @@ path_repo_root="$(cd -- "$path_script_dir/.." && pwd)"
 repo="ShengLin1001/codex-config"
 dir_root="skills-using/root"
 dir_project="skills-using/project"
+dir_skills="skills-using"
 
 usage() {
   cat <<EOF
-Usage: pei_ai_univ_reinstall [-global] [-root] [-project <域>...] [-clean] [-list] [-dry_run]
+Usage: pei_ai_univ_reinstall [-global] [-root] [-project <域>...] [-local] [-hook]
+                            [-clean] [-list] [-dry_run]
 
 选装哪些 skill：
   -root              安装 $dir_root/ 下的全部 skill
   -project <域>...   安装 $dir_project/<域>/ 下的全部 skill，可给多个域
 
+从哪里装：
+  （默认）           从 GitHub 的 $repo 装 —— 只有 **已 push** 的改动才装得到
+  -local             从本地工作树 $dir_skills/ 装，不用先 commit/push
+
 装到哪里：
   -global            装成用户级（~/.agents/skills，所有项目可见）
   （不给 -global）    装进当前目录这个项目（./.claude/skills 等），只对它生效
+
+Claude Code 侧的 hook：
+  -hook              装 claude/hooks/ 下的 skill 门，并合并进 settings.json
+                     （PreToolUse 注册 + 仅显式调用 skill 的 skillOverrides，
+                       后者由各 skill 的 agents/openai.yaml 推导，不另维护清单）
 
 其他：
   -clean             安装前先移除该范围内已装的 skill
@@ -45,6 +56,7 @@ Usage: pei_ai_univ_reinstall [-global] [-root] [-project <域>...] [-clean] [-li
   pei_ai_univ_reinstall -global -root -project academic python
   cd <项目根> && pei_ai_univ_reinstall -root -project python   # 只装进这个项目
   cd <项目根> && pei_ai_univ_reinstall -clean -root
+  pei_ai_univ_reinstall -global -root -local -hook       # 改完不 push 直接装 + 装 hook
   AGENTS="codex" pei_ai_univ_reinstall -global -root
 
 注意 -project 和 -global 是两个不相干的维度：-project 选"装哪些"，
@@ -58,6 +70,8 @@ EOF
 # --- 参数 ---------------------------------------------------------------
 want_root=false
 want_global=false
+want_local=false
+want_hook=false
 clean=false
 list_only=false
 dry_run=false
@@ -69,6 +83,8 @@ for arg in "$@"; do
     -root)            want_root=true; mode="" ;;
     -project)         mode="project" ;;
     -global)          want_global=true; mode="" ;;
+    -local)           want_local=true; mode="" ;;
+    -hook)            want_hook=true; mode="" ;;
     -clean)           clean=true; mode="" ;;
     -list)            list_only=true; mode="" ;;
     -dry_run)         dry_run=true; mode="" ;;
@@ -85,8 +101,8 @@ for arg in "$@"; do
   esac
 done
 
-if [ "$want_root" = false ] && [ "${#lproject[@]}" -eq 0 ]; then
-  echo "什么都没选。至少给一个 -root 或 -project <域>。" >&2
+if [ "$want_root" = false ] && [ "${#lproject[@]}" -eq 0 ] && [ "$want_hook" = false ]; then
+  echo "什么都没选。至少给一个 -root / -project <域> / -hook。" >&2
   usage >&2
   exit 2
 fi
@@ -116,13 +132,15 @@ for domain in "${lproject[@]:-}"; do
   while read -r skill; do [ -n "$skill" ] && lskill+=("$skill"); done < <(collect "$dir_project/$domain")
 done
 
-if [ "${#lskill[@]}" -eq 0 ]; then
+if [ "${#lskill[@]}" -eq 0 ] && [ "$want_hook" = false ]; then
   echo "选中的目录里没有找到任何 SKILL.md。" >&2
   exit 1
 fi
 
-echo "将安装 ${#lskill[@]} 个 skill:"
-printf '  %s\n' "${lskill[@]}"
+if [ "${#lskill[@]}" -gt 0 ]; then
+  echo "将安装 ${#lskill[@]} 个 skill:"
+  printf '  %s\n' "${lskill[@]}"
+fi
 [ "$list_only" = true ] && exit 0
 
 # --- 环境 ---------------------------------------------------------------
@@ -163,10 +181,41 @@ if [ "$clean" = true ]; then
   run npx --yes skills remove --all "$scope_flag"
 fi
 
-echo "从 $repo 安装…"
-run npx --yes skills add "$repo" "$scope_flag" \
+if [ "${#lskill[@]}" -gt 0 ]; then
+if [ "$want_local" = true ]; then
+  source_arg="$path_repo_root/$dir_skills"
+  echo "从本地工作树 $source_arg 安装…"
+else
+  source_arg="$repo"
+  echo "从 $repo 安装…（本地未 push 的改动装不到，要就加 -local）"
+fi
+run npx --yes skills add "$source_arg" "$scope_flag" \
     --agent "${lagent[@]}" --skill "${lskill[@]}" --yes
 
 for agent in "${lagent[@]}"; do
   run npx --yes skills list "$scope_flag" --agent "$agent"
 done
+fi
+
+# --- Claude Code 侧的 hook -----------------------------------------------
+# 挑到的解释器会被固化进 settings.json 的 hook 命令，所以这里选谁之后就跑谁。
+if [ "$want_hook" = true ]; then
+  path_installer="$path_repo_root/claude/hooks/install_hook.py"
+  [ -f "$path_installer" ] || { echo "找不到 $path_installer" >&2; exit 1; }
+
+  bin_python=""
+  for candidate in "${PYTHON_CLAUDE:-}" python3 python; do
+    [ -n "$candidate" ] || continue
+    command -v "$candidate" >/dev/null 2>&1 && { bin_python="$candidate"; break; }
+  done
+  if [ -z "$bin_python" ]; then
+    command -v module >/dev/null 2>&1 && module avail python 2>&1 || true
+    echo "找不到 python3/python，装不了 hook。" >&2
+    exit 127
+  fi
+
+  lhook_args=(-repo_root "$path_repo_root")
+  [ "$want_global" = true ] && lhook_args+=(-global)
+  [ "$dry_run" = true ] && lhook_args+=(-dry_run)
+  run "$bin_python" "$path_installer" "${lhook_args[@]}"
+fi
