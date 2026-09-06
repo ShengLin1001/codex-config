@@ -1,9 +1,14 @@
 ---
 name: p-diagnosing-bugs
-description: "诊断复杂、难复现或性能回归类软件问题；简单语法错误、已有明确根因的一步修复不使用。"
+description: "Use ONLY when the user explicitly asks to diagnose or find the root cause of a bug that is hard to reproduce, has no identified cause yet, or is a performance regression. Do NOT invoke on your own for syntax errors, a clear one-line fix, a cause already established, or just because debugging is underway. 触发：帮我定位根因、查一下为什么会这样、这个偶发问题诊断一下、复现不了帮我查。"
 ---
 
 # 复杂问题诊断
+
+## 触发条件
+
+只在用户显式点名时执行，例如 `$p-diagnosing-bugs`、"帮我定位这个偶发问题的根因"。
+语法错误、一行能改的明显问题、已知原因的修复，不走本流程。
 
 ## 核心流程
 

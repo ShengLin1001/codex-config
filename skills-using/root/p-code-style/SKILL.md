@@ -1,6 +1,6 @@
 ---
 name: p-code-style
-description: "按 PJ 规范编写科研工作流、自动化脚本和 CLI。"
+description: "ALWAYS invoke BEFORE writing, editing, refactoring, or making any change — including a one-line fix — to Python / Bash / PowerShell / Slurm-HPC / argparse-CLI / 科研计算工作流 code for PJ. Do NOT write or modify such code without loading this skill first. 触发：写脚本、改已有脚本、小修一处、批量遍历目录、用 Python 拼接生成 bash、Slurm 作业与提交引擎、sbatch/squeue 轮询重试、argparse CLI 工具、mymetal 风格通用函数。"
 ---
 
 # P Code Style

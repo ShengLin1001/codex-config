@@ -1,11 +1,16 @@
 ---
 name: p-grill-me
-description: "在实施前通过分轮追问澄清并压力测试计划、设计或决策。"
+description: "Use ONLY when the user explicitly asks to be questioned, challenged, or stress-tested on a plan, design, or decision before implementation. Do NOT invoke on your own for ordinary clarification during a task. 触发：追问我、拷打这个方案、压力测试这个设计、实施前先把问题问清。"
 ---
 
 # 方案追问
 
 把待定方案表示为决策树：上游选择确定后，才讨论依赖它的下游问题。
+
+## 触发条件
+
+只在用户显式点名时执行，例如 `$p-grill-me`、"拷打一下这个方案"。
+任务过程中的普通澄清提问不走本流程。
 
 ## 流程
 

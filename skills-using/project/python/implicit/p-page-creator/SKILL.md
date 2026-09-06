@@ -1,6 +1,6 @@
 ---
 name: p-page-creator
-description: 为 Python package 创建、维护和部署 Sphinx manual 风格的 GitHub Pages 官方文档站点。用于制作或更新 package 网站、重构为类似 LAMMPS Manual 的技术手册、发布 Pages、排查 Sphinx Actions 构建失败、验证远程文档页面，以及处理 companion package 的 autodoc 依赖。
+description: "ALWAYS invoke BEFORE creating, updating, or deploying a Sphinx manual-style GitHub Pages documentation site for a Python package — including fixing a failing Sphinx Actions build or verifying the live pages. Do NOT invoke for an ordinary README or a single docstring edit. 触发：给这个 package 建官方文档、Sphinx manual、部署 GitHub Pages、Sphinx 构建失败、验证线上文档页面、companion package 的 autodoc 依赖。"
 ---
 
 # P Page Creator

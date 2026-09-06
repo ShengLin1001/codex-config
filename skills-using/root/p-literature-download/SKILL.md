@@ -1,6 +1,6 @@
 ---
 name: p-literature-download
-description: "按 DOI 列表从出版商官网批量下载学术正文 PDF，驱动一个已登录机构账号的专用 Microsoft Edge。不要因为对话里出现了 DOI、论文、PDF、下载等字样就自动触发；也绝不用 API、聚合站、仓储、预印本、Sci-Hub 或 LibGen 替代官网正文。"
+description: "Use ONLY when the user explicitly asks to batch-download full-text academic PDFs from publisher sites for a DOI list, driving a dedicated already-logged-in Microsoft Edge. Do NOT trigger merely because DOI / 论文 / PDF / 下载 appear in the conversation. NEVER substitute an API, aggregator, repository, preprint, Sci-Hub, or LibGen for the publisher full text. 触发：按 DOI 列表批量下载正文 PDF。"
 ---
 
 # 出版商官网 PDF 批量下载

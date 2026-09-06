@@ -1,9 +1,14 @@
 ---
 name: p-tdd
-description: "在用户明确要求测试驱动、测试优先或 red-green-refactor 时，按纵向切片实现功能或修复缺陷。"
+description: "Use ONLY when the user explicitly asks for test-driven, test-first, or red-green-refactor work. Do NOT invoke to add tests after the fact, or when the user just wants the feature implemented. 触发：TDD、测试驱动、测试先行、先写测试再实现、red-green-refactor。"
 ---
 
 # 测试驱动开发
+
+## 触发条件
+
+只在用户显式点名时执行，例如 `$p-tdd`、"先写测试再实现"。
+事后补测试、只要求实现功能，不走本流程。
 
 ## 循环
 

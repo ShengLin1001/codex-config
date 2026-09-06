@@ -1,9 +1,14 @@
 ---
 name: p-research
-description: "围绕明确问题查找一手来源，形成可核验、带引用的研究结论或 Markdown 报告。"
+description: "Use ONLY when the user explicitly asks for research, a cited report, or primary-source verification producing a checkable conclusion or Markdown report. Do NOT invoke on your own for a fact already in context, a quick lookup, or just because an answer could carry a citation. 触发：调研一下、查一手来源、写带引用的研究报告、核实这个说法有没有出处。"
 ---
 
 # 一手来源研究
+
+## 触发条件
+
+只在用户显式点名时执行，例如 `$p-research`、"调研一下并给带引用的报告"。
+已在上下文里的事实、无需引用的快速查阅，不走本流程。
 
 ## 流程
 

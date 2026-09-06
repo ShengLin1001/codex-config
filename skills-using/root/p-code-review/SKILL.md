@@ -1,9 +1,14 @@
 ---
 name: p-code-review
-description: "审查指定范围内的代码变更，分别检查正确性、仓库规范和需求一致性；只报告问题，不自动修改。"
+description: "Use ONLY when the user explicitly asks to run this review on code changes — a diff, working tree, branch, or PR — for correctness, repo conventions, and requirement consistency. Reports problems only, never edits. Do NOT invoke on your own while writing code, for a syntax check, or just because a diff or PR exists. 触发：用 p-code-review 审这个改动、$p-code-review 看下 diff/PR。"
 ---
 
 # 代码审查
+
+## 触发条件
+
+只在用户显式点名时执行，例如 `$p-code-review`、"用 p-code-review 审这个 diff"。
+用户没点名时（哪怕贴了 diff、说"看看这段代码"），不要自动启动。
 
 ## 确定范围
 

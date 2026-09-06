@@ -1,13 +1,12 @@
 ---
 name: p-git-commit
-description: "生成或提交符合规范的中文 Git commit 信息。"
+description: "ALWAYS invoke BEFORE writing, formatting, or committing a git commit message. Do NOT compose a commit message without loading this skill first. 输出简洁中文 message，遵循 Conventional Commits v1.0.0、@commitlint/config-conventional 的 type 枚举与官方 gitmoji shortcode 含义。触发：commit message、提交信息、git commit、润色或选择 commit 文案。"
 ---
 
 # P Git Commit
 
 ## 概述
 
-For test 
 生成简洁、中文、易于快速浏览的 Git commit message。默认情况下，只输出建议的 commit message。只有当用户明确要求提交时，才运行 `git add` 或 `git commit`。
 
 本 skill 遵循三层约定：

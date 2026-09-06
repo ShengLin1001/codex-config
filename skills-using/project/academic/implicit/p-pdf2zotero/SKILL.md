@@ -1,6 +1,6 @@
 ---
 name: p-pdf2zotero
-description: "将本地学术 PDF 去重导入 Zotero 并整理元数据。"
+description: "Use ONLY when the user explicitly asks to import local academic PDFs into the local Zotero Desktop library and tidy their metadata. This modifies the real Zotero database: do NOT invoke merely because Zotero / PDF / 文献 appear in the conversation, and NEVER reorganize other collections or delete attachments beyond what was asked. 触发：把这个目录的 PDF 导进 Zotero、按 DOI 去重导入、补 Extra 说明、加星级 tag。"
 ---
 
 # 本地 PDF 导入 Zotero

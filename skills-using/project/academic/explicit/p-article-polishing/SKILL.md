@@ -1,6 +1,6 @@
 ---
 name: p-article-polishing
-description: "规划、重构、润色或中译英学术论文。"
+description: "Use ONLY when the user explicitly asks to plan, restructure, polish, or translate Chinese-to-English an academic manuscript. Do NOT invoke for a diagnosis-only request (that is p-article-evaluated), or for non-academic prose. 触发：写或改英文论文、定 outline、重排结构、润色措辞、帮我写 Discussion、中文稿改成英文、写图注或题目。"
 ---
 
 # P Article Polishing

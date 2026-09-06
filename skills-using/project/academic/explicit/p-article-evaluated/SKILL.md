@@ -1,6 +1,6 @@
 ---
 name: p-article-evaluated
-description: "诊断学术论文的论证、结构和语言问题；只评不改。"
+description: "Use ONLY when the user explicitly asks to diagnose or review an academic manuscript's argument, structure, or language. Diagnoses only — NEVER rewrites; rewriting goes to p-article-polishing. Do NOT invoke for code review, or for a polishing request. 触发：审稿前自检、评估这篇论文、看看论证站不站得住、只评不改、Not assessable。"
 ---
 
 # P Article Evaluated

@@ -1,11 +1,16 @@
 ---
 name: p-handoff
-description: "把当前会话压缩为可供另一 agent 继续工作的交接文档。"
+description: "Use ONLY when the user explicitly asks to hand off, pack up, or carry the current session over to another agent or a later session. Do NOT invoke on your own for an ordinary summary of what was done. 触发：交接、handoff、给下一个 agent 写说明、把当前上下文打包。"
 ---
 
 # 会话交接
 
 根据用户指定的后续目标生成一份自包含、可继续执行的交接文档。
+
+## 触发条件
+
+只在用户显式点名时执行，例如 `$p-handoff`、"给下一个 agent 写交接"。
+普通的"总结一下刚才做了什么"不走本流程。
 
 ## 必备内容
 

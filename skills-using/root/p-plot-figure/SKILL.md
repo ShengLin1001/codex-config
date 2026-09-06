@@ -1,6 +1,6 @@
 ---
 name: p-plot-figure
-description: "按 PJ 的 mymetal 风格编写科研绘图代码。"
+description: "ALWAYS invoke BEFORE writing or editing any matplotlib plotting code for PJ, including small tweaks to an existing figure. Do NOT write plotting code without loading this skill first. 触发：画图、出图、matplotlib、DOS/能带、收敛/NEB/拉伸/能量分解曲线、colorbar、断轴、多子图版式、给已有图加箭头/色带/编号/文字标注、在 mymetal/universal/plot 下新增绘图函数。配合 p-code-style 使用。"
 ---
 
 # P Plot Figure
