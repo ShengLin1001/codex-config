@@ -1,0 +1,12 @@
+{
+  "_comment": "PreToolUse 门。gates 按写入目标路径判，command_gates 按 shell 命令整条 glob 判（`git commit` 这类动作不写文件）。命中而 skill 未加载时拦一次，每个 skill 每会话最多一次。加新 skill 就在这里加一行。",
+  "gates": {
+    "p-code-style": ["**/*.py", "**/*.sh", "**/*.bash", "**/*.ps1", "**/*.slurm", "**/*.sbatch"],
+    "p-plot-figure": ["**/*plot*.py", "**/*fig*.py", "**/plot/**/*.py"],
+    "p-agent-doc-writing": ["**/SKILL.md", "**/AGENTS.md", "**/CLAUDE.md", "**/.claude/rules/*.md"]
+  },
+  "_comment_command": "已知误报：`git commit --amend --no-edit` 沿用原 message，本不需要 skill，但也会被拦一次。代价是一次拦截，不值得为它加否定语法。",
+  "command_gates": {
+    "p-git-commit": ["*git commit*"]
+  }
+}
