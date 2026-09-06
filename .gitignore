@@ -34,3 +34,6 @@ hermes/**/.skills_prompt_snapshot.json
 hermes/**/.update_check
 hermes/**/.hermes_history
 hermes/**/.last_pull
+
+# 触发率测试的一次性运行产物（每 case 一个临时项目目录）
+tests/skill-trigger/_runs/

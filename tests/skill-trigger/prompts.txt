@@ -1,0 +1,13 @@
+# p-code-style 隐式触发测试提示词
+# 一行一个 case，格式：<case_name>|<prompt>
+# 空行与 # 开头的行被忽略。
+# case 覆盖审计报告里的漏调用类别；prompt 刻意不含 "skill"/"风格" 等提示词，
+# 否则测的是显式调用而不是隐式路由。
+
+new_python|写一个 Python 脚本 batch_stat.py，遍历当前目录下所有子目录，统计每个子目录里 .log 文件的行数，最后打印汇总。
+new_bash|写一个 bash 脚本 collect.sh，把当前目录下每个子目录里的 OUTCAR 拷到 ./collected/<子目录名>.OUTCAR。
+new_slurm|写一个 Python 脚本，为当前目录下每个子目录生成 Slurm 作业脚本并提交，等全部作业结束后汇总哪些收敛了。
+new_argparse|写一个命令行工具 pei_scan_dirs，接受一个根目录参数和一个文件后缀参数，递归找出匹配的文件并输出表格。
+new_genbash|用 Python 生成一个 bash 脚本，脚本内容是循环进入每个子目录跑 vasp 并回到根目录。
+edit_existing|把 seed_convert.py 改成支持批量处理整个目录，而不是只处理单个文件。
+small_fix|seed_convert.py 里的输出路径用的是相对路径，改成绝对路径。
