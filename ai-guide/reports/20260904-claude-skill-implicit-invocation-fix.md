@@ -270,19 +270,31 @@ summary` + `-hook` 设的 `user-invocable-only`。
 | | description 层 | hook 层 |
 |---|---|---|
 | Claude Code 本地 | ✅ | ✅ **已实测**：探针会话拦下 → 加载 → 重写成功 |
-| Claude Code zcm6 | ✅ 同一份 SKILL.md | ⚠️ 机制相同，installer 全 `pathlib`、解释器自适应；**未实测**。找不到 python 时脚本会打 `module avail python` |
+| Claude Code zcm6 | ✅ 同一份 SKILL.md | ✅ **已实测**：`-global -root -local -hook` 装完，自检 18/18，已安装副本对 `git commit` 实拦成功。注意 `/usr/bin/python3` 是 3.6，`sys.stderr.reconfigure` 要 3.7+，必须 `PYTHON_CLAUDE=<codex venv python>` |
 | Codex 本地 / zcm6 | ✅ | ❌ **未做**。schema 同族（archcore 插件即有 `PreToolUse` matcher `Write\|Edit\|apply_patch`），但工具名不同（`apply_patch` / `shell`）、payload 字段未验证、且似需走 plugin 注册 |
 | Hermes | ✅ | ⚠️ 有 `pre_tool_call`，wire protocol 刻意兼容 Claude Code（exit 2 阻断、消息取 stderr），改造成本低，未做 |
 
-**description 层四家通吃且已验证；hook 层目前只有 Claude Code 本地站得住。**
-这就是把 description 放第一优先的理由。
+**description 层四家通吃且已验证；hook 层在 Claude Code 本地与 zcm6 都已实测站得住。**
+Codex / Hermes 侧仍只有 description 层，这就是把 description 放第一优先的理由。
+
+### zcm6 安装的三个环境坑（都不是脚本的问题，但每次都要处理）
+
+| 坑 | 处理 |
+|---|---|
+| 登录节点无 DNS，`git pull` / `npx` 全断 | 走 `ssh zcm6-proxy` 的 `RemoteForward 37897`，再 `export http_proxy=http://127.0.0.1:37897` |
+| `~/.local/bin/node` 直接跑报一堆 `GLIBCXX/GLIBC not found` | 先 `source ~/mysoft/tools/nvm/load-nvm.sh && nvm use 22` |
+| `/usr/bin/python3` 是 3.6.8，跑不了 `sys.stderr.reconfigure` | `export PYTHON_CLAUDE=/public3/home/scg6928/mysoft/env/pyenv/codex/bin/python`（3.10.15），installer 会把它固化进 settings.json |
+
+另：安装当天 lustre 配额 967.9G/962G 已过软限且 grace 用尽，超过 ~3MB 的写入直接失败，
+第一次 `git pull` 因此报 `Disk quota exceeded`。配额没清理干净的话下次还会撞上。
 
 ---
 
 ## 9. 已知缺口与天花板
 
 1. **hook 盖不住扒不到目标的写法**：`python -c "open('x.py','w')"`、`cp template.py dest.py`、
-   编辑器写入。测试第 12 条钉住了这个已知行为，别当 bug 修。这类靠 description 层兜。
+   PowerShell 的 `Set-Content` / `Out-File`（`>` 重定向能扒到）、编辑器写入。
+   测试第 12 条钉住了这个已知行为，别当 bug 修。这类靠 description 层兜。
 2. **p-plot-figure 的文件名 glob 是弱启发式**，价值明显低于 p-code-style 那条。
 3. **组合效果未测**：description 与 hook 各自的数字都有了，两层合起来没测过。
    而且社区数据显示两层可能负向干扰（passive 77% → 37%）。
@@ -314,6 +326,12 @@ summary` + `-hook` 设的 `user-invocable-only`。
 | 3 | `fnmatch` 不认 `**`（假阴性） | `**/*.py` 编成 `.*.*/.*\.py`，硬要求路径含 `/`，`batch.py` 这种裸相对文件名一个都拦不住——而 agent 写的多是相对路径 | 见 #4 一并修 |
 | 4 | `fnmatch` 不认 `**`（假阳性） | `**/*fig*.py` 变成"路径任意位置含 fig"，仓库名 `codex-con`**fig** 命中，**整个仓库的 .py 都被要求加载 p-plot-figure** | 按模式形状分流：去掉 `**/` 后不含 `/` 的是文件名模式，只比 basename；含 `/` 的才比整条路径 |
 | 5 | 安装脚本只给 `-hook` 时仍跑 `npx skills add` | `--skill --yes` 空列表 | 用 `${#lskill[@]} -gt 0` 守卫整段 |
+| 6 | `PreToolUse` matcher 漏了 `PowerShell` | Windows 上主 shell 就是 PowerShell，shell 那半边门（`git commit` 命令门、重定向写入）在本机等于没装 | matcher 改成 `Write\|Edit\|NotebookEdit\|Bash\|PowerShell` |
+| 7 | marker 按 `session_id` 存一个 | 写 `.py` 拦掉的那一次会把同会话后面 `git commit` 的拦截额度吃光 | marker 改按 `session_id + skill` 存 |
+
+安装当场还纠正了一条判断：**hook 装完对已开着的会话立即生效**（settings.json 会被重新读取），
+本次就是被自己刚装的门拦下才发现 matcher 漏了 PowerShell。安装脚本原本打印的
+"新会话生效"是错的，已改。
 
 另记一条操作教训：`npx skills add … --dry-run` 中 **`--dry-run` 不是真实开关**，会被忽略并**实际安装**。
 本次因此在仓库根产生了 `.claude/skills/p-code-style/`（2 个文件）和 `skills-lock.json`，已逐个删除；
@@ -325,7 +343,7 @@ summary` + `-hook` 设的 `user-invocable-only`。
 
 | # | 事项 | 说明 |
 |---|---|---|
-| 1 | 真装一次 `-global -root -local -hook` | 会改 `~/.claude/settings.json`，尚未执行 |
+| ~~1~~ | ~~真装一次 `-global -root -local -hook`~~ | ✅ 已做：本地与 zcm6 各装一次，`settings.json` 里 `env`/`model`/`statusLine`/`enabledPlugins` 全部保留 |
 | 2 | 修 harness 的被拒写入识别 → 测组合臂 | 见 §9.4 |
 | 3 | `-repeat 5` 坐实 7/7 | 见 §9.5 |
 | ~~4~~ | ~~p-git-commit 的 `Bash(git commit*)` gate~~ | ✅ 已做：`command_gates` 表 + 4 条测试 |

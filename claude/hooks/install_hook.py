@@ -220,5 +220,6 @@ else:
         print(f"✅ {change}")
 
 print(f"📊 settings.json: {path_settings}")
-print("🎉 完成。新会话生效；已开的会话不会加载新 hook。")
+# 实测：已开着的会话也会重新读 settings.json，装完当场就生效，不必重开。
+print("🎉 完成。settings.json 会被重新读取，当前会话即生效；没生效就重开一个。")
 ### to here
