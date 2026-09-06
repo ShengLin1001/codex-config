@@ -43,7 +43,3 @@ On CentOS, use the local Git and curl runtime that work on this host:
 export PATH=/public3/home/scg6928/mysoft/tools/git/2.43.7/bin:$PATH
 export LD_LIBRARY_PATH=/public3/soft/curl/lib:$LD_LIBRARY_PATH
 ```
-
-## Git Commit
-
-生成 Git commit message 时，默认使用 `$p-git-commit` skill。
