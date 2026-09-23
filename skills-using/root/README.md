@@ -28,3 +28,17 @@
 
 - 显式类 skill 均在 `SKILL.md` 正文加了 `## 触发条件` 段，重申「只在用户显式点名时执行」。
 - p-code-review 与内置 `code-review` skill 触发词曾重叠，改为显式点名后，裸「review」交给内置。
+
+## 外部仓库 skill 的上游同步（git subtree）
+
+`p-literature-download`、`p-edge-browser` 是从各自的 GitHub 仓库以 `git subtree --squash` 引入的，
+拉上游更新在 codex-config 仓库根目录执行：
+
+```bash
+git subtree pull --prefix=skills-using/root/p-edge-browser p-edge-browser main --squash
+```
+
+`p-edge-browser` 是 `git remote add` 过的远端名（`git@github.com:ShengLin1001/p-edge-browser.git`）。
+
+⚠️ **别用 `git subtree add/pull --prefix=... <URL> main`**：分支名 `main` 会被解析成**本地** main，
+结果把 codex-config 自己塞进子目录。一律先 `git remote add` + `git fetch`，再用 `<remote>/main` 或 `<remote> main`。
