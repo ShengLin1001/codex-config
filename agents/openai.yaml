@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Edge Browser"
+  short_description: "接管用户日常 Edge 浏览器：登录态访问、点击填表、下载，以及 Cloudflare 质询的脚本过法与交人接管"
+  default_prompt: "使用 $p-edge-browser 用我的 Edge 打开并操作这个页面。"
