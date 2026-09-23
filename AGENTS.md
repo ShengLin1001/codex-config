@@ -73,6 +73,9 @@ git subtree push --prefix=skills-using/root/p-literature-download \
 `npx skills add` 克隆本仓库时不带 `--recurse-submodules`，拿到的会是一个空目录，
 装出来什么都没有。subtree 把文件真实落进本仓库，所以和其他 skill 走完全同一条安装路径。
 
+`skills-using/root/p-edge-browser`、`skills-using/project/academic/explicit/p-ppt-academic`（上游 `p-ppt-generate`）
+同样是 subtree，命令见 `skills-using/root/README.md`。
+
 代价：`git subtree pull` 前工作区必须干净，且会产生一个合并提交。
 ## Hermes 配置同步
 

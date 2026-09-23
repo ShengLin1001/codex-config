@@ -1,6 +1,7 @@
 # 只在 Windows 上装的 skill，一行一个名字。
 # pei_ai_univ_reinstall 在非 Windows（如 zcm6）上会跳过这里列出的名字。
-# 用清单而不是往 skill 目录里放标记文件：p-edge-browser / p-literature-download
+# 用清单而不是往 skill 目录里放标记文件：p-edge-browser / p-literature-download / p-ppt-academic
 # 是 subtree，改它们的目录会被 subtree push 带回上游。
 p-edge-browser
 p-literature-download
+p-ppt-academic

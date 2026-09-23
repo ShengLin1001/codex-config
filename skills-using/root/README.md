@@ -34,14 +34,16 @@
 
 ## 外部仓库 skill 的上游同步（git subtree）
 
-`p-literature-download`、`p-edge-browser` 是从各自的 GitHub 仓库以 `git subtree --squash` 引入的，
+`p-literature-download`、`p-edge-browser`、`p-ppt-academic`（在 `project/academic/explicit/`，上游仓库名 `p-ppt-generate`）
+是从各自的 GitHub 仓库以 `git subtree --squash` 引入的，
 拉上游更新在 codex-config 仓库根目录执行：
 
 ```bash
 git subtree pull --prefix=skills-using/root/p-edge-browser p-edge-browser main --squash
+git subtree pull --prefix=skills-using/project/academic/explicit/p-ppt-academic p-ppt-generate main --squash
 ```
 
-`p-edge-browser` 是 `git remote add` 过的远端名（`git@github.com:ShengLin1001/p-edge-browser.git`）。
+`p-edge-browser`、`p-ppt-generate` 是 `git remote add` 过的远端名（`git@github.com:ShengLin1001/<名字>.git`）。
 
 ⚠️ **别用 `git subtree add/pull --prefix=... <URL> main`**：分支名 `main` 会被解析成**本地** main，
 结果把 codex-config 自己塞进子目录。一律先 `git remote add` + `git fetch`，再用 `<remote>/main` 或 `<remote> main`。
