@@ -1,5 +1,5 @@
 ---
-name: p-web-access
+name: p-edge-browser
 description: "ALWAYS invoke BEFORE using the mcp__playwright__browser_* tools. Use when WebFetch fails (403, empty or JS-only content, anti-bot page) or the task needs the user's real Edge: logged-in sites, clicking, form filling, downloading papers. Do NOT invoke for ordinary search or readable public pages — WebSearch/WebFetch come first. 触发：WebFetch 403 / 抓不到内容、网站进不去、用我的浏览器打开、登录后操作、下载文献、填网页表单。"
 ---
 
