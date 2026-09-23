@@ -132,6 +132,26 @@ for domain in "${lproject[@]:-}"; do
   while read -r skill; do [ -n "$skill" ] && lskill+=("$skill"); done < <(collect "$dir_project/$domain")
 done
 
+# 只适合 Windows 的 skill（依赖本机 Edge / PowerShell）在别的系统上跳过。
+# 清单在 skills-using/windows-only.txt，不在各 skill 目录里——其中有 subtree。
+case "$(uname -s)" in
+  MINGW*|MSYS*|CYGWIN*) ;;
+  *)
+    path_windows_only="$path_repo_root/$dir_skills/windows-only.txt"
+    if [ -f "$path_windows_only" ] && [ "${#lskill[@]}" -gt 0 ]; then
+      lkeep=()
+      for skill in "${lskill[@]}"; do
+        if grep -qxF "$skill" "$path_windows_only"; then
+          echo "⚠️  跳过 $skill（仅 Windows，见 $dir_skills/windows-only.txt）"
+        else
+          lkeep+=("$skill")
+        fi
+      done
+      lskill=("${lkeep[@]}")
+    fi
+    ;;
+esac
+
 if [ "${#lskill[@]}" -eq 0 ] && [ "$want_hook" = false ]; then
   echo "选中的目录里没有找到任何 SKILL.md。" >&2
   exit 1

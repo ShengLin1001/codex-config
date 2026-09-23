@@ -22,6 +22,9 @@
 `academic`、`python`）。skill 名按目录里的 `SKILL.md` 现找，所以新增 skill
 不需要改脚本。`AGENTS=` 可缩小目标 agent 范围。
 
+只适合 Windows 的 skill（依赖本机 Edge / PowerShell）登记在 `skills-using/windows-only.txt`，
+脚本在非 Windows（如 zcm6）上自动跳过。
+
 `-global` 决定的是**装到哪**，跟 `-project` 无关：给了就装成用户级，不给就装进
 **当前工作目录**那个项目（`./.claude/skills` 等），只对那个项目生效。
 
