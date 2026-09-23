@@ -21,6 +21,7 @@
 | p-agent-doc-writing | 写 / 重构 agent 指令文件前（`ALWAYS invoke BEFORE`） |
 | p-code-style | 写 / 改 PJ 脚本类代码前，含一行小修（`ALWAYS invoke BEFORE`） |
 | p-git-commit | 写 commit message 前（`ALWAYS invoke BEFORE`） |
+| p-web-access | 用 Playwright MCP 浏览器前，或 WebFetch 失败 / 需登录态、点击、填表、下载时（`ALWAYS invoke BEFORE`） |
 | p-plot-figure | 写 / 改 matplotlib 绘图代码前（`ALWAYS invoke BEFORE`） |
 
 ## 备注
