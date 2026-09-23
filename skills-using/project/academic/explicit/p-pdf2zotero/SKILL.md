@@ -7,6 +7,11 @@ description: "Use ONLY when the user explicitly asks to import local academic PD
 
 用于实际修改本机 Zotero Desktop 文献库。默认只处理用户明确给出的 PDF 目录和目标 collection，不重组其他 collection，不删除正文或附件。
 
+## 触发条件
+
+只在用户显式调用时执行：Claude Code 输入 `/p-pdf2zotero`，Codex 写 `$p-pdf2zotero`。
+对话里只是出现 Zotero、PDF、文献等字眼，不走本流程——它会改真实的 Zotero 数据库。
+
 ## 规则
 
 - 先按 DOI，其次按规范化题名去重；库中已有条目时复用该条目，只补 collection 成员关系或缺失的本地附件。

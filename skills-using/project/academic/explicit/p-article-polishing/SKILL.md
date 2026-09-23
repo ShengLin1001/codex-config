@@ -9,6 +9,11 @@ description: "Use ONLY when the user explicitly asks to plan, restructure, polis
 
 本 skill 只提供通用学术规范，不带任何学科的章节模板。目标稿的既有体例、目标期刊要求和用户本次的明确指示，都高于这里的默认写法。
 
+## 触发条件
+
+只在用户显式调用时执行：Claude Code 输入 `/p-article-polishing`，Codex 写 `$p-article-polishing`。
+只要诊断不要改写（交给 p-article-evaluated）、非学术文字，不走本流程。
+
 ## 选择入口
 
 - **架构任务**（写新文章或新章节、重排已有结构、写题目或图注）→ 读 [references/structure.md](references/structure.md)。整节、整稿或显著重构，先出 outline 交作者确认再写正文，不跳过 outline 直接产出全文；只写单个新段落时，写出该段的「段功能 | 证据落点 | 段尾结论」一行即可，不必等确认，直接写。

@@ -7,7 +7,7 @@ description: "Use ONLY when the user explicitly asks for test-driven, test-first
 
 ## 触发条件
 
-只在用户显式点名时执行，例如 `$p-tdd`、"先写测试再实现"。
+只在用户显式调用时执行：Claude Code 输入 `/p-tdd`，Codex 写 `$p-tdd`。
 事后补测试、只要求实现功能，不走本流程。
 
 ## 循环

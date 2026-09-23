@@ -7,7 +7,7 @@ description: "Use ONLY when the user explicitly asks for research, a cited repor
 
 ## 触发条件
 
-只在用户显式点名时执行，例如 `$p-research`、"调研一下并给带引用的报告"。
+只在用户显式调用时执行：Claude Code 输入 `/p-research`，Codex 写 `$p-research`。
 已在上下文里的事实、无需引用的快速查阅，不走本流程。
 
 ## 流程

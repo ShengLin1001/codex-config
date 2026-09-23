@@ -9,6 +9,11 @@ description: "Use ONLY when the user explicitly asks to diagnose or review an ac
 
 判断原则和章节功能骨架见 [references/criteria.md](references/criteria.md)。目标期刊体例、稿件类型和作者约定高于这里的默认规则。
 
+## 触发条件
+
+只在用户显式调用时执行：Claude Code 输入 `/p-article-evaluated`，Codex 写 `$p-article-evaluated`。
+要求改写或润色（交给 p-article-polishing）、代码审查，不走本流程。
+
 ## 边界
 
 可评整稿，也可评摘要、章节、图注或片段。开始时说明实际读到的范围，缺失材料影响的维度记 `Not assessable`。

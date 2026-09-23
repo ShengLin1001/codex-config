@@ -9,7 +9,7 @@ description: "Use ONLY when the user explicitly asks to batch-download full-text
 
 ## 触发条件
 
-**只在用户显式点名时执行**，例如 `$p-literature-download`、"用 p-literature-download 下这批 DOI"。
+**只在用户显式调用时执行**：Claude Code 输入 `/p-literature-download`，Codex 写 `$p-literature-download`。
 
 用户只是提到某篇文献、贴了个 DOI、问某篇论文讲什么，都**不要**启动本流程——
 它会打开浏览器、发真实网络请求、动用机构账号会话，误触发的代价由用户承担。

@@ -7,7 +7,7 @@ description: "Use ONLY when the user explicitly asks to run this review on code 
 
 ## 触发条件
 
-只在用户显式点名时执行，例如 `$p-code-review`、"用 p-code-review 审这个 diff"。
+只在用户显式调用时执行：Claude Code 输入 `/p-code-review`，Codex 写 `$p-code-review`。
 用户没点名时（哪怕贴了 diff、说"看看这段代码"），不要自动启动。
 
 ## 确定范围

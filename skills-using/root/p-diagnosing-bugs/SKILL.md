@@ -7,7 +7,7 @@ description: "Use ONLY when the user explicitly asks to diagnose or find the roo
 
 ## 触发条件
 
-只在用户显式点名时执行，例如 `$p-diagnosing-bugs`、"帮我定位这个偶发问题的根因"。
+只在用户显式调用时执行：Claude Code 输入 `/p-diagnosing-bugs`，Codex 写 `$p-diagnosing-bugs`。
 语法错误、一行能改的明显问题、已知原因的修复，不走本流程。
 
 ## 核心流程

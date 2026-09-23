@@ -9,7 +9,7 @@ description: "Use ONLY when the user explicitly asks to hand off, pack up, or ca
 
 ## 触发条件
 
-只在用户显式点名时执行，例如 `$p-handoff`、"给下一个 agent 写交接"。
+只在用户显式调用时执行：Claude Code 输入 `/p-handoff`，Codex 写 `$p-handoff`。
 普通的"总结一下刚才做了什么"不走本流程。
 
 ## 必备内容

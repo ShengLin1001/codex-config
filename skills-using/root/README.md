@@ -1,8 +1,10 @@
 # skills-using/root 调用方式汇总
 
-本目录未用 `explicit/` `implicit/` 目录分组，调用方式由各 `SKILL.md` 的 `description` 触发条款决定。
+本目录未用 `explicit/` `implicit/` 目录分组。隐式类靠 `description` 触发条款路由；显式类另有硬开关，见下。
 
 ## 显式调用（用户点名 / 明确要求才触发）
+
+硬开关只有一处：`agents/openai.yaml` 的 `policy.allow_implicit_invocation: false`。Codex 直接认它（用 `$<name>` 调用）；Claude Code 靠 `pei_ai_univ_reinstall -hook` 把它翻译成 settings.json 的 `skillOverrides: user-invocable-only`（只能由用户输入 `/<name>` 调用，自然语言点名不会加载）。不在 SKILL.md 加 `disable-model-invocation`。`description` 里的 `Use ONLY when` 只是软约束。
 
 | Skill | 触发判据 |
 |---|---|
@@ -26,7 +28,8 @@
 
 ## 备注
 
-- 显式类 skill 均在 `SKILL.md` 正文加了 `## 触发条件` 段，重申「只在用户显式点名时执行」。
+- 显式类 skill 均在 `SKILL.md` 正文加了 `## 触发条件` 段，写明 `/<name>`（Claude Code）与 `$<name>`（Codex）两种调用方式。
+- 被 `~/.claude/hooks/gate.json` 强制要求加载的 skill 不能设成显式，否则模型无法加载，流程会卡死。
 - p-code-review 与内置 `code-review` skill 触发词曾重叠，改为显式点名后，裸「review」交给内置。
 
 ## 外部仓库 skill 的上游同步（git subtree）

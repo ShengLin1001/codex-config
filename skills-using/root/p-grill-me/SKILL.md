@@ -9,7 +9,7 @@ description: "Use ONLY when the user explicitly asks to be questioned, challenge
 
 ## 触发条件
 
-只在用户显式点名时执行，例如 `$p-grill-me`、"拷打一下这个方案"。
+只在用户显式调用时执行：Claude Code 输入 `/p-grill-me`，Codex 写 `$p-grill-me`。
 任务过程中的普通澄清提问不走本流程。
 
 ## 流程

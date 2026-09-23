@@ -2,3 +2,7 @@ interface:
   display_name: "P PDF to Zotero"
   short_description: "Import PDFs with selective ratings and Extra notes"
   default_prompt: "Use $p-pdf2zotero to import these local PDFs into the specified Zotero collection, rate only important papers, and add concise Extra descriptions."
+
+# 会改真实 Zotero 库，只在用户显式调用时加载。Claude Code 侧由 pei_ai_univ_reinstall -hook 翻译成 skillOverrides。
+policy:
+  allow_implicit_invocation: false

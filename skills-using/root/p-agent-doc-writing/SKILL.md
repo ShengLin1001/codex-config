@@ -26,6 +26,15 @@ description: "ALWAYS invoke BEFORE substantively writing or restructuring an age
    - 不罗列同义词或完整流程；正文才写流程。
 4. 正文保留关键步骤、完成条件和易错点；删除工作日志、一次性修复、背景科普和泛化建议。
 5. 只有在内容确实需要按分支加载时才拆分引用文件；不要创建占位目录或附加 README。
-6. 检查名称、路径、交叉引用和调用策略。仅显式调用的 skill 必须在 `agents/openai.yaml` 设置 `allow_implicit_invocation: false`。
+6. 检查名称、路径、交叉引用和调用策略。**仅显式调用**的 skill 只设一处：`agents/openai.yaml` 的
+   `policy.allow_implicit_invocation: false`；project 下的 skill 还要放进 `<域>/explicit/`。
+   - Codex 直接认这个开关。Claude Code 由 `pei_ai_univ_reinstall -hook` 读它，在 settings.json 写
+     `skillOverrides: user-invocable-only`——不加 `-hook` 重装，Claude Code 侧就不生效。
+   - **不要**在 SKILL.md 加 `disable-model-invocation: true`：与 skillOverrides 重复，
+     以后放开 openai.yaml 时它还会单方面锁住 Claude Code。只靠 `Use ONLY when …` 是软约束。
+   - 生效后 Claude Code 只能由用户输入 `/<name>` 调用，自然语言点名不会加载。正文 `## 触发条件`
+     写明 `/<name>`（Claude Code）和 `$<name>`（Codex）。
+   - 被 hook（`gate.json`）强制要求加载、或被其他 skill 指名先加载的 skill 不能设成显式，
+     否则模型无法加载，流程会卡死。
 
 完成时确认：路由准确、正文自包含、没有重复规则，且删去任一句都不会损失关键决策信息。
