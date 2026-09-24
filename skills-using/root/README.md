@@ -15,6 +15,9 @@
 | p-diagnosing-bugs | `Use ONLY when ... explicitly asks`；语法错 / 一行小修 / 已知原因不触发 |
 | p-handoff | `Use ONLY when ... explicitly asks`；普通「总结刚才做了什么」不触发 |
 | p-research | `Use ONLY when ... explicitly asks`；已在上下文的事实 / 快速查阅不触发 |
+| p-article-evaluated | `Use ONLY when ... explicitly asks`；只诊断不改写，需 `$p-article-evaluated` |
+| p-article-polishing | `Use ONLY when ... explicitly asks`；改写 / 润色 / 定 outline，需 `$p-article-polishing` |
+| p-ppt-academic | `Use ONLY when ... explicitly asks`；仅 Windows，碰到 .pptx 不自动启动，需 `$p-ppt-academic` |
 
 ## 隐式调用（按任务类型 / 动作自动触发）
 
@@ -34,13 +37,13 @@
 
 ## 外部仓库 skill 的上游同步（git subtree）
 
-`p-literature-download`、`p-edge-browser`、`p-ppt-academic`（在 `project/academic/explicit/`，上游仓库名 `p-ppt-generate`）
+`p-literature-download`、`p-edge-browser`、`p-ppt-academic`（上游仓库名 `p-ppt-generate`）
 是从各自的 GitHub 仓库以 `git subtree --squash` 引入的，
 拉上游更新在 codex-config 仓库根目录执行：
 
 ```bash
 git subtree pull --prefix=skills-using/root/p-edge-browser p-edge-browser main --squash
-git subtree pull --prefix=skills-using/project/academic/explicit/p-ppt-academic p-ppt-generate main --squash
+git subtree pull --prefix=skills-using/root/p-ppt-academic p-ppt-generate main --squash
 ```
 
 `p-edge-browser`、`p-ppt-generate` 是 `git remote add` 过的远端名（`git@github.com:ShengLin1001/<名字>.git`）。
