@@ -57,7 +57,7 @@
 | 说明对象与条件 | `Measurements were carried out on X under Y.` | 方法已知，重点是对象和条件 |
 | 跨体系一致设置 | `X was employed across all geometries, maintaining Y.` | 参数需在不同模型间保持可比 |
 | 统一口径 | `Unless otherwise specified, all results refer to X.` | 后文反复使用同一方向、基准或条件 |
-| 参数敏感性 | `We tested X from A to B and used C without significant loss of accuracy.` | 参数无文献值，需说明选择稳健 |
+| 参数敏感性 | `We tested X from A to B and used C without significant loss of accuracy.` | 参数无文献值，且其取值会影响核心结论；否则不写 |
 | 验证可靠性 | `The computed X agrees well with previous theoretical and experimental results [refs], confirming the reliability of Y.` | 有明确比较量和文献结果 |
 
 ## 定位图表与报告定量结果
