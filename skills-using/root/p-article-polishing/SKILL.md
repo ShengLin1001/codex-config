@@ -62,6 +62,14 @@ description: "Use ONLY when the user explicitly asks to plan, restructure, polis
 - **反向同样成立：不掺入模型腔。**不为显得学术而引入目标稿没有的模型化用词；不用破折号（`—`、`–`）插入解释，冒号尽量不用于句中引出解释，标点优先逗号和句号、分号少用。破折号不是连字符——`FCC- and HCP-`、`low-SFE` 这类构词属于上一条的作者约定，保留不动。**词表、哪些词形不受限、标点细则见 [references/language.md](references/language.md) 末节「不掺模型腔」，按该节执行，不凭印象删词。**（强调词如 `critical`、`It is worth noting` 不是禁用词，判据同样在该节。）
 - 某个句子里的词语替换只在那个句子里成立，不升级成全文查找替换。
 
+## 作者的格式习惯
+
+以下为作者确认的默认体例；本次明确指示或目标期刊硬性要求优先。只在任务范围内应用，不据此重改已润色的其他章节。
+
+- 章节名称用 `Section` / `Sections`，包括 `This Section`、`In this Section`，`S` 大写；图表编号用 `Fig. 1`、`Figs. 1 and 2`、`Table 1`。句首作主语时可沿用 `Figure` / `Figures`。
+- 补充材料沿用同一编号体例，只在编号前加 `S`，如 `Fig. S1`、`Table S1`、`Section S1`、`Section S2.2`、`Eq. (S1)`。正文引用时不另加 `of the Supplementary Material` 等尾缀，不写 `Supplementary Note`。
+- 子图字母必须用括号括住，如 `Fig. 9(a)`、`Figs. 9(a-c)`、`Figs. 9(a) and 9(b)`，不写 `Fig. 9a`。子图范围的连接号跟随稿件既有写法。
+
 ## 任务边界
 
 - 只负责语言、论证顺序、段落结构和章节组织。
