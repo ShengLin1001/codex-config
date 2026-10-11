@@ -1,0 +1,4 @@
+interface:
+  display_name: "OfficeCLI"
+  short_description: "用 officecli 读、改、新建 .docx/.xlsx/.pptx；格式细则按需 load_skill"
+  default_prompt: "Use $officecli to inspect and modify this Office document."

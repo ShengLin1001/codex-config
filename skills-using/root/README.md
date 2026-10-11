@@ -28,6 +28,7 @@
 | p-git-commit | 写 commit message 前（`ALWAYS invoke BEFORE`） |
 | p-edge-browser | 用 Playwright MCP 浏览器前，或 WebFetch 失败 / 需登录态、点击、填表、下载时（`ALWAYS invoke BEFORE`） |
 | p-plot-figure | 写 / 改 matplotlib 绘图代码前（`ALWAYS invoke BEFORE`） |
+| officecli | 读 / 改 / 新建 .docx/.xlsx/.pptx；仅 Windows，格式细则由 `officecli load_skill pptx\|word\|excel` 按需输出 |
 
 ## 备注
 
@@ -47,6 +48,13 @@ git subtree pull --prefix=skills-using/root/p-ppt-academic p-ppt-generate main -
 ```
 
 `p-edge-browser`、`p-ppt-generate` 是 `git remote add` 过的远端名（`git@github.com:ShengLin1001/<名字>.git`）。
+
+`officecli` 不是 subtree：`SKILL.md` 原样拷自 officecli 二进制生成的版本，`agents/openai.yaml` 是本仓库加的。
+officecli 升级时会自动刷新已装的 `~/.agents/skills/officecli/SKILL.md`，本仓库这份只在重装时用，落后了就拷回来：
+
+```bash
+cp ~/.agents/skills/officecli/SKILL.md skills-using/root/officecli/SKILL.md
+```
 
 ⚠️ **别用 `git subtree add/pull --prefix=... <URL> main`**：分支名 `main` 会被解析成**本地** main，
 结果把 codex-config 自己塞进子目录。一律先 `git remote add` + `git fetch`，再用 `<remote>/main` 或 `<remote> main`。

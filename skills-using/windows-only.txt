@@ -6,3 +6,4 @@ p-edge-browser
 p-literature-download
 p-ppt-academic
 p-pdf2zotero
+officecli
