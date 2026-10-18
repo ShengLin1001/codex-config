@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Article LaTeX"
+  short_description: "按期刊模板排 PJ 的 LaTeX 稿件：栏数与字号默认值、参考文献字号、图表与首次引用同页、标色与压缩出片"
+  default_prompt: "Use $p-article-latex to typeset or edit this LaTeX manuscript: template-default layout, floats on the page of their first citation, layout-only changes."
