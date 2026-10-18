@@ -67,7 +67,7 @@ description: "Use ONLY when the user explicitly asks to plan, restructure, polis
 以下为作者确认的默认体例；本次明确指示或目标期刊硬性要求优先。只在任务范围内应用，不据此重改已润色的其他章节。
 
 - 章节名称用 `Section` / `Sections`，包括 `This Section`、`In this Section`，`S` 大写；图表编号用 `Fig. 1`、`Figs. 1 and 2`、`Table 1`。句首作主语时可沿用 `Figure` / `Figures`。
-- 补充材料沿用同一编号体例，只在编号前加 `S`，如 `Fig. S1`、`Table S1`、`Section S1`、`Section S2.2`、`Eq. (S1)`。正文引用时不另加 `of the Supplementary Material` 等尾缀，不写 `Supplementary Note`。
+- 补充材料沿用同一编号体例，只在编号前加 `S`，如 `Fig. S1`、`Table S1`、`Section S1`、`Section S2.2`、`Eq. (S1)`。两个方向的引用都不加出处尾缀：正文引用 SI 不加 `of the Supplementary Material`、不写 `Supplementary Note`；SI 引用正文的 Fig./Eq./Section 不加 `of the main text`，编号有无 `S` 已标明出处。SI 开头说明文献编号沿用正文文献表的声明句保留。
 - 子图字母必须用括号括住，如 `Fig. 9(a)`、`Figs. 9(a-c)`、`Figs. 9(a) and 9(b)`，不写 `Fig. 9a`。子图范围的连接号跟随稿件既有写法。
 
 ## 任务边界
