@@ -69,3 +69,17 @@ submission-guidelines 也 404；作者指引在 `/srep/author-instructions`
 
 **2026-09-28** 期刊主页内嵌 "Impact Factor: x (2025)"；APC 价目页在
 `/journal/<name>/apc`（`/journal/apc` 聚合页是 404）。零质询。
+
+## edge://（浏览器内部页）
+
+**2026-10-18** 扩展模式进不去：`edge://settings/...` 导航报 `Detached while handling command`，
+`context.newCDPSession` 报 `Not allowed`。改站点权限只能让用户点，或 PowerShell
+`Start-Process msedge.exe "edge://settings/content/siteDetails?site=<编码后的源>"` 打开后交人。
+按站删 cookie 别用 `clearCookies`（版本旧时会清全部）：`context.cookies([url])` 取出后
+`addCookies` 同名同域同路径、`expires: 1` 覆盖即删。
+
+## reddit.com / scholar.google.com（经机房 IP 代理）
+
+**2026-10-18** Reddit 会用 cookie（`loid` / `csv` / `edgebucket`）记住从机房 IP 被拦过的浏览器，
+换成能放行的出口后要删这几个 cookie 才恢复。学术「每次都要验证」先查站点 cookie 是否被屏蔽
+（Preferences `profile.content_settings.exceptions.cookies` 值 2），不是代理问题。
