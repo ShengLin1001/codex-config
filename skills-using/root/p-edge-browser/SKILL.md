@@ -1,6 +1,6 @@
 ---
 name: p-edge-browser
-description: "ALWAYS invoke BEFORE using the mcp__playwright__browser_* tools. Use when WebFetch fails (403, empty or JS-only content, anti-bot page) or the task needs the user's real Edge: logged-in sites, clicking, form filling, downloading papers. Do NOT invoke for ordinary search or readable public pages — WebSearch/WebFetch come first. 触发：WebFetch 403 / 抓不到内容、网站进不去、Just a moment 验证页、过人机验证、用我的浏览器打开、登录后操作、下载文献、填网页表单。"
+description: "ALWAYS invoke BEFORE using the mcp__playwright__browser_* tools. Use when WebFetch fails (403, empty or JS-only content, anti-bot page) or the task needs the user's real Edge: logged-in sites, clicking, form filling, downloading papers. Do NOT invoke for ordinary search or readable public pages — WebSearch/WebFetch come first. 触发：WebFetch 403 / 抓不到内容、网站进不去、Just a moment 验证页、过人机验证、用我的浏览器打开、登录后操作、用保存的账号密码登录、下载文献、填网页表单。"
 ---
 
 # 真实 Edge 浏览器操作
@@ -28,6 +28,17 @@ description: "ALWAYS invoke BEFORE using the mcp__playwright__browser_* tools. U
 - 自己新开的标签页用完关闭；不动用户原有标签页。
 - 点击、填表、下载可直接做；**提交不可撤回的内容**（投稿、付款、发送消息、删除）前先向用户确认。
 - 文献下载优先用 `$p-literature-download`（批量、按 DOI、带重试）；本 skill 只处理零星单篇。
+
+## 登录
+
+需要用户的账号密码时，先用 Edge 已有的登录态自己登，不要一上来就等用户操作：
+
+1. 先看是不是已经登录了（cookie 还有效），是的话直接继续。
+2. 打开登录页时，Edge 通常已经自动填好该站默认的已保存账号和密码。确认用户名是要用的那个，就直接点登录。
+3. 要换成同一站点的另一个已保存账号：CDP 发出的点击和按键弹不出 Edge 的自动填充下拉框。改用 `windows-mcp` 的真实鼠标点击用户名框，从弹出的下拉框里选（这一步未实测）。
+4. 以上都不行，或者遇到短信、扫码、二次验证，再按下文「交人接管」请用户处理。
+
+不读取、不导出明文密码，也不在对话里显示。
 
 ## 人机验证
 
