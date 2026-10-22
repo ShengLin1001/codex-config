@@ -1,0 +1,8 @@
+interface:
+  display_name: "P Research Diagram"
+  short_description: "用 officecli 生成可编辑的 pptx 技术路线图、研究框架图和科研架构图"
+  default_prompt: "Use $p-research-diagram to draw a research roadmap / framework diagram as an editable .pptx with officecli and export it to PNG with PowerPoint."
+
+# 只在用户显式调用时加载。Claude Code 侧对应 settings.json 的 skillOverrides: user-invocable-only。
+policy:
+  allow_implicit_invocation: false

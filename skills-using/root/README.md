@@ -18,6 +18,7 @@
 | p-article-evaluated | `Use ONLY when ... explicitly asks`；只诊断不改写，需 `$p-article-evaluated` |
 | p-article-polishing | `Use ONLY when ... explicitly asks`；改写 / 润色 / 定 outline，需 `$p-article-polishing` |
 | p-ppt-academic | `Use ONLY when ... explicitly asks`；仅 Windows，碰到 .pptx 不自动启动，需 `$p-ppt-academic` |
+| p-research-diagram | `Use ONLY when ... explicitly asks`；仅 Windows，画技术路线图 / 研究框架图，需 `$p-research-diagram` |
 
 ## 隐式调用（按任务类型 / 动作自动触发）
 
