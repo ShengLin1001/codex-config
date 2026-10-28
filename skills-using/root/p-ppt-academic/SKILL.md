@@ -262,5 +262,5 @@ batch JSON，用 `officecli batch deck.pptx --input fill.json --json` 执行。�
 ## 7. 交付
 
 - 工作 deck 与 PNG 放项目目录，不放 skill 目录。
-- 过程/汇总文档放 `<project-root>/ai-guide/<子目录>/<YYYYMMDD>-<agent>-<subject>.md`，附 §5 目检答案表。
+- 过程/汇总文档放 `<project-root>/ai-guide/<子目录>/<YYYYMMDD>-<NN>-<agent>-<subject>.md`，附 §5 目检答案表。
 - 交付时明说：哪几页的图是占位待补、哪几处断言句需要作者本人复核。
