@@ -13,6 +13,7 @@
   git subtree 从上游 `ShengLin1001/p-literature-download` 同步，维护方式见 `AGENTS.md`。
 - `skills-using/project/*/explicit/`：只通过 `$skill-name` 显式调用的项目级 skills。
 - `skills-using/project/*/implicit/`：可按任务语义自动匹配的项目级 skills。
+- `claude/agents/`：Claude Code 用户级 subagent 的上游；安装副本在 `~/.claude/agents/`，先改这里再手动复制过去（`pei_ai_univ_reinstall` 不管这个目录）。
 - `scripts/copy-codex-files.sh`：将 `~/.codex` 中的 `AGENTS.md` 和 `config.toml` 复制到本仓库的 `codex/` 目录。
 - `scripts/restore-codex-files.sh`：从本仓库将 Codex 配置恢复到 `~/.codex`。
 - `scripts/pei_ai_univ_reinstall`：从本仓库的 `skills-using/` 安装 skills。`-root` 装 `skills-using/root/`，`-project <域>...` 装 `skills-using/project/<域>/`，`-global` 装成用户级（不给则装进当前项目），`-clean` 先清空，`-list` 只列不装。
