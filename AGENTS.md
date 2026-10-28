@@ -19,7 +19,7 @@
 ```
 
 `-project` 后面跟一个或多个域名，对应 `skills-using/project/<域>/`（当前有
-`academic`、`python`）。skill 名按目录里的 `SKILL.md` 现找，所以新增 skill
+`academic`、`python`、`remote`）。skill 名按目录里的 `SKILL.md` 现找，所以新增 skill
 不需要改脚本。`AGENTS=` 可缩小目标 agent 范围。
 
 只适合 Windows 的 skill（依赖本机 Edge / PowerShell）登记在 `skills-using/windows-only.txt`，

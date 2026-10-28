@@ -1,0 +1,8 @@
+interface:
+  display_name: "P VS Code zcm6 Upgrade"
+  short_description: "同版本升级本地 VS Code 和 zcm6 上打补丁的 VS Code Server"
+  default_prompt: "Use $p-vscode-zcm6-upgrade to upgrade local VS Code and the patched VS Code Server on zcm6 to the same version."
+
+# 只在用户显式调用时加载。Claude Code 侧对应 settings.json 的 skillOverrides: user-invocable-only。
+policy:
+  allow_implicit_invocation: false

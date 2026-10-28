@@ -8,3 +8,4 @@ p-ppt-academic
 p-pdf2zotero
 officecli
 p-research-diagram
+p-vscode-zcm6-upgrade
