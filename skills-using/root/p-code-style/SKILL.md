@@ -33,6 +33,10 @@ Slurm 调用（sbatch/squeue/srun/mpirun）不加轮询重试 / 重试时把已�
 - "薄 CLI" 指**不含业务逻辑**，**不是** `from lib import main; main()`：把 argparse/main 留在库里、CLI 只转发，正是要避免的反模式。
 - 新增工作流及后处理入口都用 Python；不要用 Bash 包 Python，也不要硬编码解释器、仓库或 package 路径。先激活 `dft` / `codexpy` 等目标 venv，入口通过 `#!/usr/bin/env python3` 使用当前环境，并实际验证解析到的 Python。
 - 后处理默认先运行 `pei_vasp_univ_post` 生成标准文件；大目录或重复绘图时提供并遵循现有 `-skip_univ_post` 契约，只复用已确认有效的 `y_post_*`。
+- 工作流只按约定批量建目录：起点 `y_full_relax/`，计算在 `y_<workflow>/y_dir/<subdir>/`，目录沿用 `y_` 前缀；新写的后处理输出用 `p_`（`p_post_*`）。不内置 sbatch / `-if_sbatch`，提交交给 `pei_slurm_univ_submit.py`。
+- 后处理入口 `pei_vasp_plot_<workflow>.py` 登记进 `pei_vasp_plot_all` 分派表（`-<workflow>` → `y_<workflow>`），新开关（如 `-calc`）在 `pei_vasp_plot_all` 透传；输出格式兼容已有后处理脚本（如 NEB 的 `neb.dat` / `nebef.dat` 保持 VTST 格式）。
+- 换计算引擎（LAMMPS、GROMACS、CP2K 等）不另起工作流：并进同名已有工作流、保留原名，用 `-calc <engine>` 切换，目录布局与后处理不变，只换计算文件。
+- 写成通用工作流：决定计算目的的核心参数（应变范围与步长、像数、层序等）走 CLI 参数或格式化 txt（不用 json）；计算文件模板里已定好的物理设置不参数化（如 NEB 的 INCAR 里的 ISIF、ALGO 在结构弛豫时就定了）。
 
 **CLI 开关命名（单横杠 `-` + 下划线 `_`，别用 `--` / 连字符）**
 - 所有 CLI 开关统一 **单横杠前缀 + 下划线分隔**，bash 与 argparse 一致：`-path_root`、`-if_sbatch`、`-skip_univ_post`、`-child_wall_time`。argparse 单横杠长选项的 dest 仍把 `-`→`_`，`args.path_root` 照常；把长名放第一个（`add_argument("-input", ...)`）以定住 dest。
@@ -115,5 +119,6 @@ Slurm 调用（sbatch/squeue/srun/mpirun）不加轮询重试 / 重试时把已�
 - [ ] check 失败 `fail()`、成功返回值且调用处接住了。
 - [ ] 新增的 sbatch/squeue/srun/mpirun 都加了 99×10s 轮询重试；"已提交 / 查询成功"透传不重试，只重试暂态失败。
 - [ ] `mymetal` 库模块 import-only（无 argparse/main/build_parser/`__main__`）；argparse/回显/入口逻辑全在 `pei_*` CLI，且照抄了同域 workflow 的拆分。
+- [ ] 新工作流目录 `y_<workflow>`、后处理输出 `p_`，后处理已登记进 `pei_vasp_plot_all`；换引擎走 `-calc` 并进同名工作流；只参数化核心参数。
 - [ ] CLI 开关单横杠 `-` + 下划线 `_`、只留长名、我们自己的取值也下划线；INCAR tag / 外部工具 flag / Slurm walltime / `-h/--help` 保持原样；跨脚本调用与库内 warn/fail/docstring 引用一并改。
 - [ ] 沿用了下游约定；不确定留 TODO；声称完成的部分是真验证过的。
