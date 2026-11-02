@@ -14,6 +14,8 @@ CentOS HPC 平台上，命令缺失或版本过旧时先检查 `module avail`。
 
 zcm6 上的软件装到 `~/mysoft/tools/<name>/<version>/`，再在 `~/.bash_soft_env` 照已有条目加一行带注释的 `export PATH=...`。不要跑会改 `~/.bashrc` 的官方安装脚本，直接下载发布包并核对 sha256。系统是 CentOS 7（glibc 2.17、内核 3.10），新版二进制可能跑不起来，优先选静态或 musl 构建，装完实测 `--version`。
 
+`git pull/push` 走 ssh 连 GitHub，`~/.ssh/config` 的 ProxyCommand 只读大写 `HTTPS_PROXY`（交互式登录由 `~/.bash_soft_env` 设好）。报 `Please make sure you have the correct access rights` 时先查 `echo $HTTPS_PROXY`，多半是代理没设，不是权限问题。
+
 ## Slurm 作业提交
 
 账号上限：在队作业最多 70 个、总核数最多 70×128 = 8960（`sacctmgr show assoc user=$USER`）。多节点作业同样占这个上限，规划并发时按“作业数 × 每作业节点数 ≤ 70”估算。

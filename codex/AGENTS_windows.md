@@ -12,7 +12,7 @@
 
 Windows 10，bash (git-bash/MSYS)。CentOS HPC 平台上，命令缺失或版本过旧时先检查 `module avail`。
 
-zcm6 出网走 `ssh zcm6-proxy` 建立的反向隧道（本地 7897 → zcm6 37897），由开机自启的 `pei_ssh_univ_keep_zcm6_proxy`（右下角托盘图标，单击显示隐藏的 zcm6-proxy mintty 窗口）维持并自动重连。不要手动 `ssh zcm6-proxy`，会和它抢端口；外网不通时先用 `ps -ef | grep keep_zcm6` 确认它还在跑。交互式登录由 `~/.bash_soft_env` 设好 `http_proxy`，但 `ssh zcm6 <命令>` 这类非交互调用不会加载它，需自己 `export http_proxy=http://127.0.0.1:37897 https_proxy=http://127.0.0.1:37897`，否则外网请求会静默超时而不是报错。
+zcm6 出网走 `ssh zcm6-proxy` 建立的反向隧道（本地 7897 → zcm6 37897），由开机自启的 `pei_ssh_univ_keep_zcm6_proxy`（右下角托盘图标，单击显示隐藏的 zcm6-proxy mintty 窗口）维持并自动重连。不要手动 `ssh zcm6-proxy`，会和它抢端口；外网不通时先用 `ps -ef | grep keep_zcm6` 确认它还在跑。交互式登录由 `~/.bash_soft_env` 设好 `http_proxy`，但 `ssh zcm6 <命令>` 这类非交互调用不会加载它，需自己 `export http_proxy=http://127.0.0.1:37897 https_proxy=http://127.0.0.1:37897 HTTPS_PROXY=http://127.0.0.1:37897`，否则外网请求会静默超时而不是报错。大写 `HTTPS_PROXY` 不能省：zcm6 上 `git pull/push` 走 ssh 连 GitHub，`~/.ssh/config` 的 ProxyCommand 只读它，漏设时报 `Please make sure you have the correct access rights`，看着像权限问题。
 
 zcm6 上的软件装到 `~/mysoft/tools/<name>/<version>/`，再在 `~/.bash_soft_env` 照已有条目加一行带注释的 `export PATH=...`。不要跑会改 `~/.bashrc` 的官方安装脚本，直接下载发布包并核对 sha256。系统是 CentOS 7（glibc 2.17、内核 3.10），新版二进制可能跑不起来，优先选静态或 musl 构建，装完实测 `--version`。
 
