@@ -8,7 +8,6 @@ mkdir -p "$codex_home"
 mkdir -p "$codex_home/skills/p-skill-installer/agents"
 
 cp -p "$repo_root/codex/config.toml" "$codex_home/config.toml"
-cp -p "$repo_root/codex/AGENTS.md" "$codex_home/AGENTS.md"
 cp -p "$repo_root/skills/p-skill-installer/SKILL.md" "$codex_home/skills/p-skill-installer/SKILL.md"
 cp -p "$repo_root/skills/p-skill-installer/agents/openai.yaml" "$codex_home/skills/p-skill-installer/agents/openai.yaml"
 

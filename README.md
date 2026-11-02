@@ -6,7 +6,7 @@
 
 - `AGENTS.md`：本仓库的协作和更新规则。
 - `codex/config.toml`：`~/.codex/config.toml` 的仓库副本。
-- `codex/AGENTS.md`：`~/.codex/AGENTS.md` 的仓库副本，用于保存 Codex 全局说明。
+- `codex/AGENTS_<device>.md`（`windows`、`zcm6`）：各设备 Claude Code 与 Codex 共用的全局指令上游。`~/.claude/CLAUDE.md`、`~/.codex/AGENTS.md` 都是指向它的软链，直接改这里并提交。新设备：`ln -s <repo>/codex/AGENTS_<device>.md ~/.codex/AGENTS.md`（`~/.claude/CLAUDE.md` 同理）；Windows 在管理员 PowerShell 里用 `New-Item -ItemType SymbolicLink -Path <link> -Target <repo>\codex\AGENTS_windows.md`，git-bash 的 `ln -s` 默认只会复制。
 - `skills/`：本仓库维护的自定义 Codex skills。
 - `skills-using/root/`：跨项目通用、适合用户级安装的 skill 源码；保存在这里不等于已经安装。
   **用户级 skill 只从这里安装**，不从其他仓库装。其中 `p-literature-download` 由
@@ -14,7 +14,7 @@
 - `skills-using/project/*/explicit/`：只通过 `$skill-name` 显式调用的项目级 skills。
 - `skills-using/project/*/implicit/`：可按任务语义自动匹配的项目级 skills。
 - `claude/agents/`：Claude Code 用户级 subagent 的上游；安装副本在 `~/.claude/agents/`，先改这里再手动复制过去（`pei_ai_univ_reinstall` 不管这个目录）。
-- `scripts/copy-codex-files.sh`：将 `~/.codex` 中的 `AGENTS.md` 和 `config.toml` 复制到本仓库的 `codex/` 目录。
+- `scripts/copy-codex-files.sh`：将 `~/.codex` 中的 `config.toml` 复制到本仓库的 `codex/` 目录。
 - `scripts/restore-codex-files.sh`：从本仓库将 Codex 配置恢复到 `~/.codex`。
 - `scripts/pei_ai_univ_reinstall`：从本仓库的 `skills-using/` 安装 skills。`-root` 装 `skills-using/root/`，`-project <域>...` 装 `skills-using/project/<域>/`，`-global` 装成用户级（不给则装进当前项目），`-clean` 先清空，`-list` 只列不装。
 - `scripts/sync-hermes-generated-skills.sh`：将明确指定的 Hermes 自生成 skill 归档到仓库，不提供反向安装。
@@ -40,13 +40,13 @@ policy:
 
 ### 从当前 Codex 环境同步
 
-在修改 `~/.codex/AGENTS.md` 或 `~/.codex/config.toml` 后，从仓库根目录运行：
+在修改 `~/.codex/config.toml` 后，从仓库根目录运行：
 
 ~~~bash
 ./scripts/copy-codex-files.sh
 ~~~
 
-这会更新 `codex/AGENTS.md` 和 `codex/config.toml`。
+这会更新 `codex/config.toml`。全局指令走软链，不需要复制。
 
 ### 恢复到 Codex 环境 (慎重，最好手动检查差异)
 

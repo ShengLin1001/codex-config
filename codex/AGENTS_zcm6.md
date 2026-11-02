@@ -45,7 +45,7 @@ zcm6 上的软件装到 `~/mysoft/tools/<name>/<version>/`，再在 `~/.bash_sof
 
 用户级 skill 的上游是 `~/mysoft/pei/codex-config/skills-using/`；`~/.claude/skills`、`~/.agents/skills` 只是安装副本，重装即覆盖。改 skill 先改上游，再同步到安装副本。
 
-全局指令的上游是 `~/mysoft/pei/codex-config/codex/AGENTS_zcm6.md`；`~/.claude/CLAUDE.md` 是指向它的软链。改全局指令直接改上游文件，不要编辑软链路径（有些工具保存时会把软链换成普通文件），改完在 `codex-config` 提交。
+全局指令的上游是 `~/mysoft/pei/codex-config/codex/AGENTS_zcm6.md`；`~/.claude/CLAUDE.md`、`~/.codex/AGENTS.md` 都是指向它的软链。改全局指令直接改上游文件，不要编辑软链路径（有些工具保存时会把软链换成普通文件），改完在 `codex-config` 提交。
 
 ## 交付文档命名
 
