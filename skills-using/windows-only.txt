@@ -10,3 +10,4 @@ officecli
 p-research-diagram
 p-vscode-zcm6-upgrade
 p-claude-toolchain-upgrade
+p-windows-desktop

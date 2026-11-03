@@ -28,6 +28,7 @@
 | p-code-style | 写 / 改 PJ 脚本类代码前，含一行小修（`ALWAYS invoke BEFORE`） |
 | p-git-commit | 写 commit message 前（`ALWAYS invoke BEFORE`） |
 | p-edge-browser | 用 Playwright MCP 浏览器前，或 WebFetch 失败 / 需登录态、点击、填表、下载时（`ALWAYS invoke BEFORE`） |
+| p-windows-desktop | 第一次调用 windows-mcp 操作桌面前（`ALWAYS invoke BEFORE`）；仅 Windows |
 | p-plot-figure | 写 / 改 matplotlib 绘图代码前（`ALWAYS invoke BEFORE`） |
 | p-article-latex | 写 / 转换 / 改期刊稿件 LaTeX 前，含小改版式、去色、重编译（`ALWAYS invoke BEFORE`） |
 | officecli | 读 / 改 / 新建 .docx/.xlsx/.pptx；仅 Windows，格式细则由 `officecli load_skill pptx\|word\|excel` 按需输出 |

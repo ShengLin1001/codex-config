@@ -24,11 +24,7 @@ Windows 软件（安装包、便携 exe）装到 `D:\software\<AppName>\`，不�
 
 按顺序选，前一级够用就停：命令行或 API（PowerShell、IMAP 等）→ 网页走 `p-edge-browser` → 桌面应用走 `windows-mcp`（`mcp__windows-mcp__*`，按 UI Automation 元素名称和坐标操作）→ 截图找坐标只作兜底。
 
-- 操作前先把其他 app 全部最小化，只留目标窗口：后面的窗口会占满 Snapshot 的元素名额和输出，点击也可能落到别的窗口上。
-- 用户一碰鼠标或键盘，windows-mcp 所有工具（包括 `Wait`）都会返回 `USER_CONTROL`，用户静止 10 秒后才恢复。操作期间请用户别碰鼠标键盘；需要等待时用 PowerShell 的 `Start-Sleep`。
-- `App` 的 `switch` 找不到最小化的窗口：先 Snapshot 任务栏，再点它的任务栏按钮。目标窗口已在前台时再点会把它最小化。
-- WebView2 应用（如新版 Outlook）第一次读 UI Automation 只能拿到外壳，几秒后再读。
-- 每步操作后用窗口标题或 Snapshot 核验结果。
+第一次调用 `windows-mcp` 前先加载 `p-windows-desktop`：接管、调窗、核验、收尾的顺序和陷阱都在里面。
 
 ## 文件读写
 
