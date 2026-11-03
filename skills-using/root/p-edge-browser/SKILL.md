@@ -16,7 +16,8 @@ description: "ALWAYS invoke BEFORE using the mcp__playwright__browser_* tools. U
 ## 连接
 
 - 工具是 `mcp__playwright__browser_*`，经 Playwright Extension 接管用户**日常 Edge**（带全部登录态），token 免确认。
-- 连不上时先跑 `bash scripts/check-conn.sh`，它会直接告诉你是哪一类故障。**浏览器任务进行中别跑**——扩展同时只服务一个客户端，会把当前连接挤掉。
+- 连不上时先跑 `bash scripts/check-conn.sh`，它会直接告诉你是哪一类故障；它另起一个客户端，不影响当前会话的连接。
+- MCP 配置 args 带 `--init-page <skill 目录>/scripts/agent-indicator.cjs` 时，接管的标签页有橙色呼吸边框，点击 / 悬停前光晕光标移到目标并高亮它（每个动作多约 0.5s）。看不到这些效果就查这条参数；脚本出错会被吞掉，不影响操作。
 - 脚本没覆盖到的，查 `~/.claude.json` → `mcpServers.playwright`：
   - 报 `Extension not found in ...Google\Chrome` → args 缺 `--browser msedge`。
   - 扩展页报 `Failed to connect to MCP relay: WebSocket error` → env 缺 `NODE_OPTIONS=--dns-result-order=ipv4first`（本机 IPv6 回环被拦，relay 默认听 `[::1]`）。
@@ -28,6 +29,14 @@ description: "ALWAYS invoke BEFORE using the mcp__playwright__browser_* tools. U
 - 自己新开的标签页用完关闭；不动用户原有标签页。
 - 点击、填表、下载可直接做；**提交不可撤回的内容**（投稿、付款、发送消息、删除）前先向用户确认。
 - 文献下载优先用 `$p-literature-download`（批量、按 DOI、带重试）；本 skill 只处理零星单篇。
+
+## 多会话并行
+
+扩展（≥ 0.5.0）允许多个会话同时接管：每个会话的标签页在各自颜色的标签组里，互相看不到也抢不到。仍然共享的有：
+
+- **登录态**：同一个 Edge profile、同一份 cookie。不要登出或切换账号，否则其他会话一起掉线。
+- **站点访问量**：多个会话同时批量访问同一站点（如同一出版商下载文献）更容易触发人机验证或限流，改为一个会话做。
+- **前台弹窗**：每次建立连接都会把 Edge 拉到前台一次——MCP 是靠启动 `msedge.exe` 打开连接页来连的，无法静默。会话关掉自己全部标签页后连接即断，再用会重连再弹，所以任务中途别把自己的标签页全关掉。
 
 ## 登录
 

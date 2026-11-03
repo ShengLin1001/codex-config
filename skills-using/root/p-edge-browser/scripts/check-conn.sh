@@ -4,8 +4,8 @@
 #
 # 用法：bash scripts/check-conn.sh
 #
-# ⚠️ 它会另起一个 relay。扩展同一时刻只服务一个客户端，所以别在浏览器任务进行中
-# 跑它——会把 Claude Code 当前会话的连接挤掉。
+# 它会另起一个 MCP 客户端。扩展 ≥ 0.5.0 允许多个客户端并行，不会挤掉当前会话的
+# 连接（2026-11-03 实测）；但连接时 Edge 会被拉到前台一次。
 set -u
 
 path_cfg="${USERPROFILE:-$HOME}/.claude.json"
@@ -29,9 +29,14 @@ echo "✅ token 已读到（${#token} 字符，不回显）"
 req='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"check-conn","version":"1"}}}
 {"jsonrpc":"2.0","method":"notifications/initialized"}
 {"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"browser_navigate","arguments":{"url":"https://example.com"}}}'
+# 扩展断开时不会替我们关标签页，退出前自己关掉，不留给用户收拾
+req_close='{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"browser_tabs","arguments":{"action":"close"}}}'
+
+# MCP 没给 --output-dir 时把快照写进 cwd 的 .playwright-mcp/，换到临时目录免得弄脏调用处
+cd "$(mktemp -d)" || exit 1
 
 echo "================ ▶️ 拉起临时 MCP 并打开 example.com（最多 40s）"
-out=$( { printf '%s\n' "$req"; sleep 40; } | \
+out=$( { printf '%s\n' "$req"; sleep 35; printf '%s\n' "$req_close"; sleep 5; } | \
   PLAYWRIGHT_MCP_EXTENSION_TOKEN="$token" \
   NODE_OPTIONS=--dns-result-order=ipv4first \
   npx -y @playwright/mcp@latest --extension --browser msedge 2>&1 | grep -v '^npm notice' )

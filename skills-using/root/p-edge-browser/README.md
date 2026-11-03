@@ -16,7 +16,8 @@ MCP 配置（`~/.claude.json` → `mcpServers.playwright`），token 在 Edge �
 ```json
 {
   "command": "npx",
-  "args": ["-y", "@playwright/mcp@latest", "--extension", "--browser", "msedge"],
+  "args": ["-y", "@playwright/mcp@latest", "--extension", "--browser", "msedge",
+           "--init-page", "<skill 目录绝对路径>/scripts/agent-indicator.cjs"],
   "env": {
     "PLAYWRIGHT_MCP_EXTENSION_TOKEN": "<扩展状态页生成的 43 字符 token>",
     "NODE_OPTIONS": "--dns-result-order=ipv4first"
@@ -26,6 +27,8 @@ MCP 配置（`~/.claude.json` → `mcpServers.playwright`），token 在 Edge �
 
 `NODE_OPTIONS` 不是可选项：relay 硬编码监听 `localhost`，Node 24 解析成 `[::1]`，本机 IPv6 回环被拦时扩展报 `Failed to connect to MCP relay: WebSocket error`，且失败完全静默。
 
+`--init-page` 可选：给接管的标签页加橙色边框和光晕光标。路径指向的文件不存在时 MCP 整个起不来，重装 skill 改了位置要同步改这里。
+
 ## 目录
 
 | 路径 | 说明 |
@@ -33,6 +36,7 @@ MCP 配置（`~/.claude.json` → `mcpServers.playwright`），token 在 Edge �
 | `SKILL.md` | skill 本体：何时用、连接排障、操作规范、人机验证分流 |
 | `scripts/turnstile-click.js` | 拟人轨迹点击 Cloudflare Turnstile，由 `browser_run_code_unsafe` 执行 |
 | `scripts/check-conn.sh` | 一条命令回答"浏览器通不通"，直接报出是哪类故障 |
+| `scripts/agent-indicator.cjs` | `--init-page` 脚本：接管标签页的橙色呼吸边框、光晕光标、目标高亮 |
 | `references/site-notes.md` | 站点经验，只追加：哪个站会质询、怎么过的 |
 | `ai-guide/reports/` | 开发记录：接入方案的实测、踩坑与最终取舍 |
 
