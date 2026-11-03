@@ -22,7 +22,7 @@ description: "ALWAYS invoke BEFORE the first mcp__windows-mcp__* call that click
 3. **单独调出目标窗口**：已有窗口用 `App switch`，name 写完整窗口标题，它会把窗口从最小化还原并核验前台；新程序先 `App launch`，再 `App switch` 一次。
 4. **核验**：再跑一次脚本，前台的 pid 和标题对上才继续，并记下矩形。之后所有坐标都要落在这个矩形里。
 5. **操作**：核验过就连续下发，不必每步截图。`Type` 带 `loc` 时会先点击该点，把焦点拉回目标；`Shortcut` 会发给当前前台窗口，发之前要确认前台。弹出新窗口或对话框、或者任何调用报错后，回到第 4 步。
-6. **收尾**：按 PID 关掉自己开的进程（自己开的 Notepad 用 `Stop-Process` 直接关，不会弹保存框）。用 PowerShell 跑 `(New-Object -ComObject Shell.Application).UndoMinimizeALL()` 还原窗口，它不需要接管，用户中途抢回桌面也能用。最后再跑一次脚本，和第 1 步的结果对照。
+6. **收尾**：按 PID 关掉自己开的进程（自己开的 Notepad 用 `Stop-Process` 直接关，不会弹保存框）。用 PowerShell 跑 `(New-Object -ComObject Shell.Application).UndoMinimizeALL()` 还原窗口，它不需要接管，用户中途抢回桌面也能用。最后再跑一次脚本，和第 1 步的结果对照。还原后前台可能换成别的窗口：仍在控制期就用 `App switch` 切回第 1 步的前台窗口，否则告诉用户。
 
 ## 陷阱
 
