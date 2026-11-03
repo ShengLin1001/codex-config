@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Archive Bot Deploy"
+  short_description: "部署、排障和扩展 VPS 上的 cc-connect 归档 bot（Discord/微信/飞书/Telegram）"
+  default_prompt: "Use $p-archive-bot-deploy to check or change the archive bot on the VPS."

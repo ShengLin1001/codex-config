@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Literature Queue"
+  short_description: "在 PC 端处理归档 bot 留下的待下载文献：下载、补 BibTeX、写总结"
+  default_prompt: "Use $p-literature-queue to list and process queued literature in this repo."

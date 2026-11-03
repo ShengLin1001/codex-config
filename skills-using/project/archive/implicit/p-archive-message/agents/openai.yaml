@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Archive Message"
+  short_description: "把转发的消息、文献、想法和工具归档进 cc-conect-summary 并推送"
+  default_prompt: "Use $p-archive-message to archive this forwarded message into the repo."

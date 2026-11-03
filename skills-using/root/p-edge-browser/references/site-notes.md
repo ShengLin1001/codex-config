@@ -83,3 +83,13 @@ submission-guidelines 也 404；作者指引在 `/srep/author-instructions`
 **2026-10-18** Reddit 会用 cookie（`loid` / `csv` / `edgebucket`）记住从机房 IP 被拦过的浏览器，
 换成能放行的出口后要删这几个 cookie 才恢复。学术「每次都要验证」先查站点 cookie 是否被屏蔽
 （Preferences `profile.content_settings.exceptions.cookies` 值 2），不是代理问题。
+
+## discord.com/developers（Developer Portal）与 discord.com/oauth2/authorize
+
+**2026-11-03** 新建 bot 应用、改设置、把 bot 拉进服务器：
+
+- 「创建 APP」和 OAuth「授权」两步都弹 **hCaptcha**，按「直接交人」处理，用户点完即放行。
+- 条款复选框、Privileged Intent 开关：`click` 被 label/stack 遮挡超时，`force` 和 `mouse.click` 也不切换状态；**`focus()` 后按 `Space`** 能切换，切换后底部会出现「保存更改」。
+- 关「公开 APP」时保存报「私密 APP 无法拥有默认授权关联」：要先去「安装」页把默认安装链接设成 None。
+- 重置令牌会再弹一次多重认证（Edge 自动填好密码，点「提交」即可）；新 token 只显示一次。**读取 token 不要截图或 evaluate 出原文**，点页面里的「复制」后由 shell 从剪贴板直接写入目标文件。
+- OAuth 授权页在后台标签页里一直白屏（innerText 为空），先 `page.bringToFront()` 才会渲染。
