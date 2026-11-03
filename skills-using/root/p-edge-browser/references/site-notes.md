@@ -93,3 +93,13 @@ submission-guidelines 也 404；作者指引在 `/srep/author-instructions`
 - 关「公开 APP」时保存报「私密 APP 无法拥有默认授权关联」：要先去「安装」页把默认安装链接设成 None。
 - 重置令牌会再弹一次多重认证（Edge 自动填好密码，点「提交」即可）；新 token 只显示一次。**读取 token 不要截图或 evaluate 出原文**，点页面里的「复制」后由 shell 从剪贴板直接写入目标文件。
 - OAuth 授权页在后台标签页里一直白屏（innerText 为空），先 `page.bringToFront()` 才会渲染。
+
+## discord.com/channels（服务器、频道、身份组设置）
+
+**2026-11-03** 改服务器名和图标、频道名和话题、身份组颜色、类别权限：
+
+- **上传图片**：`setInputFiles` 超时；点按钮触发的 file chooser 用 `browser_file_upload` 设文件后页面没反应，而且每点一次都排队一个 chooser，要逐个空调用 `browser_file_upload` 取消。用 `scripts/make-upload-js.py` 生成内嵌文件的 JS，再用 `browser_run_code_unsafe` 的 `filename` 执行，会弹出裁剪框，点「应用」→「保存更改」。
+- 侧栏频道的齿轮「编辑频道」一直等不到 stable，`click` 会超时：先选中频道，再对齿轮按钮 `focus()` + `Enter`；或者点频道欢迎区里的「编辑频道」按钮（服务器默认频道没有这个按钮）。焦点不在按钮上时按 Enter 会触发顶部「下载 APP」横幅，多开一个下载页。
+- 频道话题是 Slate 富文本，不是 textarea。定位时限定在 `getByRole('dialog', {name: '频道设置'})` 里，否则会命中底下的消息输入框；点进去后用 `keyboard.insertText`。
+- 第一次打开「服务器设置」或频道设置要懒加载 2–3 s，先等再找元素。身份组列表的文字在预览里有隐藏副本，用 `getByText(..., {exact: true}).filter({visible: true})`。
+- bot 的托管身份组可以改名和改颜色，色块按钮的 aria-label 就是色号（`button[aria-label="#3498db"]`）。零权限邀请的 bot 没有托管身份组。

@@ -5,7 +5,7 @@ description: ALWAYS invoke BEFORE deploying, restarting, reconfiguring or extend
 
 # 归档 bot 部署与运维
 
-现状：`ssh vultr-lax`，用户 `ccbot`，systemd 服务 `cc-connect-archive`，配置 `~ccbot/.cc-connect/config.toml`，密钥在同目录 `*.env`（600），仓库 `~ccbot/cc-conect-summary`。
+现状：`ssh vultr-lax`，用户 `ccbot`，systemd 服务 `cc-connect-archive`，配置 `~ccbot/.cc-connect/config.toml`，密钥在同目录 `*.env`（600），仓库 `~ccbot/cc-conect-summary`。Discord 上显示名是「银月」（App 本名 `cc-connect-archive`），服务器「黄枫谷」，在 `#🏯藏经阁` 里不用 @ 就会回复。
 
 ## 硬约束
 
@@ -48,5 +48,6 @@ printf ' ' > /dev/clipboard
 ## 排障
 
 - **bot 收不到消息**：先把 `[log] level` 改成 `"debug"` 再重启，然后看日志。debug 下被丢弃的原因都会打出来：`without bot mention`（服务器频道里必须 @bot，或者开 `group_reply_all`）、`unauthorized user`（`allow_from` 填错了）。排查完改回 `"info"`。
+- **只想在一个频道里免 @**：cc-connect 只能按服务器开（`group_reply_all_guilds = "<guild_id>"`），没有按频道的开关。所以 bot 能看到哪些频道要靠 Discord 权限限制：在「宗门」类别上给 bot 的身份组设「查看频道 ✕」，子频道同步继承；`#🏯藏经阁` 放在类别外面。新建频道放进类别里，bot 就看不到。核对方法：用 bot token 请求 `GET /channels/<id>/messages?limit=1`，看不到的频道返回 403 `Missing Access`。
 - **Discord 私聊发不出去**：bot 和用户必须在同一个服务器里，所以先用 OAuth 链接把 bot 拉进服务器。
 - **完成判据**：日志里出现 `message received`，然后出现 `turn response`；同时仓库 `git log` 里有 bot 的归档提交。

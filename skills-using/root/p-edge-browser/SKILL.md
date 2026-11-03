@@ -29,6 +29,7 @@ description: "ALWAYS invoke BEFORE using the mcp__playwright__browser_* tools. U
 - 自己新开的标签页用完关闭；不动用户原有标签页。
 - 点击、填表、下载可直接做；**提交不可撤回的内容**（投稿、付款、发送消息、删除）前先向用户确认。
 - 文献下载优先用 `$p-literature-download`（批量、按 DOI、带重试）；本 skill 只处理零星单篇。
+- 上传本地文件：扩展模式下 `setInputFiles` 和 `browser_file_upload` 都可能无效。这时用 `scripts/make-upload-js.py` 生成内嵌文件的 JS，交给 `browser_run_code_unsafe` 的 `filename` 执行。
 
 ## 多会话并行
 
