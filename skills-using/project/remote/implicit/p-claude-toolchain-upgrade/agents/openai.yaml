@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Claude Toolchain Upgrade"
+  short_description: "检查并升级 Windows 与 zcm6 上的 Claude Code 工具链"
+  default_prompt: "Use $p-claude-toolchain-upgrade to check which parts of the Claude Code toolchain on Windows and zcm6 need upgrading."
