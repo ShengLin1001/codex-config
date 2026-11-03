@@ -24,8 +24,8 @@ description: ALWAYS invoke BEFORE checking or upgrading the Claude Code toolchai
 | 组件 | 升级方式 | 坑 |
 |---|---|---|
 | Claude Code CLI | 两端自动更新，不用管 | 长会话提示 `/restart to apply` 后才用上新版；`happy` 启动的会话设了 `DISABLE_AUTOUPDATER=1`；`~/.claude.json` 的 `autoUpdates: false` 是残留字段，别改；`Auto-update failed` 多半是旧会话占着文件，退出旧会话即可 |
-| VS Code 扩展（仅 Windows） | VS Code 的 `extensions.autoUpdate` 是 `"off"`，扩展只靠 CLI 升级时顺带安装，常失败而落后 | 手动补装：`env -u HTTP_PROXY -u HTTPS_PROXY -u http_proxy -u https_proxy code --install-extension anthropic.claude-code --force`（bash 的代理变量会让 `code` 报 `BAD_DECRYPT`），或在 VS Code 扩展面板里点更新 |
-| claude-hud、ponytail | `claude plugin marketplace update <m>` → `claude plugin update <p>@<m>` | 有没有新版要看 marketplace 克隆里的 `.claude-plugin/plugin.json` / `package.json`，`plugin list` 只显示已装版本。ponytail 的 Windows 本地补丁升级会丢，照清单 2.3 重打。claude-hud 升级后必须做 statusLine 验收（清单 2.3），并确认 `~/.claude/plugins/claude-hud/config.json` 的显示项仍生效 |
+| VS Code 扩展（仅 Windows） | VS Code 全局 `extensions.autoUpdate` 是 `"off"`，只给 Claude Code 扩展单独勾了 Auto Update；另外 CLI 升级时也会顺带装一次，但常失败 | 版本落后 CLI 时手动补装：`env -u HTTP_PROXY -u HTTPS_PROXY -u http_proxy -u https_proxy code --install-extension anthropic.claude-code --force`（bash 的代理变量会让 `code` 报 `BAD_DECRYPT`），或在 VS Code 扩展面板里点更新 |
+| claude-hud、ponytail | 每端各跑 `claude plugin marketplace update <m>` → `claude plugin update <p>@<m>` | 有没有新版要看 marketplace 克隆里的 `.claude-plugin/plugin.json` / `package.json`，`plugin list` 只显示已装版本。ponytail 的 Windows 本地补丁升级会丢，照清单 2.3 重打。claude-hud 升级后必须做 statusLine 验收（清单 2.3），并确认 `~/.claude/plugins/claude-hud/config.json` 的显示项仍生效 |
 | windows-mcp | `uv pip install --python D:/software/Windows-MCP/.venv/Scripts/python.exe -U windows-mcp`，重启 Claude Code | 只装在 Windows |
 | Playwright MCP | `npx @latest` 每次启动自动拉 | 是否固定版本仍待用户决定 |
 | skills CLI | `npm i -g skills@latest` | 要求 Node ≥ 22.20；验收用 `npx --yes skills list -g --agent claude-code` |
