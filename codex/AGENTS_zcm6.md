@@ -27,8 +27,10 @@ zcm6 上的软件装到 `~/mysoft/tools/<name>/<version>/`，再在 `~/.bash_sof
 
 监控作业统一在 `~/mywork/monitor/<engine>/`（`vasp`、`lammps`、`n2p2` 等，每个引擎一个子目录）里提交 `sub.monitor.sh`，`slurm-*.out` 就落在同一个目录。
 
-- VASP 用通用监控 `pei_vasp_univ_monitor_error`（`-h` 看用法）：stdout 一旦出现 `errorkeywords` 里的关键词就 `scancel`。队列里已经没有 RUNNING / PENDING 作业时它会自行退出，所以要等计算作业入队后再提交。
-- 发现监控没拦住、作业报错后仍在空跑浪费机时的情况，先向用户说明报错特征和拟加入的关键词，用户同意后再改监控脚本源码，并在 `pjvasp_package` 提交。其他引擎还没有通用监控，要新写一个也先征得同意。
+- 每次提交 VASP 作业，等作业入队后都要确认监控在队：`squeue -u $USER -h -n sub.monitor.sh` 输出为空时，进 `~/mywork/monitor/vasp/` 用 `pei_slurm_univ_sbatch_retry sub.monitor.sh` 提交。它运行 `pei_vasp_univ_monitor_error`（`-h` 看用法），每 60 s 扫一遍本用户所有作业的 stdout，命中 `errorkeywords` 就 `scancel`；队列里只剩它自己时会自行退出，所以不能只在第一批作业时提交一次。
+- 同一时间只保留一个监控：每个监控只跳过自己的作业号，两个同时在队时会把对方当成在跑的作业，谁都不会退出。
+- 发现监控没拦住、作业报错后仍在空跑浪费机时的情况，先向用户说明报错特征和拟加入的关键词，用户同意后再改监控脚本源码，并在 `pjvasp_package` 提交。
+- 其他引擎还没有通用监控：作业开始运行后，先看 stdout 的前几步，确认正常再交差；要新写监控脚本，也先征得用户同意。
 
 ## 材料计算工作流
 
