@@ -1,6 +1,6 @@
 ---
 name: p-claude-toolchain-upgrade
-description: ALWAYS invoke BEFORE checking or upgrading the Claude Code toolchain on Windows or zcm6 — CLI, VS Code extension, plugins, MCP servers, codex-config skills/agents/hooks, cc-connect, Happy, claude-sessions — or re-aligning zcm6 with Windows. Do NOT update or reconfigure any of these without loading this skill first. 触发：检查 Claude 配置要不要升级、升级插件/MCP/扩展、按维护清单检查、扩展版本和 CLI 不一致、HUD 显示不对、zcm6 与 Windows 对齐、skill 安装副本漂移。
+description: ALWAYS invoke BEFORE checking or upgrading the Claude Code toolchain on Windows or zcm6 — CLI, VS Code extension, plugins, MCP servers, codex-config skills/agents/hooks, cc-connect, Happy, claude-sessions, Claude-Code-Usage-Monitor — or re-aligning zcm6 with Windows. Do NOT update or reconfigure any of these without loading this skill first. 触发：检查 Claude 配置要不要升级、升级插件/MCP/扩展、按维护清单检查、扩展版本和 CLI 不一致、HUD 显示不对、usage monitor 任务栏小部件显示或位置不对、zcm6 与 Windows 对齐、skill 安装副本漂移。
 ---
 
 # Claude 工具链检查与升级（Windows + zcm6）
@@ -33,8 +33,13 @@ description: ALWAYS invoke BEFORE checking or upgrading the Claude Code toolchai
 | cc-connect | 把 fork 分支 `fix/discord-askq-2157` 合到新 tag 再编译（见 phone README） | **禁止** `cc-connect update` 和 IM 里的 `/upgrade`：会升到官方 v1.5.0，bypass 下会自动替你答选择题 |
 | Happy | `npm install --prefix` 到新版本目录，再跑 `happy-patch-dist.sh`（清单 2.9） | **禁止** `npm i -g happy@latest`、`npm update`（会覆盖补丁）和 `happy connect claude`（会交出 Claude 凭据） |
 | claude-sessions | fork 分支 rebase 到新 tag，重编 GUI 版和 zcm6 musl 版（清单 2.5） | 不用 `install-app`（会装到 C 盘） |
+| Claude-Code-Usage-Monitor（仅 Windows） | `gh release download` 新版 exe 并核对 sha256 → `taskkill //IM claude-code-usage-monitor.exe` → 换掉 `D:\software\Claude-Code-Usage-Monitor\` 下的 exe → `wscript D:\software\Claude-Code-Usage-Monitor\start-with-proxy.vbs` 重启 | 用的是自建主题副本，升级不会更新它，见下 |
 
 **claude-hud 只显示 5 小时额度、不显示周额度**：不是坏了。周额度默认要到 `display.sevenDayThreshold`（默认 80%）才显示；要常显，在 `config.json` 的 `display` 里设 `"sevenDayThreshold": 0`。
+
+**Usage Monitor 隐藏了 Fable 周额度**：`%APPDATA%\ClaudeCodeUsageMonitor\settings.json` 的 `active_theme_path` 指向自建主题 `themes\classic-no-fable.json`，它是内置 `classic-usage-widget.json` 的副本。程序设置里没有隐藏单个额度的开关。升级后先 diff 内置主题；有变化就重新复制，再做三处改动：顶部 `id`、`name` 改名；`fable-provider` 层的 `render` 改成 `"0"`；`surfaces[0].width` 删掉末尾的 `+ providers.claude.enabled * claude.model.fable.available * 93`。改 `settings.json` 前先停进程，它运行时会回写这个文件。
+
+**Usage Monitor 被拖离任务栏后回不去**：停进程，删掉 `settings.json` 里的 `placement_override`，再启动，它就停回托盘左侧（上游测试也用这个方法复位）。托盘左侧要留有空位：TrafficMonitor 已设成 `task_bar_wnd_on_left = true`，不要改回右侧。
 
 ## zcm6 操作
 
