@@ -23,6 +23,13 @@ zcm6 上的软件装到 `~/mysoft/tools/<name>/<version>/`，再在 `~/.bash_sof
 - 首选通用提交引擎 `pei_slurm_univ_submit.py`（`-list_presets` 看预设；默认只生成脚本，加 `-if_sbatch` 才提交）。它自带在队闸门（65）、去重和失败重试。工作流只建目录，提交另走它。
 - 通用引擎确实表达不了时，才直接提交现成的 `sub.*`，且用 `pei_slurm_univ_sbatch_retry sub.*` 代替裸 `sbatch`，同样受闸门保护。
 
+## 作业监控
+
+监控作业统一在 `~/mywork/monitor/<engine>/`（`vasp`、`lammps`、`n2p2` 等，每个引擎一个子目录）里提交 `sub.monitor.sh`，`slurm-*.out` 就落在同一个目录。
+
+- VASP 用通用监控 `pei_vasp_univ_monitor_error`（`-h` 看用法）：stdout 一旦出现 `errorkeywords` 里的关键词就 `scancel`。队列里已经没有 RUNNING / PENDING 作业时它会自行退出，所以要等计算作业入队后再提交。
+- 发现监控没拦住、作业报错后仍在空跑浪费机时的情况，先向用户说明报错特征和拟加入的关键词，用户同意后再改监控脚本源码，并在 `pjvasp_package` 提交。其他引擎还没有通用监控，要新写一个也先征得同意。
+
 ## 材料计算工作流
 
 算物性（Cij、HOEC、EOS、stretch、NEB、GSFE、表面能、收敛测试等）先用已有工作流：`compgen -c | grep -E '^pei_(vasp|lmp)_run_'` 列出入口，`-h` 看用法，部分支持 `-calc vasp|lammps` 切换引擎；源码在 `~/mysoft/pei/pjvasp_package`。确需新增或扩充时，沿用同一目录布局和 `pei_vasp_run_*` / `pei_vasp_plot_*` 配对，代码按 `p-code-style`。
