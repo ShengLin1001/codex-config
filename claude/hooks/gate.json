@@ -8,5 +8,9 @@
   "_comment_command": "已知误报：`git commit --amend --no-edit` 沿用原 message，本不需要 skill，但也会被拦一次。代价是一次拦截，不值得为它加否定语法。",
   "command_gates": {
     "p-git-commit": ["*git commit*"]
+  },
+  "_comment_tool": "tool_gates 按工具名 glob 判，管 MCP 这类既不写文件也不跑 shell 的调用。新加的工具前缀还要并进 install_hook.py 的 MATCHER，否则 hook 根本不会被调用。",
+  "tool_gates": {
+    "p-windows-desktop": ["mcp__windows-mcp__*"]
   }
 }

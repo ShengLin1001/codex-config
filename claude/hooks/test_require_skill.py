@@ -137,5 +137,18 @@ code, err = run_hook("Bash", "", "s17", command="git commit -m 'x'")
 assert code == 2 and "p-git-commit" in err, (code, err)
 print("✅ marker 按 skill 分开，两道门互不吃额度")
 
-print("🎉 18/18 通过")
+# 19. windows-mcp 调用未加载 p-windows-desktop → 拦（工具名表）
+code, err = run_hook("mcp__windows-mcp__Click", "", "s18")
+assert code == 2 and "p-windows-desktop" in err and "mcp__windows-mcp__Click" in err, (code, err)
+print("✅ windows-mcp 调用未加载 p-windows-desktop 被拦")
+
+# 20. 已加载 p-windows-desktop → 放行；别的 MCP server 不受管
+code, err = run_hook("mcp__windows-mcp__Screenshot", "", "s19",
+                     transcript='{"name":"Skill","input":{"skill":"p-windows-desktop"}}\n')
+assert code == 0, (code, err)
+code, err = run_hook("mcp__playwright__browser_click", "", "s20")
+assert code == 0, (code, err)
+print("✅ p-windows-desktop 已加载放行，其他 MCP 不误拦")
+
+print("🎉 20/20 通过")
 ### to here

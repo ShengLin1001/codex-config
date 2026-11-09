@@ -40,7 +40,8 @@ LHOOK_FILE = ["require_skill.py", "gate.json"]
 # 这道门要盯的工具。shell 工具也在里面：heredoc / sed -i / tee 改代码文件，
 # 以及 `git commit` 这种命令门，都只有从这里看得见。
 # Windows 上主 shell 是 PowerShell，漏了它等于在本机把 shell 那半边门整个关掉。
-MATCHER = "Write|Edit|NotebookEdit|Bash|PowerShell"
+# MCP 工具按 gate.json 的 tool_gates 判；matcher 是正则，`.*` 盖住该 server 的全部工具。
+MATCHER = "Write|Edit|NotebookEdit|Bash|PowerShell|mcp__windows-mcp__.*"
 
 # 认注册项的标记：命令串里出现这个文件名就算是我们装的那条，重装时替换而不是追加。
 MARK_COMMAND = "require_skill.py"

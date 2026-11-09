@@ -2,8 +2,9 @@
 """PreToolUse 门：做受管动作前，若对应 skill 未加载则拦一次。
 
 对所有 skill 通用 —— 规则表在同目录 `gate.json`，加新 skill 只改那张表，不动本文件。
-两类规则：`gates` 按**写入目标路径**判，`command_gates` 按 **shell 命令**判
-（`git commit` 这种动作不写文件，路径那张表盖不住）。
+三类规则：`gates` 按**写入目标路径**判，`command_gates` 按 **shell 命令**判
+（`git commit` 这种动作不写文件，路径那张表盖不住），`tool_gates` 按**工具名**判
+（`mcp__windows-mcp__Click` 这类 MCP 调用既不写文件也不是 shell 命令）。
 
 设计取舍
 --------
@@ -122,6 +123,13 @@ def get_command_gated_skill(data, dict_cmd_gate):
             if any(fnmatch.fnmatch(command, pattern) for pattern in lpattern)]
 
 
+def get_tool_gated_skill(data, dict_tool_gate):
+    """工具名本身命中规则时要求的 skill（glob，如 `mcp__windows-mcp__*`）。"""
+    tool_name = str(data.get("tool_name") or "")
+    return [skill for skill, lpattern in dict_tool_gate.items()
+            if any(fnmatch.fnmatch(tool_name, pattern) for pattern in lpattern)]
+
+
 def get_loaded_skill(path_transcript, lcandidate):
     """从 transcript 里找已经真实调用过的 skill 名集合。"""
     if not path_transcript or not path_transcript.is_file():
@@ -154,6 +162,11 @@ lcmd_skill = get_command_gated_skill(data, get_gate_table(PATH_GATE, "command_ga
 if lcmd_skill:
     lhit.append(f"跑 {str((data.get('tool_input') or {}).get('command'))[:40]}")
     lrequired += [skill for skill in lcmd_skill if skill not in lrequired]
+
+ltool_skill = get_tool_gated_skill(data, get_gate_table(PATH_GATE, "tool_gates"))
+if ltool_skill:
+    lhit.append(f"调 {data.get('tool_name')}")
+    lrequired += [skill for skill in ltool_skill if skill not in lrequired]
 
 if not lrequired:
     sys.exit(0)
