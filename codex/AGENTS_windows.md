@@ -24,6 +24,8 @@ Windows 软件（安装包、便携 exe）装到 `D:\software\<AppName>\`，不�
 
 按顺序选，前一级够用就停：命令行或 API（PowerShell、IMAP 等）→ 网页走 `p-edge-browser` → 桌面应用走 `windows-mcp`（`mcp__windows-mcp__*`，按 UI Automation 元素名称和坐标操作）→ 截图找坐标只作兜底。
 
+命令行优先指不弹窗口的方式（cmdlet、注册表、API）。用 shell 打开 GUI 窗口（`Start-Process ms-settings:...`、`explorer`、`start`）或自己写 UI Automation 脚本驱动界面，同样算操作桌面：先用一句话告诉用户要打开什么，用完关掉自己开的窗口。
+
 第一次调用 `windows-mcp` 前先加载 `p-windows-desktop`：接管、调窗、核验、收尾的顺序和陷阱都在里面。
 
 ## 文件读写
