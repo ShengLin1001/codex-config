@@ -11,7 +11,7 @@ description: "ALWAYS invoke BEFORE the first mcp__windows-mcp__* call that click
 
 - 需要接管的调用（relaxed 策略）：`Click`、`Type`、`Scroll`、`Move`、`Shortcut`、`MultiSelect`、`MultiEdit`，以及 `App` 的 `switch` / `resize`。`Screenshot`、`Snapshot`、`PowerShell`、`App launch`、`Process` 不需要接管——正因如此，不能拿它们在获批前改变桌面。`ControlStatus` 可查 `state` 和 `policy`（strict 策略下全部要接管）。
 - 每段控制期的第一个需接管调用会先弹确认框（琥珀色边缘 + 10 秒倒计时），调用一直阻塞到有结果：点 Allow 或无人应答到倒计时结束 → 接管；点 Deny → `CONTROL_DENIED`；用户继续用电脑但不回答 → `USER_CONTROL`。
-- 控制期没有时限：两次调用之间思考多久都不会自动交还，蓝色光晕一直亮、用户的鼠标键盘一直被拦，直到 `ControlStatus` 带 `release=true` 交还、用户接管或 server 退出。所以要提问用户或交付结果时，先 release，再回复。
+- 控制期没有时限：两次调用之间思考多久都不会自动交还，蓝色光晕一直亮、用户的鼠标键盘一直被拦，直到 `ControlStatus` 带 `release=true` 交还、用户接管或 server 退出。所以要提问用户或交付结果时，先 release，再回复；接下来较长时间不操作桌面（等程序跑完、跑长命令或子 agent）也先 release，回来再重新接管，代价只是再弹一次确认框。
 - 许可持续到用户接管（大幅晃动鼠标或按 `Ctrl+Alt+Shift+Backspace`）为止，之后的调用会重新弹框。用户拒绝、无视确认框或从 AI 手里抢回桌面后，在他静止 10 秒之前，调用一律直接返回 `USER_CONTROL`，不再弹框。
 
 ## 流程
