@@ -43,7 +43,7 @@ description: ALWAYS invoke BEFORE checking or upgrading the Claude Code toolchai
 
 ## zcm6 操作
 
-- 先在 Windows 确认隧道：`ps -ef | grep keep_zcm6`。不要手动 `ssh zcm6-proxy`。
+- 先在 Windows 确认隧道（由浮屿的「SSH 代理隧道」插件维持）：`tasklist | grep -i fuyu`。不要手动 `ssh zcm6-proxy`。
 - 每条非交互命令开头加 `source ~/.bash_soft_env >/dev/null 2>&1`。漏了会出三种问题：外网静默超时；git 落到 1.8.3，`claude plugin marketplace add` 报 `unable to parse command-line config`；node 落到 `~/.local/bin` 的坏版本，报 `GLIBC_2.28 not found`。
 - 用 `grep -v "post-quantum\|store now\|openssh.com/pq"` 过滤 ssh 的警告。
 - 改 `~/.claude/settings.json` 前先 `cp -p` 备份。两端哪些照搬 Windows、哪些保留 zcm6 自己的，见清单 3.4。
