@@ -141,6 +141,19 @@ def get_loaded_skill(path_transcript, lcandidate):
             if f'"skill":"{skill}"' in text or f'"skill": "{skill}"' in text}
 
 
+def get_installed_skill(lskill, data):
+    """只留本机装了的 skill。zcm6 不装 windows-only 的 skill（如 officecli），
+    拦下来模型也加载不了，只会白挨一次拦。定不出 home 时不过滤，按旧行为拦。"""
+    try:
+        path_home = Path.home()
+    except RuntimeError:
+        return lskill
+    lpath_skill_root = [path_home / ".claude" / "skills",
+                        Path(data.get("cwd") or ".") / ".claude" / "skills"]
+    return [skill for skill in lskill
+            if any((path_root / skill).exists() for path_root in lpath_skill_root)]
+
+
 ### ================ main ================
 
 try:
@@ -172,7 +185,7 @@ if not lrequired:
     sys.exit(0)
 
 sloaded = get_loaded_skill(Path(data.get("transcript_path") or ""), lrequired)
-lmissing = [skill for skill in lrequired if skill not in sloaded]
+lmissing = get_installed_skill([skill for skill in lrequired if skill not in sloaded], data)
 if not lmissing:
     sys.exit(0)
 

@@ -9,9 +9,14 @@ from pathlib import Path
 
 PATH_HOOK = Path(__file__).resolve().parent / "require_skill.py"
 PATH_TMP = Path(tempfile.mkdtemp(prefix="skillgate-test-"))
+# 假 home：gate.json 里的 skill 都算"已安装"，officecli 例外，留给用例 23 测"未装不拦"。
+PATH_HOME = PATH_TMP / "home"
+for _skill in ["p-code-style", "p-plot-figure", "p-agent-doc-writing", "p-git-commit",
+               "p-windows-desktop", "p-article-latex"]:
+    (PATH_HOME / ".claude" / "skills" / _skill).mkdir(parents=True)
 
 
-def run_hook(tool_name, path_target, session_id, transcript="", command=""):
+def run_hook(tool_name, path_target, session_id, transcript="", command="", path_home=PATH_HOME):
     """跑一次 hook，返回 (returncode, stderr)。TEMP 指到临时目录，别污染真 marker。"""
     path_transcript = ""
     if transcript:
@@ -26,7 +31,8 @@ def run_hook(tool_name, path_target, session_id, transcript="", command=""):
     })
     proc = subprocess.run([sys.executable, str(PATH_HOOK)], input=payload,
                           capture_output=True, text=True, encoding="utf-8",
-                          env={"TEMP": str(PATH_TMP), "SystemRoot": "C:\\Windows"})
+                          env={"TEMP": str(PATH_TMP), "SystemRoot": "C:\\Windows",
+                               "HOME": str(path_home), "USERPROFILE": str(path_home)})
     return proc.returncode, (proc.stderr or "").strip()
 
 
@@ -150,5 +156,27 @@ code, err = run_hook("mcp__playwright__browser_click", "", "s20")
 assert code == 0, (code, err)
 print("✅ p-windows-desktop 已加载放行，其他 MCP 不误拦")
 
-print("🎉 20/20 通过")
+# 21. 写 .tex / 跑 xelatex 未加载 p-article-latex → 拦
+code, err = run_hook("Write", "F:/x/manuscript/main.tex", "s21")
+assert code == 2 and "p-article-latex" in err, (code, err)
+code, err = run_hook("Bash", "", "s22", command="cd paper && latexmk -xelatex main.tex")
+assert code == 2 and "p-article-latex" in err, (code, err)
+print("✅ .tex / latexmk 命中 p-article-latex")
+
+# 22. 装了 officecli 时：python-pptx 改 deck → 拦。统计里 officecli 漏调用几乎都是这种。
+PATH_HOME_OFFICE = PATH_TMP / "home-office"
+(PATH_HOME_OFFICE / ".claude" / "skills" / "officecli").mkdir(parents=True)
+code, err = run_hook("Bash", "", "s23", path_home=PATH_HOME_OFFICE,
+                     command='python -c "from pptx import Presentation; Presentation(\'deck.pptx\')"')
+assert code == 2 and "officecli" in err, (code, err)
+code, err = run_hook("Write", "F:/x/report.docx", "s24", path_home=PATH_HOME_OFFICE)
+assert code == 2 and "officecli" in err, (code, err)
+print("✅ python-pptx / 写 .docx 命中 officecli")
+
+# 23. 没装 officecli（zcm6 情形）→ 不拦，拦了模型也加载不了
+code, err = run_hook("Bash", "", "s25", command="python edit.py deck.pptx")
+assert code == 0, (code, err)
+print("✅ 未安装的 skill 不拦")
+
+print("🎉 23/23 通过")
 ### to here
