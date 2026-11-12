@@ -32,6 +32,8 @@ Windows 软件（安装包、便携 exe）装到 `D:\software\<AppName>\`，不�
 
 默认使用 utf-8 编码。read_file 拒绝 BOM .md 文件，用 terminal cat 读取。
 
+要给用户看的截图和图片，存到当前项目下的 `ai-guide/screenshots/`（文件名以 `<YYYYMMDD>-` 开头），不要只留在 scratchpad 或 Temp：那些路径很深，用户找不到。存好后用 `Start-Process <图片路径>` 在前台打开给用户看。只给自己核对用的中间截图不受此限。
+
 ## Skill 编写规范
 
 自生成的 skill 只保留关键步骤、触发条件、核心命令和陷阱。不记录详细工作进度、一次性修复记录或面面俱到的细节。skill 是可复用的流程模板，不是工作日志。
