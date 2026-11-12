@@ -32,7 +32,7 @@ check_windows() {
   diff -rq $CODEX_CONFIG/skills-using/root ~/.agents/skills | grep -v '__pycache__\|: README.md$'
   diff -rq $CODEX_CONFIG/claude/agents ~/.claude/agents
   # 这些 hook 文件来自 claude-desktop-phone 项目或是备份，本来就不在 codex-config 里
-  diff -rq $CODEX_CONFIG/claude/hooks ~/.claude/hooks | grep -v '__pycache__\|install_hook.py\|test_require_skill.py\|feishu_notify\|push_away\|\.bak'
+  diff -rq $CODEX_CONFIG/claude/hooks ~/.claude/hooks | grep -v '__pycache__\|install_hook.py\|test_require_skill.py\|cc_connect_push\|push_away\|\.bak'
 
   section "📌 Windows 待决项"
   grep -q "awk '{print }'" ~/.claude/settings.json && echo "⚠️  statusLine 仍是 awk '{print }'（\$2 丢了，清单 2.3）"
