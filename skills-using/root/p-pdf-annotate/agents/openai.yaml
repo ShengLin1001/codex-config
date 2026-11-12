@@ -1,0 +1,8 @@
+interface:
+  display_name: "P PDF Annotate"
+  short_description: "Highlight and annotate an academic PDF into a new file"
+  default_prompt: "Use $p-pdf-annotate to read this paper, summarize it and its relevance to our project, gloss rare words in the abstract, and highlight key passages with notes."
+
+# 会写出新的 PDF 文件，只在用户显式调用时加载。Claude Code 侧由 pei_ai_univ_reinstall -hook 翻译成 skillOverrides。
+policy:
+  allow_implicit_invocation: false

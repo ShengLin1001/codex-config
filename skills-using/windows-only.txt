@@ -6,6 +6,7 @@ p-edge-browser
 p-literature-download
 p-ppt-academic
 p-pdf2zotero
+p-pdf-annotate
 officecli
 p-research-diagram
 p-vscode-zcm6-upgrade
