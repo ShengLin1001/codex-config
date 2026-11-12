@@ -18,7 +18,7 @@ description: "ALWAYS invoke BEFORE the first mcp__windows-mcp__* call that click
 
 运行脚本：`powershell -NoProfile -ExecutionPolicy Bypass -File "<本 skill 目录>/scripts/desktop-state.ps1"`，输出前台窗口的 pid、标题、矩形，以及各窗口是否最小化。
 
-1. **只读侦察**：跑脚本留底，确定目标窗口标题或要启动的程序；要看屏幕就用 `Screenshot`。这一步不启动、不切换、不最小化、不点击。
+1. **只读侦察**：跑脚本留底，确定目标窗口标题或要启动的程序；要看屏幕就用 `Screenshot`，不用 `Snapshot`。这一步不启动、不切换、不最小化、不点击。
 2. **接管**：先用一句话告诉用户“即将接管，请别碰鼠标键盘；确认框点 Allow now 后立刻松手，或等倒计时”。然后第一个需接管调用就发 `Shortcut` `win+m`，获批后才最小化全部窗口。
 3. **单独调出目标窗口**：已有窗口用 `App switch`，name 写完整窗口标题，它会把窗口从最小化还原并核验前台；新程序先 `App launch`，再 `App switch` 一次。
 4. **核验**：再跑一次脚本，前台的 pid 和标题对上才继续，并记下矩形。之后所有坐标都要落在这个矩形里。
@@ -32,6 +32,6 @@ description: "ALWAYS invoke BEFORE the first mcp__windows-mcp__* call that click
 - 置顶窗口（如 Claude sessions 小窗）不受 `Win+M` 影响，可能盖住目标窗口的一部分，坐标要避开它。
 - `App launch` 后新窗口显示在最上层，前台焦点却可能还在 explorer 上，这时 `Shortcut` 会发到桌面。
 - `Screenshot` 截图时会隐藏 AI 光晕和提示条，截不到不代表没接管。
-- `Snapshot` 只在需要元素名称或 id 时用，其他窗口会挤占它的元素名额。
+- `Snapshot` 只在需要元素名称或 id 时用，而且要等第 4 步核验过、目标窗口单独在前台后再用，`region` 限定在目标矩形内。它读 UI Automation 时会让 VS Code 等 Electron 程序开启辅助功能、导出整棵元素树，曾在侦察阶段读到满屏的 VS Code，导致其主进程卡死、所有 VS Code 窗口未响应；其他窗口也会挤占它的元素名额。
 - WebView2 应用（如新版 Outlook）第一次读 UI Automation 只能拿到外壳，几秒后再读。
 - 演示和试验只在自己新开的窗口里做，不要在用户已打开的文件上试。
