@@ -103,3 +103,21 @@ submission-guidelines 也 404；作者指引在 `/srep/author-instructions`
 - 频道话题是 Slate 富文本，不是 textarea。定位时限定在 `getByRole('dialog', {name: '频道设置'})` 里，否则会命中底下的消息输入框；点进去后用 `keyboard.insertText`。
 - 第一次打开「服务器设置」或频道设置要懒加载 2–3 s，先等再找元素。身份组列表的文字在预览里有隐藏副本，用 `getByText(..., {exact: true}).filter({visible: true})`。
 - bot 的托管身份组可以改名和改颜色，色块按钮的 aria-label 就是色号（`button[aria-label="#3498db"]`）。零权限邀请的 bot 没有托管身份组。
+
+## chatgpt.com
+
+**2026-11-10** 零质询，登录态可用。批量开会话 / 收图时踩到的：
+
+- 标签页在后台（`document.hidden`）时 `locator.click()` 永远等不到 "stable"，生成的图也不渲染
+  （gallery 高度 0、没有 `<img>`）。发消息用 `focus()` + `fill()` + `Enter`；页面还显示
+  `Loading profile` 时回车会被吞，等它消失再发。输入框是 `getByRole('textbox')`，没有 `#prompt-textarea`。
+- 后台标签页发消息后 URL 不跳转、输入框留着草稿，但会话已建成。**别按 URL 判断成败**，
+  按项目页 `main a[href*="/c/"]` 新增链接或后端接口的 user 消息数判断，否则会重复提交。
+- 收结果不靠 DOM：页面内 `fetch('/api/auth/session')` 取 `accessToken`，再调
+  `/backend-api/gizmos/<g-p-id>/conversations`、`/backend-api/conversation/<id>`；图片在
+  `image_asset_pointer` 里，经 `/backend-api/files/download/<file_id>?conversation_id=<id>` 换
+  `download_url`（estuary，需 cookie，只能页面内 fetch）。
+- `browser_run_code_unsafe` 里没有 `require`/`import`，写不了文件。图片在页面内用
+  `OffscreenCanvas` 缩小转 base64，交给 `browser_evaluate` 的 `filename` 落盘再解码；
+  落盘内容是 JS 对象字面量格式，不是严格 JSON。
+- 会话里图片出完后 assistant 状态可能一直停在 `in_progress`，不影响取图和追问。
