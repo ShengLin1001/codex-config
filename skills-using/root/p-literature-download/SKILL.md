@@ -86,6 +86,10 @@ WebVPN 首页应显示“输入网址直接访问内网或图书馆资源”。
 
 DOI 文件每行一个 DOI，可在空白后附备注；空行和 `#` 开头的行忽略。
 
+跑之前按 `references/zju-coverage.md` 对一遍 DOI 前缀和年份：落在浙大订购空档里的
+（如 1995 年前的 Elsevier），先告诉用户大概率拿不到，由用户决定保留还是注释掉。
+这类文章脚本目前不会快速失败，直连和 WebVPN 各等满一轮 `-timeout`。
+
 **agent 跑批一律加 `-preset agent`**，它把该关的都关了：
 
 ```bash
@@ -266,6 +270,7 @@ Elsevier 单独说一句，因为它看起来像 attach 被检测，其实不是
 | PDF 在内置阅读器里打开、拿不到文件 | 正常，级别 1 和 3 不依赖下载。**不要**去改 `always_open_pdf_externally`，它是受保护偏好，改了会被启动时还原 |
 | 日志出现 `↩️ 偏离到 …，退回 DOI 重来` | 正常自愈。页面跑到了非本文页（APS 的 `/prb/accepted`、SSO wayfinder 等），脚本退回 DOI 重来，最多两次 |
 | 大文件（20 MB 以上）报 `fetch_failed` | 超时不够。`-timeout 240` 起步，RSC 综述这类要走第 3 级取件 |
+| 单篇耗满两轮 `-timeout` 后 `no_pdf_link` / `fetch_failed` | 先查 `references/zju-coverage.md`：落在空档里就报「疑似机构未订购」，不要重跑 |
 | 偶发一两篇失败 | Cloudflare 抖动或超时。agent 直接重跑（`-preset agent` 已带 `-skip_existing`）；人跑用 `-preset human`，自带 2 轮重试 |
 | Elsevier 卡在 linkinghub 打不开文章页 | 入口 URL 改写没生效，见 `publisher_pdf.py` 的 `LHOST_ENTRY_RULES` |
 | Elsevier 一直 `fetch_failed`，或手动点的下载没被认到 | 多半是下载目录对不上。看启动时打印的「浏览器下载目录」，跟 Edge 里 `edge://settings/downloads` 显示的是不是同一个；不是就重跑一次 `start_edge.ps1` |
