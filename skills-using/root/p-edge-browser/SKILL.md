@@ -30,7 +30,8 @@ description: "ALWAYS invoke BEFORE using the mcp__playwright__browser_* tools. U
 - 自己新开的标签页用完关闭；不动用户原有标签页。
 - 点击、填表、下载可直接做；**提交不可撤回的内容**（投稿、付款、发送消息、删除）前先向用户确认。
 - 文献下载优先用 `$p-literature-download`（批量、按 DOI、带重试）；本 skill 只处理零星单篇。
-- 上传本地文件：扩展模式下 `setInputFiles` 和 `browser_file_upload` 都可能无效。这时用 `scripts/make-upload-js.py` 生成内嵌文件的 JS，交给 `browser_run_code_unsafe` 的 `filename` 执行。
+- `browser_run_code_unsafe` 的 `filename` 只能读 MCP 输出目录（`--output-dir`，本机是 `C:/Users/louis/.claude/playwright-output`）和工作目录里的文件。skill 自带的脚本先复制进输出目录，再传复制后的绝对路径，用完删掉副本。
+- 上传本地文件：扩展模式下 `setInputFiles` 和 `browser_file_upload` 都可能无效。这时用 `scripts/make-upload-js.py` 在输出目录里生成内嵌文件的 JS，交给 `browser_run_code_unsafe` 的 `filename` 执行。
 
 ## 多会话并行
 
@@ -63,7 +64,7 @@ description: "ALWAYS invoke BEFORE using the mcp__playwright__browser_* tools. U
 **Cloudflare 质询**
 
 1. `browser_wait_for`（`textGone: "Just a moment"`，或 `time: 10`）。多数 Turnstile 在日常 Edge 上自动放行，到此为止。
-2. 仍在质询页：`browser_run_code_unsafe`，`filename` 传 `scripts/turnstile-click.js` 的**绝对路径**（实测可用，不必贴全文）。脚本拟人轨迹点复选框，内含 6s 等待并回报 `passed`。
+2. 仍在质询页：`browser_run_code_unsafe`，`filename` 传复制进输出目录的 `scripts/turnstile-click.js`（见「操作规范」，不必贴全文）。脚本拟人轨迹点复选框，内含 6s 等待并回报 `passed`。
 3. `passed:false` 再跑一次，**最多两轮**；两轮不过按下面交人。
 
 **交人接管**
