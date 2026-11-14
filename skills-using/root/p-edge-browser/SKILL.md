@@ -16,6 +16,7 @@ description: "ALWAYS invoke BEFORE using the mcp__playwright__browser_* tools. U
 ## 连接
 
 - 工具是 `mcp__playwright__browser_*`，经 Playwright Extension 接管用户**日常 Edge**（带全部登录态），token 免确认。
+- 在 zcm6 上：MCP 经 SSH 接管 Windows 上的 Edge，路径、取文件和排障都不同，先读 `references/remote-zcm6.md`，不跑 `check-conn.sh`。
 - 连不上时先跑 `bash scripts/check-conn.sh`，它会直接告诉你是哪一类故障；它另起一个客户端，不影响当前会话的连接。
 - MCP 配置 args 带 `--init-page <skill 目录>/scripts/agent-indicator.cjs` 时，接管的标签页有橙色呼吸边框，点击 / 悬停前光晕光标移到目标并高亮它（每个动作多约 0.5s）。看不到这些效果就查这条参数；脚本出错会被吞掉，不影响操作。
 - 脚本没覆盖到的，查 `~/.claude.json` → `mcpServers.playwright`：
