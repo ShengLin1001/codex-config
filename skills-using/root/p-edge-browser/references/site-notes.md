@@ -121,3 +121,13 @@ submission-guidelines 也 404；作者指引在 `/srep/author-instructions`
   `OffscreenCanvas` 缩小转 base64，交给 `browser_evaluate` 的 `filename` 落盘再解码；
   落盘内容是 JS 对象字面量格式，不是严格 JSON。
 - 会话里图片出完后 assistant 状态可能一直停在 `in_progress`，不影响取图和追问。
+- **2026-11-14** Edge 窗口不在前台时（`document.hidden` 为真，`bringToFront` 只切标签页、不抬窗口），`fill` 后按 `Enter` 不发送，草稿留在输入框里，脚本照常返回。改成页面内点发送按钮：`page.evaluate(() => document.querySelector('form button[aria-label="Send"]').click())`，后台也能发。每次调用只发一条，发完用 gizmos conversations 接口核对会话数。
+
+## github.com（issue 里传图）
+
+**2026-11-14** 新版 issue 页没有 `input[type=file]`，`gh` 也传不了附件。做法：在 `issues/new` 的
+`textarea[aria-label="Markdown value"]` 上派发 `ClipboardEvent('paste', {clipboardData: dt})`（dt 里放 File），
+GitHub 会上传并插入 `https://github.com/user-attachments/assets/<id>`，轮询 textarea 取地址；全部传完清空 textarea、
+不提交，再用 `gh issue create --body-file` 发正文。文件别编进 run_code 的代码里（整段会回显进上下文）：
+本地 `python -m http.server` 起服务，在 run_code 里用 `page.context().request.get()` 取（走 Node，不受页面 CSP 限制），
+`buf.toString('base64')` 作为 `page.evaluate` 的参数传进去。`gh issue create` 偶尔报 `graphql: EOF`，先用 REST 查是否已建成再重发。
