@@ -37,7 +37,8 @@ mobile-mcp 不是全局 MCP，在要用的项目根目录 `.mcp.json` 注册，�
   2. `adb shell am broadcast -a ADB_CLEAR_TEXT`，再 `adb shell am broadcast -a ADB_INPUT_B64 --es msg <UTF-8 的 base64>`
   3. 密码框里广播不生效，改 `adb shell input text <ASCII>`；核对只比长度和是否一致，不在对话里显示内容。
   4. ADB Keyboard 键盘不可见但仍占位，会挡住下方元素：点页面标题等空白处收起。
-  5. 用完必须 `adb shell ime set com.baidu.input_vivo/.ImeVivoService` 切回，否则 PJ 手机上没键盘。
+  5. 密码框聚焦时切回 vivo 输入法会弹出系统「安全键盘」（`SecureInputMethod` 窗口）：它盖住下半屏，点下面的按钮没反应、`screencap` 也是空图。先按一次返回键收起，再点。
+  6. 用完必须 `adb shell ime set com.baidu.input_vivo/.ImeVivoService` 切回，否则 PJ 手机上没键盘。
 
 ## Mika
 
@@ -61,7 +62,7 @@ mobile-mcp 不是全局 MCP，在要用的项目根目录 `.mcp.json` 注册，�
 mobile-mcp 启动的 `mobilecli DeviceServer` 占着 UiAutomation 时（闲置 30 分钟才退），Mika 的无障碍被挂起：任务报 `phone_unavailable`，`adb shell dumpsys accessibility` 里 `Bound services:{}`。切到 Mika 前：
 
 ```bash
-adb shell ps -A | grep mobilecli          # 找 PID 后 adb shell kill <PID>
+adb shell ps -A -o PID,ARGS | grep mobilecli   # 进程名是 app_process，要看 ARGS；找到 PID 后 adb shell kill <PID>
 adb shell settings put secure enabled_accessibility_services ""
 adb shell settings put secure enabled_accessibility_services com.wangzan101.mika/.a11y.MikaAccessibilityService
 ```
@@ -69,4 +70,4 @@ adb shell settings put secure enabled_accessibility_services com.wangzan101.mika
 ## 边界
 
 - 只看：不加购、不领券、不下单、不发消息、不登录新账号，这些先问 PJ。密码、验证码、付款永远交给 PJ。
-- 收尾确认：输入法已切回 vivo 输入法；接下来要用 Mika 的话没留 mobilecli 进程。
+- 收尾确认：输入法已切回 vivo 输入法；没留 mobilecli 进程，`dumpsys accessibility` 的 `Bound services` 里能看到 Mika 等服务。
