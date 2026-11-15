@@ -1,0 +1,4 @@
+interface:
+  display_name: "P Android Phone"
+  short_description: "经 USB adb 操作 PJ 的备用安卓机：mobile-mcp 读元素树点按、ADB Keyboard 输中文、Mika 派长任务及两者互斥的切换"
+  default_prompt: "使用 $p-android-phone 在备用机上打开这个 App 查一下。"

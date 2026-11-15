@@ -32,6 +32,7 @@
 | p-windows-desktop | 第一次调用 windows-mcp 操作桌面前（`ALWAYS invoke BEFORE`）；仅 Windows |
 | p-plot-figure | 写 / 改 matplotlib 绘图代码前（`ALWAYS invoke BEFORE`） |
 | p-article-latex | 写 / 转换 / 改期刊稿件 LaTeX 前，含小改版式、去色、重编译（`ALWAYS invoke BEFORE`） |
+| p-android-phone | 用 adb、mobile-mcp 或 Mika 操作备用安卓机前（`ALWAYS invoke BEFORE`）；仅 Windows |
 | officecli | 读 / 改 / 新建 .docx/.xlsx/.pptx；仅 Windows，格式细则由 `officecli load_skill pptx\|word\|excel` 按需输出 |
 
 ## 备注
