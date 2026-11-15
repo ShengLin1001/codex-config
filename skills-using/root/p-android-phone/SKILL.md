@@ -9,7 +9,8 @@ description: "ALWAYS invoke BEFORE operating PJ's Android spare phone — adb sh
 
 - iQOO Neo5（V2055A），OriginOS 4 / Android 14，1080x2400，序列号 `341826557700BOO`，USB 调试已「始终允许」。
 - adb 用 `D:/software/platform-tools/adb.exe`；PATH 上 vivo pcsuite 自带的 adb 不要用。Git Bash 里先 `export MSYS_NO_PATHCONV=1`，否则 `/sdcard` 会被改写成 Windows 路径。
-- `adb devices` 为空或 `offline`：先请 PJ 检查数据线和 USB 口（换口解决过描述符失败），再查 vivo 办公套件的 vivoSyncService、vivoesService 是否在跑——它们抢 adb 接口，已改成手动启动，别打开 vivo 办公套件。`unauthorized` 请 PJ 在手机上允许并勾「始终允许」。
+- `offline`：先 `adb kill-server && adb start-server`，别用 `adb reconnect`（会让设备直接从列表消失）。
+- `adb devices` 为空：电脑报 `Device Descriptor Request Failed` 是 USB 层没连上，请 PJ 检查数据线和 USB 口（换口解决过描述符失败），再查 vivo 办公套件的 vivoSyncService、vivoesService 是否在跑——它们抢 adb 接口，已改成手动启动，别打开 vivo 办公套件。`unauthorized` 请 PJ 在手机上允许并勾「始终允许」。
 
 ## 选工具
 
