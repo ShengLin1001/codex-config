@@ -79,17 +79,7 @@ Codex 用 `$env:CODEX_HOME\skills`。重启会话后确认能被发现。
 **不要用 `npx skills add ShengLin1001/p-literature-download`**：仓库根目录本身是 skill 时，
 那个 CLI 只装 `SKILL.md`，`scripts/` 全丢，装完是空壳（实测确认）。
 
-要在配置仓库里长期维护并接收上游更新，用 **git subtree**：
-
-```bash
-git subtree add  --prefix=skills-using/root/p-literature-download \
-    git@github.com:ShengLin1001/p-literature-download.git main --squash
-git subtree pull --prefix=skills-using/root/p-literature-download \
-    git@github.com:ShengLin1001/p-literature-download.git main --squash   # 之后拉更新
-```
-
-不要用 submodule：它存的是指针不是文件，`npx skills add` 克隆配置仓库时不带
-`--recurse-submodules`，拿到的是空目录。
+这份副本只在 codex-config 维护，不再与原仓库同步，也不要改成 submodule。
 
 本 skill **只允许显式调用**（`$p-literature-download`）：它会开浏览器、发真实网络请求、
 动用机构会话，不该因为对话里出现 DOI 就自动触发。

@@ -9,8 +9,8 @@
 - `codex/AGENTS_<device>.md`（`windows`、`zcm6`）：各设备 Claude Code 与 Codex 共用的全局指令上游。`~/.claude/CLAUDE.md`、`~/.codex/AGENTS.md` 都是指向它的软链，直接改这里并提交。新设备：`ln -s <repo>/codex/AGENTS_<device>.md ~/.codex/AGENTS.md`（`~/.claude/CLAUDE.md` 同理）；Windows 在管理员 PowerShell 里用 `New-Item -ItemType SymbolicLink -Path <link> -Target <repo>\codex\AGENTS_windows.md`，git-bash 的 `ln -s` 默认只会复制。
 - `skills/`：本仓库维护的自定义 Codex skills。
 - `skills-using/root/`：跨项目通用、适合用户级安装的 skill 源码；保存在这里不等于已经安装。
-  **用户级 skill 只从这里安装**，不从其他仓库装。其中 `p-literature-download` 由
-  git subtree 从上游 `ShengLin1001/p-literature-download` 同步，维护方式见 `AGENTS.md`。
+  **用户级 skill 只从这里安装**，不从其他仓库装。其中 `p-literature-download`、`p-edge-browser`、
+  `p-ppt-academic` 源自独立仓库，现只在本仓库维护，见 `AGENTS.md`。
 - `skills-using/project/*/explicit/`：只通过 `$skill-name` 显式调用的项目级 skills。
 - `skills-using/project/*/implicit/`：可按任务语义自动匹配的项目级 skills。
 - `claude/agents/`：Claude Code 用户级 subagent 的上游；安装副本在 `~/.claude/agents/`，先改这里再手动复制过去（`pei_ai_univ_reinstall` 不管这个目录）。

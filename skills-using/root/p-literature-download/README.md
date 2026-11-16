@@ -9,9 +9,8 @@
 本仓库同时是一个 agent skill（Claude Code / Codex 等），仓库根目录就是 skill 根目录。
 也可以完全不用 agent，直接当命令行工具跑。
 
-这个 skill 已经并入配置仓库 `codex-config`，在那边以 git submodule 的形式挂在
-`skills-using/root/p-literature-download`。**改动仍然提交到本仓库**，下游用
-`git submodule update --remote` 拉取。
+这份副本位于配置仓库 `codex-config` 的 `skills-using/root/p-literature-download`，
+已与原仓库 `ShengLin1001/p-literature-download` 断开，**改动只提交到 codex-config**。
 
 ## 不做什么
 
@@ -200,16 +199,6 @@ Codex 用 `$env:CODEX_HOME\skills`。
 > ⚠️ **不要用 `npx skills add ShengLin1001/p-literature-download`。** 实测过：当仓库根目录本身
 > 就是 skill 时，那个 CLI 只会装走 `SKILL.md`，`scripts/` 一个文件都不带，装完是个空壳。
 > 它只对「skill 位于仓库子目录」的布局才拷贝完整目录。
-
-要在自己的配置仓库里长期维护并接收本仓库更新，用 **git subtree**（不是 submodule——
-submodule 存的是指针，别人克隆你的配置仓库会得到一个空目录）：
-
-```bash
-git subtree add  --prefix=<你的路径>/p-literature-download \
-    git@github.com:ShengLin1001/p-literature-download.git main --squash
-git subtree pull --prefix=<你的路径>/p-literature-download \
-    git@github.com:ShengLin1001/p-literature-download.git main --squash   # 之后拉更新
-```
 
 该 skill **只允许显式调用**（`$p-literature-download`），不会因为对话里出现 DOI 或
 "下载论文"就自动触发——它会开浏览器、发真实请求、动用机构会话，误触发的代价不该由用户承担。

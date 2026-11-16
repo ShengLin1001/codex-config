@@ -6,11 +6,11 @@
 
 ## 这个仓库是什么
 
-仓库根目录**就是** skill 根目录（`SKILL.md` 在根）。这样 codex-config 之类的
-配置仓库可以直接把它作为 git submodule 挂进 `skills-using/root/p-literature-download`，
-上游一改，下游 `git submodule update --remote` 就能拉到。
+本目录**就是** skill 根目录（`SKILL.md` 在根），在 codex-config 中独立维护，
+不再与原仓库 `ShengLin1001/p-literature-download` 同步。
 
-所以：不要在根目录上面再套一层 skill 子目录，也不要把 `SKILL.md` 挪走。
+不要在根目录上面再套一层 skill 子目录，也不要把 `SKILL.md` 挪走：安装脚本按
+`skills-using/root/<name>/SKILL.md` 找 skill。
 
 ## 架构边界
 

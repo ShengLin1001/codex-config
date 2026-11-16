@@ -7,9 +7,9 @@
 
 ## 安装
 
-仓库根目录就是 skill 本体。实际安装走 [codex-config](https://github.com/ShengLin1001/codex-config)：
-它以 git subtree 引入到 `skills-using/project/academic/explicit/p-ppt-academic/`，
-由 `pei_ai_univ_reinstall -global -project academic -hook` 装给 Claude Code / Codex。装完**重启会话**才会被识别。
+本目录就是 skill 本体，在 [codex-config](https://github.com/ShengLin1001/codex-config) 的
+`skills-using/root/p-ppt-academic/` 独立维护（已与原仓库 `p-ppt-generate` 断开），
+由 `pei_ai_univ_reinstall -global -root -hook` 装给 Claude Code / Codex。装完**重启会话**才会被识别。
 
 **只能显式调用**：开关只有一处，`agents/openai.yaml` 的 `allow_implicit_invocation: false`（Codex 用 `$p-ppt-academic`）；
 Claude Code 侧由 `pei_ai_univ_reinstall -hook` 翻译成 settings.json 的 `skillOverrides: user-invocable-only`（用 `/p-ppt-academic`）。

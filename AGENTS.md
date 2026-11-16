@@ -54,29 +54,15 @@ policy:
   allow_implicit_invocation: false
 ```
 
-## 从上游仓库同步的 skill（git subtree）
+## 源自外部仓库的 skill（独立维护）
 
-`skills-using/root/p-literature-download` 用 **git subtree** 从上游
-`ShengLin1001/p-literature-download` 拉取（那个仓库的根目录就是 skill 本体）。
+`skills-using/root/` 下的 `p-literature-download`、`p-edge-browser`、`p-ppt-academic`
+最初从 `ShengLin1001/` 下的同名仓库（`p-ppt-academic` 对应 `p-ppt-generate`）以 git subtree 引入，
+现已断开，**只在本仓库维护**，和其他 skill 一样直接改、直接提交。
 
-```bash
-# 拉上游更新
-git subtree pull --prefix=skills-using/root/p-literature-download \
-    git@github.com:ShengLin1001/p-literature-download.git main --squash
+- 不再跑 `git subtree pull/push`，也不往原仓库回推。想借原仓库的某个改动，人工比对后手改进来。
+- 不要改成 submodule：`npx skills add` 克隆本仓库时不带 `--recurse-submodules`，装出来是空目录。
 
-# 把在本仓库里做的改动推回上游（少用；优先直接在上游仓库改）
-git subtree push --prefix=skills-using/root/p-literature-download \
-    git@github.com:ShengLin1001/p-literature-download.git main
-```
-
-用 subtree 而不是 submodule，原因只有一个：**submodule 存的是指针，不是文件**。
-`npx skills add` 克隆本仓库时不带 `--recurse-submodules`，拿到的会是一个空目录，
-装出来什么都没有。subtree 把文件真实落进本仓库，所以和其他 skill 走完全同一条安装路径。
-
-`skills-using/root/p-edge-browser`、`skills-using/root/p-ppt-academic`（上游 `p-ppt-generate`）
-同样是 subtree，命令见 `skills-using/root/README.md`。
-
-代价：`git subtree pull` 前工作区必须干净，且会产生一个合并提交。
 ## Hermes 配置同步
 
 `hermes/<device>/` 下按设备管理各台机器的 Hermes Agent 配置文件，直接用 git 版本控制。当前已落地设备：`zcm6`。

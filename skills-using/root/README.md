@@ -41,25 +41,14 @@
 - 被 `~/.claude/hooks/gate.json` 强制要求加载的 skill 不能设成显式，否则模型无法加载，流程会卡死。
 - p-code-review 与内置 `code-review` skill 触发词曾重叠，改为显式点名后，裸「review」交给内置。
 
-## 外部仓库 skill 的上游同步（git subtree）
+## 外部来源的 skill
 
-`p-literature-download`、`p-edge-browser`、`p-ppt-academic`（上游仓库名 `p-ppt-generate`）
-是从各自的 GitHub 仓库以 `git subtree --squash` 引入的，
-拉上游更新在 codex-config 仓库根目录执行：
+`p-literature-download`、`p-edge-browser`、`p-ppt-academic` 源自各自的 GitHub 仓库，
+已断开 subtree 同步，只在本仓库维护，规则见仓库根 `AGENTS.md`。
 
-```bash
-git subtree pull --prefix=skills-using/root/p-edge-browser p-edge-browser main --squash
-git subtree pull --prefix=skills-using/root/p-ppt-academic p-ppt-generate main --squash
-```
-
-`p-edge-browser`、`p-ppt-generate` 是 `git remote add` 过的远端名（`git@github.com:ShengLin1001/<名字>.git`）。
-
-`officecli` 不是 subtree：`SKILL.md` 原样拷自 officecli 二进制生成的版本，`agents/openai.yaml` 是本仓库加的。
+`officecli` 的 `SKILL.md` 原样拷自 officecli 二进制生成的版本，`agents/openai.yaml` 是本仓库加的。
 officecli 升级时会自动刷新已装的 `~/.agents/skills/officecli/SKILL.md`，本仓库这份只在重装时用，落后了就拷回来：
 
 ```bash
 cp ~/.agents/skills/officecli/SKILL.md skills-using/root/officecli/SKILL.md
 ```
-
-⚠️ **别用 `git subtree add/pull --prefix=... <URL> main`**：分支名 `main` 会被解析成**本地** main，
-结果把 codex-config 自己塞进子目录。一律先 `git remote add` + `git fetch`，再用 `<remote>/main` 或 `<remote> main`。

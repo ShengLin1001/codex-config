@@ -133,7 +133,7 @@ for domain in "${lproject[@]:-}"; do
 done
 
 # 只适合 Windows 的 skill（依赖本机 Edge / PowerShell）在别的系统上跳过。
-# 清单在 skills-using/windows-only.txt，不在各 skill 目录里——其中有 subtree。
+# 清单在 skills-using/windows-only.txt。
 case "$(uname -s)" in
   MINGW*|MSYS*|CYGWIN*) ;;
   *)
