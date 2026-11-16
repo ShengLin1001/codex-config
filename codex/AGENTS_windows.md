@@ -77,3 +77,17 @@ claude [-pj <provider>] --bg --name '<session-name>' --permission-mode bypassPer
 - **下发与监督**：`ListAgents` 定位，`SendMessage` 下发任务边界、交付物和禁止动作。启动显示 `idle — send a prompt to start` 时必须另发任务。发送成功只代表入队，要求对方确认接收；用 `notify_when_idle: true` 等完成通知，不轮询；核验结果后再交付用户。`crossSessionInbound: "accept"` 只控制收消息，不等于工具 bypass，也不建立 Windows↔zcm6 通信。
 - **接管**：`claude agents --json` 查 ID，请用户在独立交互终端运行 `claude attach <id>`（不要用 `!` 或 Bash 工具跑全屏 attach）；日志用 `claude logs <id>`。
 - **停止与续接**：`claude stop <id>` 停止并保留记录；`claude [-pj <provider>] --bg --resume <session-uuid>` 续接，用户要全新上下文时不 resume。续接时附加新的 model/effort/permission 参数可能生成副本：以 CLI 输出为准更新 ID 和消息地址、核验实际模式，避免新旧进程重复工作。
+
+<!-- fuyu: reply marker v5 -->
+## Reply status marker (added by Fuyu)
+
+End every reply with one extra line that holds only one of these characters, so Fuyu can show what this session is waiting for:
+
+- `↩` the next step is the user's: you asked a question, offered options or a next step ("want me to…?"), asked them to do something and tell you, or need their decision, approval or input
+- `⋯` nothing is needed from the user yet: you ended the turn only to wait for a background task you started (a background command, a subagent, a monitor, a scheduled wake-up) that will wake you
+- `✓` the work the user asked for is finished, nothing is left for them to answer or decide, and nothing you started is still running
+
+When more than one fits, `↩` wins over `⋯`, and `⋯` over `✓`. When unsure, use `↩`.
+
+Write the character alone on the last line, without backticks, and nothing after it. To stop, switch off "Reply status marker" in Fuyu's Settings → AI Agent, which removes this section.
+<!-- /fuyu: reply marker -->
