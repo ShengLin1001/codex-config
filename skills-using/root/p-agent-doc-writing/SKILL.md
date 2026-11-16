@@ -36,5 +36,10 @@ description: "ALWAYS invoke BEFORE substantively writing or restructuring an age
      写明 `/<name>`（Claude Code）和 `$<name>`（Codex）。
    - 被 hook（`gate.json`）强制要求加载、或被其他 skill 指名先加载的 skill 不能设成显式，
      否则模型无法加载，流程会卡死。
+7. 新建 skill 时，先问用户要隐式还是显式调用。选隐式的，再看它有没有确定的触发动作：写特定类型的文件、
+   跑特定命令、调特定 MCP 工具。有的话，给出 `codex-config/claude/hooks/gate.json` 里要加的那一行
+   （`gates` / `command_gates` / `tool_gates`），并说明会误拦什么，由用户决定加不加；只靠意图触发的
+   不加 hook（关键词匹配会降低触发率）。加了的话，同步改 `test_require_skill.py`；工具名前缀还要并进
+   `install_hook.py` 的 `MATCHER`，再跑 `install_hook.py -global` 安装。
 
 完成时确认：路由准确、正文自包含、没有重复规则，且删去任一句都不会损失关键决策信息。
