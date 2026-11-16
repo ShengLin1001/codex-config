@@ -12,7 +12,7 @@ PATH_TMP = Path(tempfile.mkdtemp(prefix="skillgate-test-"))
 # 假 home：gate.json 里的 skill 都算"已安装"，officecli 例外，留给用例 23 测"未装不拦"。
 PATH_HOME = PATH_TMP / "home"
 for _skill in ["p-code-style", "p-plot-figure", "p-agent-doc-writing", "p-git-commit",
-               "p-windows-desktop", "p-article-latex"]:
+               "p-windows-desktop", "p-article-latex", "p-android-phone"]:
     (PATH_HOME / ".claude" / "skills" / _skill).mkdir(parents=True)
 
 
@@ -155,6 +155,14 @@ assert code == 0, (code, err)
 code, err = run_hook("mcp__playwright__browser_click", "", "s20")
 assert code == 0, (code, err)
 print("✅ p-windows-desktop 已加载放行，其他 MCP 不误拦")
+
+# 20b. mobile-mcp 调用未加载 p-android-phone → 拦；加载后放行
+code, err = run_hook("mcp__mobile-mcp__mobile_take_screenshot", "", "s20b")
+assert code == 2 and "p-android-phone" in err, (code, err)
+code, err = run_hook("mcp__mobile-mcp__mobile_list_elements_on_screen", "", "s20c",
+                     transcript='{"name":"Skill","input":{"skill":"p-android-phone"}}\n')
+assert code == 0, (code, err)
+print("✅ mobile-mcp 未加载 p-android-phone 被拦，加载后放行")
 
 # 21. 写 .tex / 跑 xelatex 未加载 p-article-latex → 拦
 code, err = run_hook("Write", "F:/x/manuscript/main.tex", "s21")

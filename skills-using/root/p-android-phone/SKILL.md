@@ -21,10 +21,10 @@ description: "ALWAYS invoke BEFORE operating PJ's Android spare phone — adb sh
 
 不用：Open-AutoGLM（通用视觉模型输出格式对不上、复读、编造，只有智谱 `autoglm-phone` 才值得重测）；DSH Go（手机端 agent，电脑没有接口驱动它）。
 
-mobile-mcp 不是全局 MCP，在要用的项目根目录 `.mcp.json` 注册，新会话同意启用后才出现 `mcp__mobile-mcp__*`：
+mobile-mcp 注册在用户级（`~/.claude.json`，所有项目可用），工具名为 `mcp__mobile-mcp__*`。重装用：
 
-```json
-{"mcpServers":{"mobile-mcp":{"command":"cmd","args":["/c","npx","-y","@mobilenext/mobile-mcp@1.0.17"],"env":{"ANDROID_HOME":"D:/software/android-sdk"}}}}
+```bash
+claude mcp add-json -s user mobile-mcp '{"type":"stdio","command":"cmd","args":["/c","npx","-y","@mobilenext/mobile-mcp@1.0.17"],"env":{"ANDROID_HOME":"D:/software/android-sdk"}}'
 ```
 
 ## mobile-mcp 操作
