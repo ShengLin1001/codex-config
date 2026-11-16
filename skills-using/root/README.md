@@ -28,6 +28,7 @@
 | p-agent-doc-writing | 写 / 重构 agent 指令文件前（`ALWAYS invoke BEFORE`） |
 | p-code-style | 写 / 改 PJ 脚本类代码前，含一行小修（`ALWAYS invoke BEFORE`） |
 | p-git-commit | 写 commit message 前（`ALWAYS invoke BEFORE`） |
+| p-humanizer | 交付对外文字（帖子、文章、宣传文案、公告、自荐）前，或用户要求「去 AI 味」时（`ALWAYS invoke BEFORE`）；不管代码、commit、调研笔记 |
 | p-edge-browser | 用 Playwright MCP 浏览器前，或 WebFetch 失败 / 需登录态、点击、填表、下载时（`ALWAYS invoke BEFORE`） |
 | p-windows-desktop | 第一次调用 windows-mcp 操作桌面前（`ALWAYS invoke BEFORE`）；仅 Windows |
 | p-plot-figure | 写 / 改 matplotlib 绘图代码前（`ALWAYS invoke BEFORE`） |
@@ -45,6 +46,8 @@
 
 `p-literature-download`、`p-edge-browser`、`p-ppt-academic` 源自各自的 GitHub 仓库，
 已断开 subtree 同步，只在本仓库维护，规则见仓库根 `AGENTS.md`。
+
+`p-humanizer` 改写自 op7418/Humanizer-zh 和 blader/humanizer（均 MIT），同目录 `LICENSE` 保留两份版权声明，不跟上游同步。
 
 `officecli` 的 `SKILL.md` 原样拷自 officecli 二进制生成的版本，`agents/openai.yaml` 是本仓库加的。
 officecli 升级时会自动刷新已装的 `~/.agents/skills/officecli/SKILL.md`，本仓库这份只在重装时用，落后了就拷回来：
