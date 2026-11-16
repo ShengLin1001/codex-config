@@ -16,6 +16,8 @@ zcm6 出网走反向隧道（本地 7897 → zcm6 37897），由浮屿（`fuyu.e
 
 zcm6 上的软件装到 `~/mysoft/tools/<name>/<version>/`，再在 `~/.bash_soft_env` 照已有条目加一行带注释的 `export PATH=...`。不要跑会改 `~/.bashrc` 的官方安装脚本，直接下载发布包并核对 sha256。系统是 CentOS 7（glibc 2.17、内核 3.10），新版二进制可能跑不起来，优先选静态或 musl 构建，装完实测 `--version`。
 
+看 zcm6 上的结构或轨迹不用下载：用桌面 OVITO 快捷方式（`D:\software\Ovito\ovito-zcm6.cmd`，会先开 `127.0.0.1:20022` → ln2:22 转发）启动本机 OVITO，File → Load Remote File 输入 `sftp://zcm6-ovito/<绝对路径>`（不支持 `~`）。OVITO 不认命令行传入的远程地址，替用户打开只能用 `windows-mcp` 点菜单。matplotlib 等 X 窗口用 `ssh -Y zcm6`，本机 VcXsrv 已开机自启。
+
 ## 软件安装
 
 Windows 软件（安装包、便携 exe）装到 `D:\software\<AppName>\`，不装 C 盘或 `~/mysoft`。本机没有 winget，GitHub 发布的软件用 `gh release download` 下载并核对 sha256。
