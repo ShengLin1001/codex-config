@@ -131,3 +131,13 @@ GitHub 会上传并插入 `https://github.com/user-attachments/assets/<id>`，�
 不提交，再用 `gh issue create --body-file` 发正文。文件别编进 run_code 的代码里（整段会回显进上下文）：
 本地 `python -m http.server` 起服务，在 run_code 里用 `page.context().request.get()` 取（走 Node，不受页面 CSP 限制），
 `buf.toString('base64')` 作为 `page.evaluate` 的参数传进去。`gh issue create` 偶尔报 `graphql: EOF`，先用 REST 查是否已建成再重发。
+
+## cc98.org（编辑帖子、传动图）
+
+**2026-11-16** 编辑页 `https://www.cc98.org/editor/edit/<postId>`（帖子页「编辑」链接里取），正文在唯一的 `textarea`，
+React 控件要用原生 setter 赋值再派发 `input` 事件；改前先把原文存一份。提交按钮是 `button.button.blue`（文字「编辑」），
+页面点击会超时，用 `page.evaluate` 里 `.click()`。上传用 `#ubbFileUpload` + `make-upload-js.py`（把等待改长到 15s），
+地址插进 textarea，形如 `https://file.cc98.org/v4-upload/d/<年>/<月日>/<id>.<ext>`。
+- **WebP 动图会被压成单帧静态图，GIF 原样保存**（上传后 `curl` 比对大小或 md5）。动图转 GIF：720 宽、10 fps、`palettegen`，11 秒约 7 MB。
+- UBB：`[line]` 出分割线（`[hr]`、`[list]` 不支持）；`[size=3/4/5]`、`[color=]`、`[quote]`、`[align=center]`、`[md]` 可用；换行原样保留。
+- 帖子里的图片不在普通 DOM 里，`querySelectorAll('img')` 查不到，核对看截图或直接 `curl` 文件。
