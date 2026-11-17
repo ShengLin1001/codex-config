@@ -1,6 +1,6 @@
 ---
 name: p-android-phone
-description: "ALWAYS invoke BEFORE operating PJ's Android spare phone — adb shell / input, mcp__mobile-mcp__* tools, or Mika tasks — including a one-off screenshot, app launch, or adb reconnect. Do NOT drive the phone without loading this skill first. 触发：备用机、在手机上查、手机 App 查价、拼多多/闲鱼/转转/1688/微信 App、adb 连手机、手机掉线、mobile-mcp、Mika、让 AI 操作手机。"
+description: "ALWAYS invoke BEFORE operating PJ's Android spare phone — adb shell / input, mcp__mobile-mcp__* tools, or Mika tasks — including a one-off screenshot, app launch, or adb reconnect. Do NOT drive the phone without loading this skill first. 触发：备用机、在手机上查、手机 App 查价、拼多多/闲鱼/转转/1688/微信 App、adb 连手机、无线调试、无线 adb、手机掉线、mobile-mcp、Mika、让 AI 操作手机。"
 ---
 
 # 备用安卓机操作
@@ -11,6 +11,13 @@ description: "ALWAYS invoke BEFORE operating PJ's Android spare phone — adb sh
 - adb 用 `D:/software/platform-tools/adb.exe`；PATH 上 vivo pcsuite 自带的 adb 不要用。Git Bash 里先 `export MSYS_NO_PATHCONV=1`，否则 `/sdcard` 会被改写成 Windows 路径。
 - `offline`：先 `adb kill-server && adb start-server`，别用 `adb reconnect`（会让设备直接从列表消失）。
 - `adb devices` 为空：电脑报 `Device Descriptor Request Failed` 是 USB 层没连上，请 PJ 检查数据线和 USB 口（换口解决过描述符失败），再查 vivo 办公套件的 vivoSyncService、vivoesService 是否在跑——它们抢 adb 接口，已改成手动启动，别打开 vivo 办公套件。`unauthorized` 请 PJ 在手机上允许并勾「始终允许」。
+
+### 无线 adb
+
+- 校园网下 mDNS 组播不通（手机与电脑常跨网段，单播走网关正常），`adb mdns services` 恒为空，绑网卡重发也没用——别排查发现，直接问 PJ 要地址。
+- 请 PJ 开 设置 → 系统管理 → 开发者选项 → 无线调试，读**主页面**的「IP 地址和端口」（不是「使用配对码配对设备」弹窗里那个），然后 `adb connect <ip>:<port>`。端口每次开关无线调试都变，IP 走 DHCP 也会变，手机重启后无线调试自动关。
+- 已与本机配对（`~/.android/adb_known_hosts.pb` 里有 `adb-341826557700BOO-*`），不用再 `adb pair`；换电脑或清了配对记录才需要 6 位配对码。
+- `adb connect` 试错留下的 offline 条目用 `adb disconnect <设备列表里的原文>` 清掉，否则 `-s` 容易选错设备。
 
 ## 选工具
 
