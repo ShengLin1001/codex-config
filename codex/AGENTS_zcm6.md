@@ -16,6 +16,18 @@ zcm6 上的软件装到 `~/mysoft/tools/<name>/<version>/`，再在 `~/.bash_sof
 
 `git pull/push` 走 ssh 连 GitHub，`~/.ssh/config` 的 ProxyCommand 只读大写 `HTTPS_PROXY`（交互式登录由 `~/.bash_soft_env` 设好）。报 `Please make sure you have the correct access rights` 时先查 `echo $HTTPS_PROXY`，多半是代理没设，不是权限问题。
 
+## 调用用户的 Windows 电脑
+
+`ssh pc` 经反向通道（ln2 `127.0.0.1:38022`）登录用户的 Windows PC，拿到的是完整 shell（cmd.exe），用户的桌面和平时登录好的 Edge 都可用。用户想在本机看结果、开网页时用它：
+
+- 本机 OVITO 打开 zcm6 上的结构或轨迹，不下载：`pcovito <文件> [文件...]`。
+- 本机浏览器打开网址：`pcopen <url>`。
+- 传文件：`scp file pc:D:/zcm6-inbox/`（取回用 `scp pc:D:/zcm6-inbox/<name> .`）。
+- 本机启动其他 GUI 程序，要用 `pcovito` 里的 detach 写法（`powershell -NoProfile -File <pei_ssh_univ_pc_detach.ps1> <命令>`）：Windows sshd 会在 ssh 断开时杀掉会话里启动的所有进程。
+- 要在本机跑带 bash 函数的命令（如 `claude -p`），套一层 `"D:\Program Files\Git\usr\bin\bash.exe" -lc "..."`。
+
+报 `connect to host 127.0.0.1 port 38022: Connection refused` 说明 PC 关机或通道未起，告诉用户即可，不要在 zcm6 侧排查。
+
 ## Slurm 作业提交
 
 账号上限：在队作业最多 70 个、总核数最多 70×128 = 8960（`sacctmgr show assoc user=$USER`）。多节点作业同样占这个上限，规划并发时按“作业数 × 每作业节点数 ≤ 70”估算。
